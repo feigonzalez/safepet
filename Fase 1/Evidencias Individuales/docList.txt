@@ -1,6 +1,6 @@
 [ ] Espinosa_Francisca_1.1_APT122_AutoevaluacionCompetenciasFase1.docx
 [ ] Espinosa_Francisca_1.2_APT122_DiarioReflexionFase1.docx
 [ ] Espinosa_Francisca_1.3_APT122_AutoevaluacionFase1.docx
-[ ] Gonzalez_Felipe_1.1_APT122_AutoevaluacionCompetenciasFase1.docx
-[ ] Gonzalez_Felipe_1.2_APT122_DiarioReflexionFase1.docx
+[O] Gonzalez_Felipe_1.1_APT122_AutoevaluacionCompetenciasFase1.docx
+[O] Gonzalez_Felipe_1.2_APT122_DiarioReflexionFase1.docx
 [ ] Gonzalez_Felipe_1.3_APT122_AutoevaluacionFase1.docx
