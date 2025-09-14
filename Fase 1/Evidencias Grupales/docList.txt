@@ -1,4 +1,4 @@
-[O] Presentación Proyecto.pptx
+[X] Presentación Proyecto.pptx
 [ ] 1.4_APT122_FormativaFase1.docx
 [X] 1.5_GuiaEstudiante_Fase 1_Definicion Proyecto APT (Español).docx
 [ ] 1.5_GuiaEstudiante_Fase 1_Definicion Proyecto APT (Inglés).docx (Optativo)

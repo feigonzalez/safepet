@@ -1,0 +1,251 @@
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<style>
+			:root{
+				--todo:#c32;
+				--progress:#da1;
+				--done:#292;
+			}
+
+			*{margin:0}
+			body{background-color:#000;color:#fff;font-family:Noto Sans JP;height:100%;font-size:1rem}
+			small{font-size:0.75em}
+
+			.row, .column{display:flex;justify-content:left;align-items:center}
+			.column>*, .row>*{height:-moz-available;height:-webkit-fill-available;width:-moz-available;width:-webkit-fill-available}
+			.row{flex-direction:row}
+			.column{flex-direction:column;}
+			.section{display:flex;justify-content:left;align-items:center}
+
+			.tracker{height:1em;border-radius:1em;overflow:hidden;width:100%;background-color:#666;display:flex}
+			.trackBar{height:100%;display:inline-block;font-size:0.7rem;text-align:center;color:#000;}
+
+			.row.tight{height:initial}
+			.column.tight{width:initial}
+			.row .section.tight{width:initial}
+			.column .section.tight{height:initial}
+			.text-left{text-align:left;justify-content:left}
+			.text-center{text-align:center;justify-content:center}
+			.text-right{text-align:right;justify-content:right}
+			.hidden{display:none}
+			.scroll{overflow-y:scroll;height:100%}
+			.clip-overflow{overflow:clip}
+			.pad-xs{padding:0.5rem}
+			.pad-s{padding:1rem}
+			.pad-m{padding:2rem}
+			.pad-l{padding:3rem}
+			.pad-xl{padding:5rem}
+
+			div.image{image-rendering:crisp-edges}
+			div.grid{display:grid;justify-items:center;width:initial}
+
+			.task{background:#333;color:#fff;border-left:solid 0.5rem #0000;margin-left:0.5rem;white-space:nowrap}
+			.task.collapsed .children{display:none}
+			.titleBar{display:inline-block;width:100%;background:#333;padding:0.1rem;text-overflow:ellipsis;overflow:clip;padding-left:0.5rem}
+			.titleBar:hover{filter:brightness(1.5)}
+
+			.todo{;background-color:var(--todo)}
+			.progress{background-color:var(--progress)}
+			.done{;background-color:var(--done)}
+			.task.todo{border-left-color:var(--todo);background-color:initial}
+			.task.progress{border-left-color:var(--progress);background-color:initial}
+			.task.done{border-left-color:var(--done);background-color:initial}
+
+			.task.hasDetail .titleBar{cursor:hand;cursor:pointer;background-color:#237}
+			
+			#section_title{font-size:2rem;padding:1rem}
+			
+			#detailHolder p{margin-top:1rem;margin-bottom:1rem}
+			#detailHolder img{min-width: 30vw;image-rendering: crisp-edges;max-width:40vw;}
+		</style>
+		<script>
+			const stateDisc={" ":"todo","X":"done","O":"progress"}
+
+			var stateCount={"todo":0,"done":0,"progress":0}
+			var taskList={};
+			var taskTree={};
+
+
+			window.addEventListener("load",async ()=>{
+				await fetch("tasks.txt")
+					.then(r=>r.ok?r.text():{"status":"FAIL"})
+					.then(j=>processTasks(j))
+				document.querySelectorAll(".tracker").forEach(t=>updateTracker(t))
+				document.querySelectorAll(".row.fill").forEach(r=>{
+					let pH = window.getComputedStyle(r.parentElement)["height"]
+						pH = parseFloat(pH.substr(0,pH.indexOf("px")));
+					let sH=0
+					for(let sib of r.parentElement.children){
+						if(sib!==r){
+							let sibH = window.getComputedStyle(sib)["height"]
+							sH += parseFloat(sibH.substr(0,sibH.indexOf("px")));
+						}
+					}
+					r.style.height=(pH-sH)
+				})
+			})
+
+			function updateTracker(t){
+				let fw = window.getComputedStyle(t)["width"];
+					fw = parseFloat(fw.substr(0,fw.indexOf("px")));
+				let fm = parseFloat(t.dataset.max);
+				for(let track of t.querySelectorAll(".trackBar")){
+					//track.style.width= parseInt(track.dataset.value)
+					track.style.width= (fw*parseFloat(track.dataset.value))/fm
+				}
+			}
+
+			async function loadDetail(type,content){
+				console.debug("Loading detail of type ["+type+"]: "+content)
+				switch(type){
+					case "html":
+						await fetch("./details/"+content+".html").then(r=>r.ok?r.text():"").then(t=>processDetails(t)); break;
+					case "img":
+						processDetails("<img src='"+content+"'></img>"); break;
+					case "audio":
+						processDetails("<audio src='"+content+"' controls></audio>"); break;
+					default:
+						processDetails(content)
+				}
+			}
+
+			function processTasks(j){
+				let lastTaskAppended=document.querySelector("#cardHolder");
+				let newTask;
+				for(let line of j.split("\n")){
+					let level = line.indexOf("[");
+					if(level==-1){
+						document.title=line+" - DINTPM";
+						document.querySelector("#section_title").innerText=line;
+						continue;
+					}
+					let state = stateDisc[line.charAt(level+1)]
+					let detail=""
+					
+					line = line.substr(line.indexOf("]")+1);
+					
+					if(line.indexOf("{")!=-1){
+						detail=line.substr(line.indexOf("{")+1,line.indexOf("}")-line.indexOf("{")-1)
+						line = line.substr(0,line.indexOf("{"))
+					}
+					
+					let title = line.substring(0,line.indexOf(":")).trim()
+					
+					let shortDesc=line.substr(line.indexOf(":")+1).trim()
+					if(title==""){title=line;shortDesc = ""}
+					
+					newTask=document.createElement("div")
+					if(parseInt(lastTaskAppended.dataset.level) < level){
+						//last appended task is parent of current
+						lastTaskAppended.querySelector(".children").appendChild(newTask);
+					} else if(parseInt(lastTaskAppended.dataset.level) == level){
+						//last appended task is sibling of current
+						lastTaskAppended.parentElement.appendChild(newTask)
+					} else {
+						//last appended task is not related. backtrack from it until parent of current is found, then append
+						while(parseInt(lastTaskAppended.dataset.level) != level-1){
+							lastTaskAppended=lastTaskAppended.parentElement.parentElement;
+						}
+						lastTaskAppended.querySelector(".children").appendChild(newTask);
+					}
+					newTask.classList.add("task")
+					if(detail){
+						let detailType = "text";
+						let detailContent = detail;
+						if(detail.indexOf("|")!=-1){
+							detailType = detail.substr(0,detail.indexOf("|"))
+							detailContent = detail.substr(detail.indexOf("|")+1)
+						}
+						newTask.addEventListener("click",(ev)=>{
+							loadDetail(detailType, detailContent)
+						})
+						newTask.classList.add("hasDetail")
+					}
+					if(state) newTask.classList.add(state)
+					newTask.dataset.level=level;
+					let titleBar=document.createElement("span");
+						titleBar.classList.add("titleBar")
+					let titleElem=document.createElement("b");
+						titleElem.innerText=title;
+						titleBar.appendChild(titleElem)
+						newTask.appendChild(titleBar)
+					if(shortDesc){
+						let shortDescElem = document.createElement("span")
+							shortDescElem.innerText+=" — "+shortDesc;
+							titleBar.appendChild(shortDescElem)
+					}
+					titleBar.addEventListener("click",(ev)=>{
+						ev.preventDefault();
+						if(ev.ctrlKey){
+							let taskParent = ev.target.parentElement
+							while(!taskParent.classList.contains("task")) taskParent = taskParent.parentElement
+							if(taskParent.classList.contains("collapsed")) taskParent.classList.remove("collapsed")
+							else taskParent.classList.add("collapsed")
+						}
+					})
+					let newChildren = document.createElement("div")
+						newChildren.classList.add("children")
+						newTask.appendChild(newChildren)
+					lastTaskAppended=newTask;
+				}
+				let stateCountTotal=0
+				for(let state in stateCount){
+					for(let task of document.querySelectorAll(".task")){
+						if(task.querySelector(".children").children.length>0) continue;
+						if(task.classList.contains(state)) stateCount[state]+=1/(Math.pow(2,parseInt(task.dataset.level)));
+					}
+					document.querySelector("#trackBar_"+state).dataset.value=stateCount[state];
+					stateCountTotal+=stateCount[state]
+				}
+				for(let state in stateCount){
+					document.querySelector("#trackBar_"+state).innerText=Math.round(10000*stateCount[state]/stateCountTotal,2)/100+"%";
+				}
+				document.querySelector("#tracker_overall").dataset.max=stateCountTotal;
+				updateTracker(document.querySelector("#tracker_overall"))
+			}
+
+			function processDetails(d){
+				document.querySelector("#detailHolder").innerHTML=d;
+				for(let img of document.querySelectorAll("#detailHolder div.image")){
+					img.style.backgroundSize      = img.dataset.size * img.dataset.scale + "px";
+					img.style.width               = img.dataset.w * img.dataset.scale
+					img.style.height              = img.dataset.h * img.dataset.scale
+					img.style.backgroundPositionX = -img.dataset.x * img.dataset.scale + "px"
+					img.style.backgroundPositionY = -img.dataset.y * img.dataset.scale + "px"
+					if(img.classList.contains("animated")){
+						img.dataset.curFrame=0
+						img.dataset.animFunc=setInterval(()=>{
+							let frameArray = eval(img.dataset.anim);
+							let curFrame = parseInt(img.dataset.curFrame)
+							img.style.backgroundPositionX = -(frameArray[curFrame][0]) * img.dataset.scale + "px"
+							img.style.backgroundPositionY = -(frameArray[curFrame][1]) * img.dataset.scale + "px"
+							img.dataset.curFrame=(curFrame+1)%frameArray.length
+						},parseFloat(img.dataset.speed))
+					}
+					img.style.backgroundImage     = "url('"+img.dataset.src+"')";
+				}
+				for(let grid of document.querySelectorAll("#detailHolder div.grid")){
+					grid.style.gridTemplateColumns="repeat("+grid.dataset.columns+", 1fr)"
+				}
+			}
+</script>
+	</head>
+	<body class="column">
+		<div class="row tight">
+			<div class="section tight pad-s"><div>DINTPM<br><small><nobr>Project Manager</nobr></small></div></div>
+			<div class="section tight" id="section_title"></div>
+			<div class="section pad-s">
+				<div class="tracker" id="tracker_overall" data-max=100>
+					<div class="trackBar done" id="trackBar_done"></div>
+					<div class="trackBar progress" id="trackBar_progress"></div>
+					<div class="trackBar hidden" id="trackBar_todo"></div>
+				</div>
+			</div>
+		</div>
+		<div class="row fill clip-overflow">
+			<div class="column scroll" id="cardHolder" data-level="-1"><div class='children'></div></div>
+			<div class="column scroll pad-s" id="detailHolder"></div>
+		</div>
+	</body>
+</html>
