@@ -8,7 +8,7 @@ SafePet
   [X] Gonzalez_Felipe_1.2_APT122_DiarioReflexionFase1.docx
   [ ] Gonzalez_Felipe_1.3_APT122_AutoevaluacionFase1.docx
  [O] Evidencias Grupales
-  [O] Presentación Proyecto.pptx: Esperando Validación {Se han utilizado algunas imágenes sin tener licencia para ello. Sería apropiado realizar alguna de las siguientes acciones:<ul><li>A) Obtener licencias para estas imágenes</li><li>B) Conseguir imágenes con licencia apropiada</li><li>C) Crear las imágenes de forma particular</li></ul>}
+  [X] Presentación Proyecto.pptx {Se han utilizado algunas imágenes sin tener licencia para ello. Sería apropiado realizar alguna de las siguientes acciones:<ul><li>A) Obtener licencias para estas imágenes</li><li>B) Conseguir imágenes con licencia apropiada</li><li>C) Crear las imágenes de forma particular</li></ul>}
   [X] 1.4_APT122_FormativaFase1.docx: Esperando Validación
   [O] 1.5_GuiaEstudiante_Fase 1_Definicion Proyecto APT (Español).docx: En proceso
   [ ] 1.5_GuiaEstudiante_Fase 1_Definicion Proyecto APT (Inglés).docx (Optativo)
@@ -40,9 +40,9 @@ SafePet
   [ ] Presentación Final del proyecto (Español).pptx
   [ ] Presentación Final del proyecto (Inglés).pptx (Optativo)
 [O] Documentación
- [O] Visión: Definición de Proyecto, Roles, etc.
- [ ] Requisitos
-  [ ] Historias de Usuario
+ [X] Visión: Definición de Proyecto, Roles, etc.
+ [O] Requisitos
+  [O] Historias de Usuario
   [ ] Casos de Uso
   [ ] Backlog: Tareas a realizar a lo largo del desarrollo del proyecto
   [ ] Sprint Backlogs: Lista de tareas a completar para cada sprint
