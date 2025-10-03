@@ -1,106 +1,82 @@
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>SafePet - Inicio</title>
 	<link rel="stylesheet" href="../style.css">
 	<link rel="stylesheet" href="../bootstrap.min.css">
 	<script src="../jquery.min.js"></script>
 	<script src="../bootstrap.min.js"></script>
 	<script src="../script.js"></script>
+	<script>
+		function showQRModal() {
+			document.getElementById("qrModal").style.display = "block";
+		}
+		
+		// Cuando se carga la página
+		window.onload = function() {
+			// Asignar evento a los botones de cerrar
+			var closeButtons = document.getElementsByClassName("close");
+			for (var i = 0; i < closeButtons.length; i++) {
+				closeButtons[i].addEventListener("click", function() {
+					var modals = document.getElementsByClassName("modal");
+					for (var j = 0; j < modals.length; j++) {
+						modals[j].style.display = "none";
+					}
+				});
+			}
+			
+			// Cerrar el modal si se hace clic fuera de él
+			window.addEventListener("click", function(event) {
+				var modals = document.getElementsByClassName("modal");
+				for (var i = 0; i < modals.length; i++) {
+					if (event.target == modals[i]) {
+						modals[i].style.display = "none";
+					}
+				}
+			});
+		};
+	</script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-	<style>
-		#mainLogoImg{width:50%}
-		body{background:linear-gradient(#f63, #f22)}
-		#appTitle{color:#632;font-family:MV Boli, sans-serif;background:#fff;font-size:2rem;margin-top:1rem;width:100%;text-align:center}
-		
-		/* Estilos para el mapa */
-		#map-container {
-			height: 60vh;
-			width: 100%;
-			background-color: #e0e0e0;
-			position: relative;
-			margin-bottom: 10px;
-			border-radius: 10px;
-			overflow: hidden;
-		}
-		
-		/* Estilos para la campanita de notificaciones */
-		.notification-bell {
-			position: absolute;
-			top: 15px;
-			right: 15px;
-			font-size: 24px;
-			color: #fff;
-			background-color: rgba(0,0,0,0.3);
-			width: 40px;
-			height: 40px;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			z-index: 100;
-		}
-		
-		/* Estilos para los botones de navegación */
-		.nav-buttons {
-			display: flex;
-			justify-content: space-around;
-			width: 100%;
-			margin-top: 10px;
-		}
-		
-		.nav-button {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			color: #fff;
-			text-decoration: none;
-			padding: 10px;
-			border-radius: 10px;
-			background-color: rgba(0,0,0,0.3);
-			width: 30%;
-			text-align: center;
-		}
-		
-		.nav-button i {
-			font-size: 24px;
-			margin-bottom: 5px;
-		}
-	</style>
 </head>
 
-<body class="column">
+<body class="column main-page">
 	<!-- Campanita de notificaciones -->
 	<div class="notification-bell">
 		<i class="fas fa-bell"></i>
 	</div>
+
 	
-	<div class="row flex-grow">
-		<div class="column">
-			<img id="mainLogoImg" src="../logo.png"></img>
-			<span id="appTitle">SafePet</span>
-		</div>
-	</div>
 	
 	<!-- Contenedor del mapa -->
-	<div id="map-container">
+	<div id="map-container" class="fullscreen-map">
 		<!-- Aquí iría el mapa real, por ahora es solo un placeholder -->
-		<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-			<i class="fas fa-map-marker-alt" style="font-size: 48px; color: #f63;"></i>
-			<p style="color: #333; margin-top: 10px;">Mapa de mascotas cercanas</p>
-		</div>
+		<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-76.13525390625001%2C-35.44724605551147%2C-66.96166992187501%2C-31.527043924837933&amp;layer=mapnik" 
+		style="border: none"></iframe>
 	</div>
 	
 	<!-- Botones de navegación -->
 	<div class="nav-buttons">
-		<a href="#" class="nav-button">
+		<a href="register.html" class="nav-button">
 			<i class="fas fa-user"></i>
-			<span>Cuenta</span>
 		</a>
-		<a href="#" class="nav-button">
+		<a href="#" class="nav-button" onclick="showQRModal(); return false;">
 			<i class="fas fa-exclamation-triangle"></i>
-			<span>Reportar</span>
 		</a>
 		<a href="#" class="nav-button">
 			<i class="fas fa-comments"></i>
-			<span>Mensajería</span>
 		</a>
+	</div>
+	
+	<!-- Modal para verificar QR -->
+	<div id="qrModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>Verificación de mascota</h2>
+			<p>¿Tiene un código QR de SafePet?</p>
+			<div class="modal-buttons">
+				<a href="scan-qr.html" class="modal-button">Tiene QR</a>
+				<a href="report.html" class="modal-button">No tiene QR</a>
+			</div>
+		</div>
 	</div>
 </body>
