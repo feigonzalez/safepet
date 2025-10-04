@@ -1,0 +1,44 @@
+<!--ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>main</ion-title>
+  </ion-toolbar>
+</ion-header-->
+
+<ion-content [fullscreen]="true" >
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button color="medium">
+      <ion-icon name="notifications"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <iframe id="mainMapFrame" src="https://www.openstreetmap.org/export/embed.html?bbox=-71.26693725585939%2C-33.721484135922836%2C-70.12023925781251%2C-33.21054198303287&amp;layer=mapnik"></iframe>
+  
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid class="ion-text-center">
+      <ion-row>
+        <ion-col>
+          <ion-button color="medium" size="large" shape="round">
+            <ion-icon slot="icon-only" name="person"></ion-icon>
+          </ion-button>
+        </ion-col>
+        
+        <ion-col>
+          <ion-button color="danger" size="largest" shape="round">
+            <ion-icon slot="icon-only" name="warning"></ion-icon>
+          </ion-button>
+        </ion-col>
+        
+        <ion-col>
+          <ion-button color="medium" size="large" shape="round">
+            <ion-icon slot="icon-only" name="chatbubble-ellipses"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
