@@ -71,6 +71,8 @@ button, a.button, input[type=button], input[type=submit]{
 
 .row.header{height:initial;justify-content:start}
 .row.header h1{font-weight:initial;font-size:1.75em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row.footer{margin-top:auto}
+.row.footer.fixed{bottom:0}
 
 .formEntry{position:relative;height:initial;margin-top:1em;margin-bottom:1em}
 .formEntry label:has(~ input[type=text]:focus), .formEntry input[type=text]:focus ~ label,
@@ -86,6 +88,7 @@ button, a.button, input[type=button], input[type=submit]{
 .bg-redpale{background-color:#FCC !important;color:#411 !important}
 
 .ph-1{padding-left:1rem;padding-right:1rem}
+.ph-05{padding-left:0.5rem;padding-right:0.5rem}
 .mh-1{margin-left:1rem;margin-right:1rem}
 .mv-1{margin-top:1rem;margin-bottom:1rem}
 
