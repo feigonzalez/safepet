@@ -1,0 +1,36 @@
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="../style.css">
+	<script src="../js/mockups.js"></script>
+	<style>
+		iframe{border:none}
+		#reportButton{position:absolute;bottom:0}
+	</style>
+</head>
+
+<body class="column size-full-height">
+
+	<div class="pos-fixed pos-top pos-right">
+		<a class="button bg-redpale round" role="button" href="notifications.html"><span class="icon" data-icon="bell-fill"></span></a>
+	</div>
+	
+	<div class="row flex-grow size-full-height">
+		<div class="column size-full-height">
+		<!-- Replace this Iframe with whatever Leaflet.js uses -->
+		<iframe class="size-full" src="https://www.openstreetmap.org/export/embed.html?bbox=-70.69%2C-33.36%2C-70.67%2C-33.35&amp;layer=mapnik" ></iframe>
+		</div>
+	</div>
+	
+	<div class="row footer compact">
+		<div class="column">
+			<a class="button bg-redpale round" role="button" href="account.html"><span class="icon" data-icon="person-fill"></span></a>
+		</div>
+		<div class="column">
+			<button id="reportButton" class="button bg-red round size-largest" role="button" onclick="loadModal('../templates/reportModal.html')"><span class="icon" data-icon="exclamation-diamond"></span></button>
+		</div>
+		<div class="column">
+			<a class="button bg-redpale round" role="button" href="messages.html"><span class="icon" data-icon="chat-dots-fill"></span></a>
+		</div>
+	</div>
+	
+</body>

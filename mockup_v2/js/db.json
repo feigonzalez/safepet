@@ -1,0 +1,20 @@
+{
+	"pets":{
+		"florencia":{
+			"name":"Florencia",
+			"species":"Perro",
+			"breed":"Caniche",
+			"color":"Gris",
+			"sex":"Hembra",
+			"images":["florencia.jpg"]
+		},
+		"covellina":{
+			"name":"Covellina",
+			"species":"Lechuza",
+			"breed":"Campanario",
+			"color":"Blanco",
+			"sex":"Hembra",
+			"images":["covellina.jpg"]
+		}
+	}
+}

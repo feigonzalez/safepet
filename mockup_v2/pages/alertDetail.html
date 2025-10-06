@@ -1,0 +1,57 @@
+<head>
+	<link rel="stylesheet" href="../style.css">
+	<script src="../js/mockups.js"></script>
+	<script src="../js/urlParams.js"></script>
+	<script src="../js/db.js"></script>
+	<style>
+		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
+	</style>
+	<script>
+		async function beforeLoad(){
+			let petData=(await selectAllFrom("pets"));
+			if("id" in params && params["id"] in (await selectAllFrom("pets"))){
+				petData = petData[params["id"]]
+				let context = {
+					petName:petData["name"],
+					petSpecies:petData["species"],
+					petBreed:petData["breed"],
+					petColor:petData["color"],
+					petSex:petData["sex"],
+					petImage:petData["images"][0]
+				}
+				for(let property in context){
+					document.body.innerHTML = document.body.innerHTML.replaceAll("${"+property+"}",context[property])
+				}
+			}
+		}
+	</script>
+</head>
+<body class="column">
+	<div class="row header">
+		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+		<h1>Detalles de Alerta</h1>
+	</div>
+	<div class="row flex-grow">
+		<div class="column">
+			<div class="row flex-grow carrousel">
+				<div data-imgsrc="../media/${petImage}"></div>
+			</div>
+			<div class="row">
+				<div class="grid" data-columns=2>
+					<h1 name="petName" colspan=2>${petName}</h1>
+					<span class="ta-left bold">Especie</span>
+					<span class="ta-left" name="petSpecies">${petSpecies}</span>
+					<span class="ta-left bold">Raza</span>
+					<span class="ta-left" name="petBreed">${petBreed}</span>
+					<span class="ta-left bold">Color</span>
+					<span class="ta-left" name="petColor">${petColor}</span>
+					<span class="ta-left bold">Sexo</span>
+					<span class="ta-left" name="petSex">${petSex}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<button class="bg-red" onclick="loadModal('../templates/alertConfirmModal.html')">Confirmar</button>
+	</div>
+</body>

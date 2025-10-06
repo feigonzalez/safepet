@@ -1,0 +1,33 @@
+<head>
+	<link rel="stylesheet" href="../style.css">
+	<script src="../js/mockups.js"></script>
+	<style>
+		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
+		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
+	</style>
+</head>
+<body class="column">
+	<div class="row header">
+		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+		<h1>Reportar Hallazgo</h1>
+	</div>
+	<div class="row">
+		<form class="column mh-1" action="alertList.html">
+			<div class="row formEntry"><div class="column ta-center">
+				<div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage"></div>
+				<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
+			</div></div>
+			<div class="row formEntry"><label for="petSpecie">Especie</label>	<input type="text" name="petSpecie"></div>
+			<div class="row formEntry"><label for="petBreed">Raza</label>		<input type="text" name="petBreed"></div>
+			<div class="row formEntry"><label for="petColor">Color</label>		<input type="text" name="petSex"></div>
+			<div class="row formEntry">
+				<div class="column ta-left"><label for="petBreed">Sexo</label></div>
+				<div class="column"><input type="radio" name="petSex" value="M">	<label for="reg_petSexM">Macho</label></div>
+				<div class="column"><input type="radio" name="petSex" value="F">	<label for="reg_petSexF">Hembra</label></div>
+			</div>
+			<!--div class="row formEntry ta-left"><label for="petDescription">Descripción</label></div>
+			<textarea class="row" name="petDescription"></textarea-->
+			<input type="submit" class="bg-red" value="Registrar"></input>
+		</form>
+	</div>
+</body>
