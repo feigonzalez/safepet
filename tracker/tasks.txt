@@ -55,3 +55,15 @@ SafePet
   [O] Entidades (Actores)
 [O] Mock-ups
  [O] Vistas
+[ ] Desarrollo
+ [ ] Leaflet.js
+ [ ] Cámara (QR, Fotos perfil)
+ [ ] ID Dispositivo (ANDROID_ID)
+ [ ] API Mensajería
+ [X] Capacitor
+ [O] Notificaciones {Falta que se borren de la BD, que el telefono las pida, ...}
+ [ ] Servidor Web
+ [X] Servidor SQL
+ [ ] Ejecutar código por QR
+ [ ] Cuentas de Usuario {Sólo se pueden añadir mascotas con cuenta}
+ [ ] Modelos BD
