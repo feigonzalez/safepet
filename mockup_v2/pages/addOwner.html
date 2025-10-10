@@ -1,0 +1,40 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css">
+    <script src="../js/mockups.js"></script>
+    <script src="../js/urlParams.js"></script>
+    <style></style>
+    <script>
+        window.addEventListener('load', ()=>{
+            const btn = document.querySelector('#saveOwnerBtn');
+            if(btn){
+                btn.addEventListener('click', (e)=>{
+                    e.preventDefault();
+                    const id = (params && params.id) ? ('?id='+encodeURIComponent(params.id)) : '';
+                    window.location.href = 'addOwnerSuccess.html'+id;
+                });
+            }
+        });
+    </script>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Agregar Dueño</h1>
+    </div>
+    <div class="row"><div class="column">
+        <div class="row formEntry"><label>Nombre</label><input type="text" placeholder=" "></div>
+        <div class="row formEntry"><label>Correo</label><input type="text" placeholder=" "></div>
+        <div class="row formEntry"><label>Teléfono</label><input type="text" placeholder=" "></div>
+    </div></div>
+    <div class="row">
+        <div class="column">
+            <div class="row">
+                <a id="saveOwnerBtn" class="button bg-red" role="button" href="#">Guardar</a>
+            </div>
+            <div class="row">
+                <a class="button bg-redpale" role="button" href="javascript:history.back()">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</body>

@@ -8,22 +8,44 @@ window.mobileCheck = function() {
 };
 
 window.addEventListener("load",()=>{
-	// If mobile, require the user to tap the screen first to show the page in fullscreen, to better simulate an app
-	if(window.mobileCheck()){
-		document.querySelector("#fullscreenTap").addEventListener("click",()=>{
-			document.body.requestFullscreen();
-			document.querySelector("#fullscreenTap").remove()
-		})
-	}
+    // If mobile, require the user to tap the screen first to show the page in fullscreen, to better simulate an app
+    if(window.mobileCheck()){
+        const tapEl = document.querySelector("#fullscreenTap");
+        if(tapEl){
+            tapEl.addEventListener("click",()=>{
+                document.body.requestFullscreen();
+                tapEl.remove();
+            })
+        }
+    }
+    // Initialize icons/images and other behaviors for standalone pages
+    try{ processFrameContents(window); }catch(e){ /* no-op */ }
 })
 
-async function processFrameContents(iFrame){
-	let iDocument=iFrame.contentDocument || iFrame;
-	let iWindow=iFrame.contentWindow;
-	
-	if(iWindow && iWindow.beforeLoad){
-		await iWindow.beforeLoad()
-	}
+async function processFrameContents(root){
+    let iDocument, iWindow;
+    // Accept iframe, window, document, or an element as root
+    if(root && root.contentDocument){
+        // iframe element
+        iDocument = root.contentDocument;
+        iWindow = root.contentWindow;
+    } else if(root && root.document){
+        // window object
+        iWindow = root;
+        iDocument = root.document;
+    } else if(root && root.nodeType === 9){
+        // document node
+        iDocument = root;
+        iWindow = window;
+    } else {
+        // fallback to element container
+        iDocument = root || document;
+        iWindow = window;
+    }
+
+    if(iWindow && iWindow.beforeLoad){
+        await iWindow.beforeLoad()
+    }
 	
 	// Sets the placeholder attribute to text-type inputs
 	// This attribute is required for css animations related to their labels
@@ -34,12 +56,29 @@ async function processFrameContents(iFrame){
 	}
 	
 	// Makes .backButton elements redirect to the previous page when clicked
-	let backButton = iDocument.querySelector("#backButton")
-	if(backButton){
-		backButton.addEventListener("click",()=>{
-			iWindow.history.back();
-		})
-	}
+    let backButton = iDocument.querySelector("#backButton")
+    if(backButton){
+        backButton.addEventListener("click",()=>{
+            const w = (iWindow || window);
+            try{
+                const prevLen = w.history.length;
+                w.history.back();
+                // Si no hay historial o no cambia, ir a welcome/main
+                setTimeout(()=>{
+                    // En algunos navegadores, history.length no cambia; usar una redirección segura
+                    if(w.history.length<=prevLen){
+                        // Fallback: si estamos en páginas internas, redirigir a main
+                        const href = (w.location && w.location.href) ? w.location.href : '';
+                        const isInternal = /mockup_v2\/pages\//.test(href);
+                        w.location.href = isInternal ? 'main.html' : '/mockup_v2/pages/main.html';
+                    }
+                }, 80);
+            }catch(e){
+                // Fallback inmediato
+                w.location.href = 'main.html';
+            }
+        })
+    }
 	
 	// Something about handling file uploads ??
 	for(let controller of iDocument.querySelectorAll(".fileUploadControl")){

@@ -1,0 +1,30 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css">
+    <script src="../js/mockups.js"></script>
+    <style>
+        .msgItem{display:flex;gap:0.5rem;align-items:flex-start}
+        .msgAvatar{height:2rem;width:2rem;border-radius:50%;background-size:cover;background-position:50%;border:solid 1px #844}
+        .msgMeta{font-size:0.85rem;color:#666;margin-top:0.25rem}
+    </style>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Mensajes</h1>
+    </div>
+    <div class="row">
+        <div class="column size-full-width">
+            <div class="row compact listCard">
+                <div class="column msgItem ta-left">
+                    <div class="msgAvatar" data-imgsrc="../media/florencia.jpg"></div>
+                    <div class="column ta-left">
+                        <div class="row ta-left bold">Dueño de Florencia</div>
+                        <div class="row ta-left">¡Gracias por avisar! ¿Puedes compartir ubicación?</div>
+                        <div class="row ta-left metaText">Hace 2 min</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

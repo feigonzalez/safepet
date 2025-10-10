@@ -1,0 +1,54 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css">
+    <script src="../js/mockups.js"></script>
+    <!-- Parser sencillo de parámetros de URL -->
+    <style>
+        .authContainer{max-width:520px;margin:1rem auto}
+        .authCard{padding:1rem}
+        .toggle{gap:0.5rem}
+        .hint{font-size:0.85rem;color:#666}
+        .cta{height:3rem}
+    </style>
+    <script>
+        const params = (()=>{const p={}; const q=new URLSearchParams(window.location.search); q.forEach((v,k)=>p[k]=v); return p;})();
+        function renderForm(){
+            const mode = (params.mode||'login');
+            const title = mode==='register' ? 'Crear cuenta' : 'Iniciar sesión';
+            document.querySelector('#authTitle').textContent = title;
+            document.querySelector('#authForm').innerHTML = mode==='register' ? `
+                <div class="row formEntry"><label for="reg_name">Nombre</label><input id="reg_name" type="text" name="name" placeholder=" "></div>
+                <div class="row formEntry"><label for="reg_email">Email</label><input id="reg_email" type="text" name="email" placeholder=" "></div>
+                <div class="row formEntry"><label for="reg_phone">Teléfono</label><input id="reg_phone" type="text" name="phone" placeholder=" "></div>
+                <div class="row formEntry"><label for="reg_password">Contraseña</label><input id="reg_password" type="text" name="password" placeholder=" "></div>
+                <div class="row"><button class="bg-red cta" type="button" onclick="loadModal('../templates/addOwnerSuccessModal.html')">Registrarse</button></div>
+                <div class="row hint">¿Ya tienes cuenta? <a href="auth.html?mode=login">Inicia sesión</a></div>
+            ` : `
+                <div class="row formEntry"><label for="login_email">Email</label><input id="login_email" type="text" name="email" placeholder=" "></div>
+                <div class="row formEntry"><label for="login_password">Contraseña</label><input id="login_password" type="text" name="password" placeholder=" "></div>
+                <div class="row"><button class="bg-red cta" type="button" onclick="loadModal('../templates/addOwnerSuccessModal.html')">Iniciar sesión</button></div>
+                <div class="row hint">¿No tienes cuenta? <a href="auth.html?mode=register">Regístrate</a></div>
+            `;
+        }
+        async function beforeLoad(){ renderForm(); }
+    </script>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1 id="authTitle">Autenticación</h1>
+    </div>
+    <div class="row">
+        <div class="column authContainer size-full-width">
+            <div class="row compact">
+                <div class="column listCard size-full-width authCard">
+                    <div id="authForm" class="column"></div>
+                </div>
+            </div>
+            <div class="row compact">
+                <a class="button" href="welcome.html"><span class="icon" data-icon="arrow-left-circle"></span>&nbsp;&nbsp;Volver</a>
+                <a class="button bg-red" href="main.html"><span class="icon" data-icon="arrow-right-circle"></span>&nbsp;&nbsp;Usar sin cuenta</a>
+            </div>
+        </div>
+    </div>
+</body>

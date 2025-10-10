@@ -1,0 +1,32 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css">
+    <script src="../js/mockups.js"></script>
+    <script src="../js/urlParams.js"></script>
+    <style></style>
+    <script>
+        window.addEventListener('load', ()=>{
+            const ok = document.querySelector('#okBtn');
+            if(ok){
+                const id = (params && params.id) ? ('?id='+encodeURIComponent(params.id)+'&view=owner') : '';
+                ok.href = 'alertDetail.html'+id;
+            }
+        });
+    </script>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Dueño agregado</h1>
+    </div>
+    <div class="row"><div class="column">
+        <div class="round icon green-text" data-icon="check-circle-fill"></div>
+        <p class="ta-center"><b>¡Dueño agregado con éxito!</b></p>
+        <p class="ta-center">El perfil de la mascota se actualizó.</p>
+    </div></div>
+    <div class="row">
+        <div class="column">
+            <div class="row"><a id="okBtn" class="button bg-red" role="button" href="account.html">OK</a></div>
+        </div>
+    </div>
+</body>

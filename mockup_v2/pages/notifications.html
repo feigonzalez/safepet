@@ -1,0 +1,39 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css">
+    <script src="../js/mockups.js"></script>
+    <style>
+        .notifItem{display:flex;gap:0.5rem;align-items:flex-start}
+        .notifIcon{height:2rem;width:2rem}
+        .notifMeta{font-size:0.85rem;color:#666;margin-top:0.25rem}
+    </style>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Notificaciones</h1>
+    </div>
+    <div class="row">
+        <div class="column size-full-width">
+            <div class="row compact listCard">
+                <div class="column notifItem ta-left">
+                    <span class="icon notifIcon" data-icon="exclamation-triangle-fill"></span>
+                    <div class="column ta-left">
+                        <div class="row ta-left bold">Nueva alerta cerca de tu ubicación</div>
+                        <div class="row ta-left metaText">Hace 5 min • Zona: Ñuñoa</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row compact listCard">
+                <div class="column notifItem ta-left">
+                    <span class="icon notifIcon" data-icon="chat-dots-fill"></span>
+                    <div class="column ta-left">
+                        <div class="row ta-left bold">Mensaje de un dueño</div>
+                        <div class="row ta-left">“Gracias por tu reporte.”</div>
+                        <div class="row ta-left metaText">Hace 10 min • Mascota: Florencia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

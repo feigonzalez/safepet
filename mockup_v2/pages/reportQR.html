@@ -4,10 +4,14 @@
 </head>
 
 <body class="column">
-	<div class="row flex-grow">
-		<div class="column ph-1">
-			<h1>Escáner QR</h1>
-			<p>Esta página es sólo una cámara. Si no se detecta un QR, se pide otra vez o algo así. Cuando se detecta, se genera el reporte.</p>
-		</div>
-	</div>
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Escáner QR</h1>
+    </div>
+    <div class="row">
+        <div class="column ph-1 size-full-width">
+            <div class="cameraBox column size-full-width" aria-label="Cámara"></div>
+            <p class="metaText ta-left">Apunta la cámara al QR de la chapa. Al detectar el código, se abrirá el formulario de reporte automáticamente.</p>
+        </div>
+    </div>
 </body>

@@ -17,17 +17,16 @@
 				<div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage"></div>
 				<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
 			</div></div>
-			<div class="row formEntry"><label for="petSpecie">Especie</label>	<input type="text" name="petSpecie"></div>
-			<div class="row formEntry"><label for="petBreed">Raza</label>		<input type="text" name="petBreed"></div>
-			<div class="row formEntry"><label for="petColor">Color</label>		<input type="text" name="petSex"></div>
-			<div class="row formEntry">
-				<div class="column ta-left"><label for="petBreed">Sexo</label></div>
-				<div class="column"><input type="radio" name="petSex" value="M">	<label for="reg_petSexM">Macho</label></div>
-				<div class="column"><input type="radio" name="petSex" value="F">	<label for="reg_petSexF">Hembra</label></div>
-			</div>
-			<!--div class="row formEntry ta-left"><label for="petDescription">Descripción</label></div>
-			<textarea class="row" name="petDescription"></textarea-->
-			<input type="submit" class="bg-red" value="Registrar"></input>
+            <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petColor">Color</label>		<input id="rep_petColor" type="text" name="petColor" placeholder=" "></div>
+            <div class="row formEntry">
+                <div class="column ta-left"><label>Sexo</label></div>
+                <div class="column"><input id="rep_petSexM" type="radio" name="petSex" value="M">	<label for="rep_petSexM">Macho</label></div>
+                <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F">	<label for="rep_petSexF">Hembra</label></div>
+            </div>
+			
+			<input type="submit" class="bg-red" value="Reportar"></input>
 		</form>
 	</div>
 </body>
