@@ -1,0 +1,33 @@
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="assets/style.css">
+	<script src="assets/app.js"></script>
+	<style>
+		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
+		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
+	</style>
+</head>
+<body class="column">
+	<div class="row header">
+		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+		<h1>Reportar Hallazgo</h1>
+	</div>
+	<div class="row">
+		<form class="column mh-1" action="alertList.html">
+			<div class="row formEntry"><div class="column ta-center">
+				<div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage"></div>
+				<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
+			</div></div>
+            <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petColor">Color</label>		<input id="rep_petColor" type="text" name="petColor" placeholder=" "></div>
+            <div class="row formEntry">
+                <div class="column ta-left"><label>Sexo</label></div>
+                <div class="column"><input id="rep_petSexM" type="radio" name="petSex" value="M">	<label for="rep_petSexM">Macho</label></div>
+                <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F">	<label for="rep_petSexF">Hembra</label></div>
+            </div>
+			
+			<input type="submit" class="bg-red" value="Reportar"></input>
+		</form>
+	</div>
+</body>

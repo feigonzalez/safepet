@@ -1,0 +1,130 @@
+:root{
+	--text-color:#222;
+	/* --- Theme --- */
+	--brand-primary:#E53935;
+	--brand-primary-soft:#FFE5E5;
+	--brand-surface:#fff;
+	--brand-border:#eaeaea;
+	--radius-lg:0.75rem;
+	--radius-xl:1rem;
+	--shadow-1:0 1px 3px #0002;
+	--shadow-2:0 4px 12px #0002;
+}
+
+@media (orientation:landscape){
+	:root{--screen-scale:0.4;}
+}
+
+@media (orientation:portrait){
+	:root{
+		--screen-scale:1;
+		font-size:5vw
+	}
+}
+
+@keyframes formLabel{
+	from{font-size:1em;bottom:0.1em;color:#111;left:0.1em}
+	to{font-size:0.75em;bottom:100%;color:#777;left:0}
+	
+}
+html{height:100%;user-select:none;-webkit-tap-highlight-color: transparent;}
+body{display:flex;flex-direction:column;margin:0;min-height:100%;color:var(--text-color);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Ubuntu,Arial,sans-serif;background:#fff;justify-content:start !important;line-height:1.4}
+a{text-decoration:none;color:inherit}
+
+button, .button, input[type=button], input[type=submit]{
+	display:flex;border:none;width:100%;height:3rem;min-height:3rem;margin:0.5rem;font-size:1rem;
+	border-radius:2rem;background:#fff;align-items:center;justify-content:center;
+	text-decoration:none;color:var(--text-color);cursor:hand;cursor:pointer;
+	box-shadow:var(--shadow-1);
+	transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+button:hover, .button:hover, input[type=button]:hover, input[type=submit]:hover{box-shadow:var(--shadow-2)}
+button:active, .button:active, input[type=button]:active, input[type=submit]:active{transform:scale(0.99)}
+
+.row, .column{display:flex;align-items:center;justify-content:center;
+	height:-moz-available;height:-webkit-fill-available;width:-moz-available;width:-webkit-fill-available
+	/*height:100%;width:100%*/
+	}
+.row{flex-direction:row;}
+.column{flex-direction:column;}
+.grid{display:grid}
+
+.row.compact{height:initial}
+.column.compact{width:initial}
+
+.row.header{height:initial;justify-content:start;position:sticky;background:inherit;border-bottom:solid 1px #0002;top:0;z-index:10;backdrop-filter:saturate(1.2)}
+.row.header h1{font-weight:600;font-size:1.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0.75rem 0}
+.row.footer{margin-top:auto;background:inherit;border-top:solid 1px #0004;z-index:10;position:sticky;bottom:0}
+.row.footer.fixed{bottom:0}
+
+.formEntry{position:relative;height:initial;margin-top:1em;margin-bottom:1em}
+.formEntry label:has(~ input[type=text]:focus), .formEntry input[type=text]:focus ~ label,
+	.formEntry label:has(~ input[type=text]:not(:placeholder-shown)), .formEntry input[type=text]:not(:placeholder-shown) ~ label
+	{font-size:0.75em;bottom:100%;color:#777;left:0;animation-name:formLabel;animation-duration:0.25s}
+.formEntry label:has(~ input[type=text]){position:absolute;left:0.1em;bottom:0.1em}
+.formEntry input[type=text]{width:100%;height:1rem;border:none;border-bottom:solid 1px #999;font-size:1rem}
+.formEntry input:placeholder-shown{font-size:0.75em;bottom:100%;}
+
+.card{border:solid 1px var(--brand-border);border-radius:var(--radius-lg);background:#f7f7f7;padding:0.75rem;margin:0.5rem}
+
+.round{height:3rem;width:3rem;border-radius:50%}
+
+.carrousel div[data-imgsrc]{height:12rem;width:12rem;background-size:cover;background-position-x:50%;border-radius:1rem;}
+
+.size-large{font-size:1.5rem;height:4rem;width:4rem}
+.size-largest{font-size:2.5rem;height:5rem;width:5rem}
+.size-full{height:100%;width:100%}
+.size-full-height{height:100%}
+.size-full-width{width:100%}
+
+.pos-fixed{position:fixed}
+.pos-top{top:0.5rem}
+.pos-right{right:0.5rem}
+
+.bg-red{background-color:var(--brand-primary) !important;color:#fff !important}
+.bg-green{background-color:#4B4 !important;color:#fff !important}
+.bg-redpale{background-color:#FCC !important;color:#411 !important;;border-color:#f88}
+
+.ph-1{padding-left:1rem;padding-right:1rem}
+.ph-05{padding-left:0.5rem;padding-right:0.5rem}
+.mh-1{margin-left:1rem;margin-right:1rem}
+.mv-1{margin-top:1rem;margin-bottom:1rem}
+
+.bold{font-weight:bold}
+.flex-grow{flex-grow:1}
+
+.icon{background-size:contain;background-repeat:no-repeat;background-position:center;display:inline-block}
+button.icon, a.button.icon, input[type=button].icon, input[type=submit].icon{
+	height:2rem;width:2rem;margin:0.5rem;
+}
+span.icon{height:1.5em;width:1.5em;}
+.bg-red .icon{filter:invert(1)}
+.icon.green-text{filter:invert(1) brightness(0.6) sepia() hue-rotate(60deg) saturate(2)}
+
+input[type=file]{display:none}
+
+.ta-left{text-align:left;}		.ta-left.column{align-items:start}		.ta-left.row{justify-content:start}
+.ta-center{text-align:center;}	.ta-center.column{align-items:center}	.ta-center.row{justify-content:center}
+.ta-right{text-align:right;}	.ta-right.column{align-items:end}		.ta-right.row{justify-content:end}
+.al-top{align-items:top}
+
+.modalBackdrop{background:#0008;position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:100}
+.modalBody{background:#fff;width:85%;max-width:480px;min-height:1rem;border-radius:1rem}
+.modalCloseButton{border-bottom:solid 1px #0004;text-align:center;color:#0004;padding:0.5rem;cursor:hand;cursor:pointer}
+.modalCloseButton:before{content:"×"}
+.modalContent{padding:1rem}
+
+#backButton{filter:none}
+
+/* --- UI utilities for consistent aesthetics across pages --- */
+.sectionTitle{font-size:1rem;color:#666;margin:0.5rem 1rem}
+.metaText{font-size:0.85rem;color:#666}
+.listCard{display:flex;align-items:center;padding:0.75rem;margin:0.5rem;border:solid 1px var(--brand-border);border-radius:var(--radius-lg);background:var(--brand-surface);box-shadow:var(--shadow-1);transition:background 0.15s, box-shadow .15s}
+.listCard:hover{background:#f9f9f9;box-shadow:var(--shadow-2)}
+.chevron{height:1.25rem;width:1.25rem}
+.rotate-180{transform:rotate(180deg)}
+.cameraBox{width:80vw;height:60vw;max-width:480px;background:#000;border-radius:1rem;overflow:hidden;border:solid 1px #222}
+
+/* Chips y hero */
+.chip{display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.5rem;border:solid 1px var(--brand-border);border-radius:1rem;background:#fff;font-size:0.85rem;color:#555;margin:0.25rem}
+.heroBox{padding:1rem;border:solid 1px var(--brand-border);border-radius:var(--radius-lg);background:#fff;margin:0.5rem;box-shadow:var(--shadow-2)}

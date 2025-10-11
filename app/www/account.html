@@ -1,0 +1,156 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/app.js"></script>
+    <script src="../js/urlParams.js"></script>
+    <style>
+        .petImageDisplay{height:4rem;width:4rem;background-size:cover;
+            background-position:50%;border-radius:50%;border:solid 1px #844}
+        .sectionTitle{font-weight:bold;margin:0.75rem 0.5rem;color:#333}
+        /* Perfil grande y atractivo */
+        .profileCard{border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-2);margin:0.5rem}
+        .profileHeader{background:linear-gradient(135deg,var(--brand-primary),#ff6b6b);color:#fff;display:flex;align-items:center;gap:0.75rem;padding:1rem}
+        .accountAvatar{height:4.5rem;width:4.5rem;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 2px 8px #0002}
+        .accountAvatarInitials{font-weight:700;color:#444}
+        .accountName{font-size:1.35rem}
+        .changePicLink{font-size:0.85rem;color:#fff8;text-decoration:underline;cursor:pointer}
+        .profileBody{background:#fff;padding:1rem}
+        .tabs{display:flex;gap:0.5rem;margin-bottom:0.5rem}
+        .tab{padding:0.35rem 0.75rem;border:solid 1px var(--brand-border);border-radius:1rem;background:#fff;color:#555;font-size:0.9rem}
+        .tab.active{background:var(--brand-primary-soft);color:#a22;border-color:#f5b}
+        .accountBadges{display:flex;gap:0.5rem;margin:0.25rem 0}
+        .contactRow{display:flex;align-items:center;gap:0.5rem;color:#444;margin-top:0.25rem}
+        .contactRow .icon{height:1.1rem;width:1.1rem}
+        .accountMeta{font-size:0.95rem;color:#666}
+        .petCard{align-items:center;justify-content:space-between}
+    </style>
+    <!--script>
+        async function beforeLoad(){
+            // Render account info
+            const accountInfo = document.querySelector('#accountInfoContainer');
+            let account = await selectAllFrom('account');
+            if(account){
+                const initials = (account.name||'')
+                    .split(' ')
+                    .filter(Boolean)
+                    .map(n=>n[0])
+                    .slice(0,2)
+                    .join('')
+                    .toUpperCase();
+                const avatarHTML = initials
+                    ? `<div class="accountAvatar"><div class="accountAvatarInitials">${initials}</div></div>`
+                    : `<div class="accountAvatar"><span class="icon" data-icon="person-fill"></span></div>`;
+
+                accountInfo.innerHTML = `
+                    <div class="row">
+                        <div class="column size-full-width">
+                            <div class="profileCard">
+                                <div class="profileHeader">
+                                    ${avatarHTML}
+                                    <div class="column ta-left flex-grow">
+                                        <div class="row accountName bold ta-left">${account.name || 'Sin nombre'}</div>
+                                        <div class="row"><a class="changePicLink" href="#">Cambiar foto</a></div>
+                                    </div>
+                                </div>
+                                <div class="profileBody">
+                                    <div class="tabs"><div class="tab active">Perfil</div><div class="tab">Contacto</div></div>
+                                    <div class="row accountBadges ta-left">
+                                        <span class="chip">${(account.plan||'free').toUpperCase()}</span>
+                                        <span class="chip">${account.status || 'Sin estado'}</span>
+                                    </div>
+                                    <div class="row accountMeta ta-left">Información de contacto</div>
+                                    <div class="row contactRow ta-left"><span class="icon" data-icon="envelope-fill"></span>${account.email || 'Sin correo'}</div>
+                                    <div class="row contactRow ta-left"><span class="icon" data-icon="telephone-fill"></span>${account.phone || 'Sin teléfono'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                accountInfo.innerHTML = `
+                    <div class="row heroBox">
+                        <div class="column ta-left">
+                            <div class="row ta-left">Aún no has configurado tu cuenta.</div>
+                        </div>
+                    </div>`;
+            }
+
+            // Render pets list under account info
+            const petsContainer = document.querySelector('#accountPetsContainer');
+            const pets = await selectAllFrom('pets');
+            if(petsContainer){
+                petsContainer.innerHTML = '';
+                for(const [id, pet] of Object.entries(pets || {})){
+                    const sexSymbol = pet.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
+                    const card = document.createElement('a');
+                    card.href = `alertDetail.html?id=${encodeURIComponent(id)}&view=owner`;
+                    card.className = 'row compact listCard petCard';
+                    card.innerHTML = `
+                        <div class="column compact"><div class="petImageDisplay" data-imgsrc="../media/${pet.images?.[0]||''}"></div></div>
+                        <div class="column ph-1 ta-left">
+                            <div class="row ta-left bold">${pet.name} ${sexSymbol}</div>
+                            <div class="row ta-left metaText">${pet.species} (${pet.breed})</div>
+                        </div>
+                        <div class="column compact"><span class="icon" data-icon="chevron-right"></span></div>`;
+                    petsContainer.appendChild(card);
+                }
+            }
+            // Render section based on view param (notifications/messages)
+            const sectionContainer = document.querySelector('#accountSectionContainer');
+            const view = (params && params.view) || '';
+            if(view === 'notifications'){
+                sectionContainer.innerHTML = `
+                    <div class="row header"><h2>Notificaciones</h2></div>
+                    <div class="row compact card"><div class="column">Nueva alerta cerca de tu ubicación.</div></div>
+                    <div class="row compact card"><div class="column">Mensaje de un dueño: Gracias por tu reporte.</div></div>
+                `;
+            } else if(view === 'messages'){
+                sectionContainer.innerHTML = `
+                    <div class="row header"><h2>Mensajes</h2></div>
+                    <div class="row compact card"><div class="column"><div class="row bold">Dueño de Florencia</div><div class="row">¡Gracias por avisar! ¿Puedes compartir ubicación?</div></div></div>
+                `;
+            } else {
+                sectionContainer.innerHTML = '';
+            }
+        }
+    </script-->
+</head>
+<body class="column">
+
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Mi Cuenta</h1>
+    </div>
+	
+    <div class="row">
+        <div class="column ph-1">
+			<!-- Datos resumidos de la cuenta -->
+			<!-- Se le puede hacer clic para ver los detalles de la cuenta -->
+            <div id="accountInfoContainer">
+				datos resumidos de la cuenta: nombre, foto?, estado
+			</div>
+        </div>
+    </div>
+	
+    <!--div class="row compact">
+        <div class="column ph-1">
+            <a class="button bg-red" href="petList.html">Ver mis mascotas</a>
+        </div>
+    </div-->
+	
+    <div class="row">
+        <div class="column ph-1">
+			<div class="row">
+				<!-- Datos de la primera mascota -->
+				mascota 1
+			</div>
+			<div class="row">
+				<!-- Datos de la segunda mascota -->
+				mascota 2
+			</div>
+			<div class="row">
+				<a class="button bg-red" href="register.html">Añadir Mascota</a>
+			</div>
+        </div>
+    </div>
+	
+</body>

@@ -1,0 +1,48 @@
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="assets/style.css">
+	<script src="assets/app.js"></script>
+	<script src="assets/urlParams.js"></script>
+	<style>
+		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:0 auto}
+		.petSummary{margin-top:0.5rem;color:#555}
+		.ownerMeta{font-size:0.9rem;color:#666}
+	</style>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1 id="alertTitle">Alerta de pérdida</h1>
+    </div>
+	<div class="row flex-grow">
+		<div class="column">
+			<div class="row"><div id="petImageDisplay" data-imgsrc="../media/${petImage}"></div></div>
+			<div class="row">
+				<div class="column ta-center size-full-width">
+					<h2 class="row ta-center">${petName} ${petSexSymbol}</h2>
+					<div class="row ta-center petSummary">${petSpeciesBreed}</div>
+				</div>
+			</div>
+            <div class="row">
+                <div class="grid" data-columns=2>
+                    <h3 name="petName" class="ta-center" colspan=2>${petName}</h3>
+                    <span class="ta-left bold">Especie</span>
+                    <span class="ta-left" name="petSpecies">${petSpecies}</span>
+                    <span class="ta-left bold">Raza</span>
+                    <span class="ta-left" name="petBreed">${petBreed}</span>
+                    <span class="ta-left bold">Color</span>
+                    <span class="ta-left" name="petColor">${petColor}</span>
+                    <span class="ta-left bold">Sexo</span>
+                    <span class="ta-left" name="petSex">${petSex}</span>
+                </div>
+            </div>
+            <div class="row"><div id="ownerInfo" class="column size-full-width"></div></div>
+            <div class="row" id="ownerActions">
+                <div class="column size-full-width ph-1">
+                    <button id="lossAlertBtn" class="button bg-red" role="button" onclick="loadModal('templates/confirmReportModal.html')">Confirmar Reporte</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </body>

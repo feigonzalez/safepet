@@ -1,0 +1,42 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/app.js"></script>
+    <style>
+		.notifItem{display:flex;align-items:flex-start}
+		.notifTitle{padding-left:0.5rem}
+		.notifIcon{height:2rem;width:2rem}
+		.notifMeta{font-size:0.85rem;color:#666;margin-top:0.25rem}
+    </style>
+</head>
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Notificaciones</h1>
+    </div>
+    <div class="row">
+        <div class="column size-full-width">
+            <div class="row compact listCard">
+                <div class="column notifItem ta-left">
+                    <div class="row ta-left bold">
+						<span class="icon notifIcon" data-icon="warning"></span>
+						<span class="notifTitle">Nueva alerta cerca de tuyo</span>
+					</div>
+                    <div class="column ta-left">
+                        <div class="row ta-left metaText">5Km, hace 7 min</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row compact listCard">
+                <div class="column notifItem ta-left">
+                    <div class="row ta-left bold">
+						<span class="icon notifIcon" data-icon="chat"></span>
+						<span class="notifTitle">Mensaje de un dueño</span>
+					</div>
+					<div class="row ta-left metaText">Hace 10 min, por Florencia</div>
+					<div class="row ta-left">“Gracias por tu reporte.”</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,7 +1,0 @@
-{
-  "name": "safepet",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
