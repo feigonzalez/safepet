@@ -10,7 +10,15 @@
 	</style>
 	<script>
 		async function beforeLoad(){
-			notifications = await fetch("assets/mockupData/notifications.json").then(r=>r.ok?r.json():{});
+			notifications = await fetch("http://dintdt.c1.biz/safepet/pullNotifications.php",{
+				method:"cors",
+				method:"POST",
+				body:new URLSearchParams({"account_id":0})
+			})
+			.then(r=>r.ok?r.json():{});
+			for(let n of notifications){
+				n["metaText"]=n.timestamp
+			}
 		}
 	</script>
 </head>
@@ -31,7 +39,7 @@
 			<div class="row compact listCard">
 				<div class="column notifItem ta-left">
 					<div class="row ta-left bold">
-						<span class="icon notifIcon" data-icon="${icon}"></span>
+						<span class="icon notifIcon" data-icon="${type}"></span>
 						<span class="notifTitle" content="${title}"></span>
 					</div>
 					<div class="column ta-left">
