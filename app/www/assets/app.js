@@ -3,8 +3,8 @@ window.addEventListener("load",()=>{
 })
 
 async function processContents(self){
-	if(window.beforeLoad)
-		await window.beforeLoad();
+	if(typeof beforeLoad === "function")
+		await beforeLoad();
 	let frame = self;
 	if(!self) frame = document.body;
 	
@@ -17,7 +17,6 @@ async function processContents(self){
 		for(let item of data){
 			let newEntry = template;
 			for(let key in item){
-				console.log("replace ${"+key+"} with ["+item[key]+"]")
 				newEntry=newEntry.replaceAll("${"+key+"}",item[key])
 			}
 			iterator.innerHTML+=newEntry
@@ -29,25 +28,10 @@ async function processContents(self){
 	}
 	
 	// Fija el [placeholder] los inputs de tipo texto a " " para las animaciones css
-	for(let input of document.querySelectorAll("input[type=text]")){
+	for(let input of frame.querySelectorAll("input[type=text]")){
 		if(input.getAttribute("placeholder") == null){
 			input.setAttribute("placeholder"," ")
 		}
-	}
-	
-	// Hace que el botón #backButton redirija a la página previa
-	let backButton = frame.querySelector("#backButton")
-	if(backButton){
-		backButton.addEventListener("click",()=>{
-			window.history.back();
-		})
-	}
-	
-	// Something about handling file uploads ??
-	for(let controller of frame.querySelectorAll(".fileUploadControl")){
-		controller.addEventListener("click",()=>{
-			frame.querySelector("#"+controller.dataset.input).click()
-		})
 	}
 	
 	// Maneja elementos que no son <img> pero que muestran imágenes
@@ -74,6 +58,22 @@ async function processContents(self){
 	
 	// Borra los campos de templating (de formato ${...}) que quedaron sin reemplazar.
 	frame.innerHTML=frame.innerHTML.replaceAll(/\${(.*?)}/gm,"");
+	
+	// Hace que el botón #backButton redirija a la página previa
+	let backButton = frame.querySelector("#backButton")
+	if(backButton){
+		console.log(backButton)
+		backButton.addEventListener("click",()=>{
+			history.back();
+		})
+	}
+	
+	// Something about handling file uploads ??
+	for(let controller of frame.querySelectorAll(".fileUploadControl")){
+		controller.addEventListener("click",()=>{
+			frame.querySelector("#"+controller.dataset.input).click()
+		})
+	}
 }
 
 function showUploadedImage(src,target){
