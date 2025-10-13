@@ -1,5 +1,8 @@
 {
-  "appId": "com.safepet.app",
-  "appName": "SafePet",
-  "webDir": "www"
+	"appId": "com.safepet.app",
+	"appName": "SafePet",
+	"webDir": "www",
+	"android": {
+		"allowMixedContent": true 
+	}
 }
