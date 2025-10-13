@@ -3,17 +3,39 @@ window.addEventListener("load",()=>{
 })
 
 async function processContents(self){
+	if(window.beforeLoad)
+		await window.beforeLoad();
 	let frame = self;
-	if(!self) frame = document;
-	// Sets the placeholder attribute to text-type inputs
-	// This attribute is required for css animations related to their labels
+	if(!self) frame = document.body;
+	
+	// Repite el contenido de elementos con [foreach] por cada entrada del objeto
+	// señalado en el atributo.
+	for(let iterator of frame.querySelectorAll("[foreach]")){
+		data = eval(iterator.getAttribute("foreach"));
+		template = iterator.innerHTML;
+		iterator.innerHTML="";
+		for(let item of data){
+			let newEntry = template;
+			for(let key in item){
+				console.log("replace ${"+key+"} with ["+item[key]+"]")
+				newEntry=newEntry.replaceAll("${"+key+"}",item[key])
+			}
+			iterator.innerHTML+=newEntry
+		}
+	}
+	
+	for(let hasContent of frame.querySelectorAll("[content]")){
+		hasContent.innerHTML=hasContent.getAttribute("content");
+	}
+	
+	// Fija el [placeholder] los inputs de tipo texto a " " para las animaciones css
 	for(let input of document.querySelectorAll("input[type=text]")){
 		if(input.getAttribute("placeholder") == null){
 			input.setAttribute("placeholder"," ")
 		}
 	}
 	
-	// Makes #backButton elements redirect to the previous page when clicked
+	// Hace que el botón #backButton redirija a la página previa
 	let backButton = frame.querySelector("#backButton")
 	if(backButton){
 		backButton.addEventListener("click",()=>{
@@ -28,19 +50,19 @@ async function processContents(self){
 		})
 	}
 	
-	// Handles elements that show images but arent don't have the img tag
+	// Maneja elementos que no son <img> pero que muestran imágenes
 	for(let pseudoImg of frame.querySelectorAll("[data-imgsrc]")){
 		pseudoImg.style.backgroundImage="url("+pseudoImg.dataset.imgsrc+")";
 	}
 	
-	// Sets the background-image of .icon elements to an url that depends on the data-icon attribute
+	// Fija la imagen de fondo para los elementos con [data-icon]
 	for(let icon of frame.querySelectorAll("[data-icon]")){
 		icon.style.backgroundImage="url(\"assets/"+icon.dataset.icon+".svg\")";
 	}
 	
-	// Handles grid elements:
-	// Uses the data-columns to determine the number of columns, which adjusts the number of rows according to the number of children.
-	// [colspan] elements inside a .grid element are given the appropriate grid-column style
+	// Maneja los elementos de grilla:
+	// Usa el valor [data-columns] para determinar el número de columnas.
+	// Elementos con [colspan=X] dentro de un .grid abarcan X columnas.
 	for(let grid of frame.querySelectorAll(".grid")){
 		if(grid.dataset["columns"]){
 			grid.style.gridTemplateColumns="repeat("+grid.dataset["columns"]+", 1fr)";
@@ -49,6 +71,9 @@ async function processContents(self){
 	for(let span of frame.querySelectorAll(".grid [colspan]")){
 		span.style.gridColumn=span.getAttribute("colspan")+" span";
 	}
+	
+	// Borra los campos de templating (de formato ${...}) que quedaron sin reemplazar.
+	frame.innerHTML=frame.innerHTML.replaceAll(/\${(.*?)}/gm,"");
 }
 
 function showUploadedImage(src,target){

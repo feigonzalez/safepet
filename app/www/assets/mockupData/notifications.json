@@ -1,0 +1,13 @@
+[
+	{
+		"title":"Nueva alerta cerca tuyo",
+		"icon":"warning",
+		"metaText":"5Km, hace 7 min"
+	},
+	{
+		"title":"Mensaje de un dueño",
+		"icon":"chat",
+		"description":"gracias por tu reporte!",
+		"metaText":"Hace 10 min, por mascota Florencia"
+	}
+]
