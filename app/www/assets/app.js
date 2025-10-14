@@ -64,7 +64,13 @@ async function processContents(self){
 	if(backButton){
 		console.log(backButton)
 		backButton.addEventListener("click",()=>{
-			history.back();
+			// Si hay historial previo, retrocede
+			if(window.history.length > 1){
+				history.back();
+			} else {
+				// Si no hay historial, va a la página principal
+				window.location.href = 'index.html';
+			}
 		})
 	}
 	
