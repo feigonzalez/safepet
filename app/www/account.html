@@ -2,7 +2,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="assets/style.css">
     <script src="assets/app.js"></script>
-    <script src="../js/urlParams.js"></script>
+    <script src="assets/urlParams.js"></script>
     <style>
         .petImageDisplay{height:4rem;width:4rem;background-size:cover;
             background-position:50%;border-radius:50%;border:solid 1px #844}
@@ -23,6 +23,93 @@
         .contactRow .icon{height:1.1rem;width:1.1rem}
         .accountMeta{font-size:0.95rem;color:#666}
         .petCard{align-items:center;justify-content:space-between}
+        
+        /* Nuevos estilos para el perfil mejorado */
+         .profileSummary {
+             display: flex;
+             align-items: center;
+             gap: 1rem;
+             padding: 1.5rem;
+             background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+             border-radius: var(--radius-lg);
+             box-shadow: var(--shadow-1);
+             border: 1px solid var(--brand-border);
+             transition: all 0.3s ease;
+             width: 100%;
+             margin: 0;
+         }
+        
+        .profileSummary:hover {
+            box-shadow: var(--shadow-2);
+            transform: translateY(-1px);
+        }
+        
+        .profileCircle {
+             position: relative;
+             flex-shrink: 0;
+         }
+         
+         .profileInfo {
+             flex: 1;
+             min-width: 0;
+         }
+        
+        .profileName {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .profileStatus {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profilePlan {
+            font-size: 0.9rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--brand-primary-soft);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+        
+        .profilePlan:hover {
+            background: var(--brand-primary);
+            color: white;
+        }
+        
+        .accountDetails {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--brand-primary);
+            animation: slideDown 0.3s ease;
+        }
+        
+        .detailRow {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        
+        .detailRow:last-child {
+            margin-bottom: 0;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
     <!--script>
         async function beforeLoad(){
@@ -125,8 +212,31 @@
         <div class="column ph-1">
 			<!-- Datos resumidos de la cuenta -->
 			<!-- Se le puede hacer clic para ver los detalles de la cuenta -->
-            <div id="accountInfoContainer">
-				datos resumidos de la cuenta: nombre, foto?, estado
+            <div id="accountInfoContainer" onclick="toggleAccountDetails()" style="cursor: pointer; width: 100%;">
+				<div class="profileSummary">
+					<div class="profileCircle">
+						<img id="profileImage" src="assets/logo.png" alt="Foto de perfil" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-primary);">
+					</div>
+					<div class="profileInfo">
+						<div class="profileName">Juan Pérez</div>
+						<div class="profileStatus">Cuenta Activa</div>
+						<div class="profilePlan" onclick="goToSubscription(event)" style="color: var(--brand-primary); font-weight: 500; cursor: pointer;">Plan Gratis ▼</div>
+					</div>
+				</div>
+				<div id="accountDetails" class="accountDetails" style="display: none;">
+					<div class="detailRow">
+						<strong>Email:</strong> juan.perez@email.com
+					</div>
+					<div class="detailRow">
+						<strong>Teléfono:</strong> +1 234 567 8900
+					</div>
+					<div class="detailRow">
+						<strong>Fecha de registro:</strong> 15 de Enero, 2024
+					</div>
+					<div class="detailRow">
+						<strong>Mascotas registradas:</strong> 2
+					</div>
+				</div>
 			</div>
         </div>
     </div>
@@ -152,5 +262,26 @@
 			</div>
         </div>
     </div>
+
+    <script>
+        function toggleAccountDetails() {
+            const details = document.getElementById('accountDetails');
+            if (details.style.display === 'none') {
+                details.style.display = 'block';
+            } else {
+                details.style.display = 'none';
+            }
+        }
+        
+        function goToSubscription(event) {
+            event.stopPropagation(); // Evita que se active toggleAccountDetails
+            window.location.href = 'subscription.html';
+        }
+        
+        // Funcionalidad del botón de regreso
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
 	
 </body>
