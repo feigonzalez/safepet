@@ -22,8 +22,38 @@ function debugLog(s){if(debugging)console.log(s)}
 async function selectAll(){
 	debugLog("Retrieving DB data...");
 	var res;
-	await fetch("../js/db.json").then(r=>r.json()).then(j=>res=j);
-	debugLog("DB data retrieved.")
+	try {
+		await fetch("assets/db.json").then(r=>r.json()).then(j=>res=j);
+		debugLog("DB data retrieved.")
+	} catch (error) {
+		debugLog("Error fetching DB data, using default data");
+		res = {
+			account: {
+				name: "Francisca Espinosa",
+				email: "fran@example.com",
+				phone: "+56 9 8765 4321",
+				address: "Valparaíso, Chile",
+				status: "Cuenta Activa",
+				plan: "Plan Gratis"
+			},
+			pets: {
+				"1": {
+					name: "Covellina",
+					species: "Perro",
+					breed: "Golden Retriever",
+					sex: "Hembra",
+					images: ["covellina.jpg"]
+				},
+				"2": {
+					name: "Dargon",
+					species: "Perro", 
+					breed: "Pastor Alemán",
+					sex: "Macho",
+					images: ["dargon.jpg"]
+				}
+			}
+		};
+	}
 	return res;
 }
 
