@@ -1,301 +1,33 @@
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
-    <script src="assets/app.js"></script>
+	<script src="assets/app.js"></script>
 	<style>
-		body {
-			background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-			min-height: 100vh;
-			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-		}
-
-		.form-container {
-			background: white;
-			border-radius: 16px;
-			padding: 2.5rem;
-			margin: 1rem;
-			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-			border: 1px solid rgba(255, 255, 255, 0.2);
-		}
-
-		#petImageDisplay {
-			width: 140px;
-			height: 140px;
-			border: 2px dashed #E53935;
-			border-radius: 50%;
-			background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-			background-size: cover;
-			background-position: center;
-			position: relative;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin: 0 auto 1.5rem auto;
-		}
-
-		#petImageDisplay:hover {
-			border-color: #c62828;
-			transform: scale(1.05);
-			box-shadow: 0 8px 24px rgba(229, 57, 53, 0.15);
-		}
-
-		#petImageDisplay::before {
-			content: "📷";
-			font-size: 2.2rem;
-			color: #E53935;
-			opacity: 0.8;
-		}
-
-		#petImageDisplay.has-image::before {
-			display: none;
-		}
-
-		.upload-text {
-			text-align: center;
-			color: #6c757d;
-			font-size: 0.9rem;
-			margin-top: 0.5rem;
-			font-weight: 500;
-		}
-
-		.formEntry {
-			margin-bottom: 1.8rem;
-		}
-
-		.formEntry label {
-			font-weight: 600;
-			color: #495057;
-			margin-bottom: 0.7rem;
-			display: block;
-			font-size: 0.95rem;
-		}
-
-		.formEntry label .required {
-			color: #E53935;
-			margin-left: 2px;
-		}
-
-		.error-message {
-			color: #E53935;
-			font-size: 0.8rem;
-			margin-top: 0.3rem;
-			display: none;
-			font-weight: 500;
-		}
-
-		.formEntry.error input[type="text"] {
-			border-color: #E53935;
-			box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
-		}
-
-		.progress-indicator {
-			display: flex;
-			justify-content: center;
-			margin-bottom: 2rem;
-			gap: 0.5rem;
-		}
-
-		.progress-step {
-			width: 8px;
-			height: 8px;
-			border-radius: 50%;
-			background: #e9ecef;
-			transition: all 0.3s ease;
-		}
-
-		.progress-step.active {
-			background: #E53935;
-			transform: scale(1.2);
-		}
-
-		.form-help {
-			font-size: 0.8rem;
-			color: #6c757d;
-			margin-top: 0.3rem;
-			font-style: italic;
-		}
-
-		.formEntry input[type="text"] {
-			border: 2px solid #e9ecef;
-			border-radius: 12px;
-			padding: 14px 18px;
-			font-size: 1rem;
-			transition: all 0.3s ease;
-			background: white;
-			width: 100%;
-			box-sizing: border-box;
-			font-family: inherit;
-		}
-
-		.formEntry input[type="text"]:focus {
-			border-color: #E53935;
-			box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
-			outline: none;
-			transform: translateY(-1px);
-		}
-
-		.formEntry input[type="text"]:hover {
-			border-color: #dee2e6;
-		}
-
-		.sex-selector {
-			display: flex;
-			gap: 1rem;
-			justify-content: center;
-			margin-top: 1.5rem;
-		}
-
-		.sex-option {
-			position: relative;
-			cursor: pointer;
-		}
-
-		.sex-option input[type="radio"] {
-			display: none;
-		}
-
-		.sex-option label {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 14px 28px;
-			border: 2px solid #e9ecef;
-			border-radius: 24px;
-			background: white;
-			transition: all 0.3s ease;
-			cursor: pointer;
-			font-weight: 600;
-			font-size: 0.95rem;
-			color: #6c757d;
-		}
-
-		.sex-option input[type="radio"]:checked + label {
-			background: #E53935;
-			color: white;
-			border-color: #E53935;
-			transform: scale(1.02);
-			box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
-		}
-
-		.sex-option label:hover {
-			border-color: #E53935;
-			color: #E53935;
-			transform: translateY(-1px);
-		}
-
-		input[type="submit"] {
-			background: linear-gradient(135deg, #E53935 0%, #c62828 100%);
-			border: none;
-			border-radius: 12px;
-			padding: 16px 32px;
-			color: white;
-			font-size: 1.1rem;
-			font-weight: 600;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			margin-top: 2rem;
-			box-shadow: 0 4px 16px rgba(229, 57, 53, 0.3);
-			font-family: inherit;
-		}
-
-		input[type="submit"]:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4);
-		}
-
-		input[type="submit"]:active {
-			transform: translateY(0);
-		}
-
-		.header {
-			background: white;
-			border-bottom: 1px solid #e9ecef;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-		}
-
-		.header h1 {
-			color: #495057;
-			font-weight: 700;
-			font-size: 1.4rem;
-		}
-
-		#backButton {
-			background: #f8f9fa;
-			border: 1px solid #e9ecef;
-			color: #6c757d;
-			border-radius: 8px;
-			transition: all 0.3s ease;
-		}
-
-		#backButton:hover {
-			background: #e9ecef;
-			color: #495057;
-		}
+		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
+		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
 	</style>
 </head>
 <body class="column">
-    <div class="row header">
-        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-        <h1>Registrar Mascota</h1>
-    </div>
-    <div class="row">
-        <div class="form-container">
-            <!-- Indicador de progreso -->
-            <div class="progress-indicator">
-                <div class="progress-step active"></div>
-                <div class="progress-step"></div>
-                <div class="progress-step"></div>
+	<div class="row header">
+		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+		<h1>Añadir mascotas </h1>
+	</div>
+	<div class="row">
+		<form class="column mh-1" action="alertList.html">
+			<div class="row formEntry"><div class="column ta-center">
+				<div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage"></div>
+				<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
+			</div></div>
+            <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petColor">Color</label>		<input id="rep_petColor" type="text" name="petColor" placeholder=" "></div>
+            <div class="row formEntry">
+                <div class="column ta-left"><label>Sexo</label></div>
+                <div class="column"><input id="rep_petSexM" type="radio" name="petSex" value="M">	<label for="rep_petSexM">Macho</label></div>
+                <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F">	<label for="rep_petSexF">Hembra</label></div>
             </div>
-            
-            <form class="column" onsubmit="event.preventDefault(); loadModal('templates/petAddedModal.html'); return false;">
-                <div class="column" style="align-items: center;">
-                    <div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage" onclick="document.getElementById('reg_petImage').click()"></div>
-                    <div class="upload-text">Toca para agregar foto</div>
-                    <div class="form-help">Opcional: Ayuda a identificar mejor a tu mascota</div>
-                    <input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay'); document.getElementById('petImageDisplay').classList.add('has-image')" style="display: none;">
-                </div>
-                
-                <div class="formEntry">
-                    <label for="petName">Nombre <span class="required">*</span></label>
-                    <input type="text" name="petName" id="petName" placeholder="Ej: Max, Luna, Firulais">
-                </div>
-                
-                <div class="formEntry">
-                    <label for="reg_petSpecies">Especie <span class="required">*</span></label>
-                    <input id="reg_petSpecies" type="text" name="petSpecies" placeholder="Ej: Perro, Gato, Conejo">
-                    <div class="form-help">Tipo de animal (perro, gato, etc.)</div>
-                </div>
-                
-                <div class="formEntry">
-                    <label for="reg_petBreed">Raza</label>
-                    <input id="reg_petBreed" type="text" name="petBreed" placeholder="Ej: Labrador, Siamés, Mestizo">
-                    <div class="form-help">Opcional: Si conoces la raza específica</div>
-                </div>
-                
-                <div class="formEntry">
-                    <label for="reg_petColor">Color <span class="required">*</span></label>
-                    <input id="reg_petColor" type="text" name="petColor" placeholder="Ej: Marrón, Negro, Blanco y negro">
-                    <div class="form-help">Describe los colores principales del pelaje</div>
-                </div>
-                
-                <div class="formEntry">
-                    <label style="text-align: center; margin-bottom: 1rem; font-weight: 600;">Sexo <span class="required">*</span></label>
-                    <div class="sex-selector">
-                        <div class="sex-option">
-                            <input id="reg_petSexM" type="radio" name="petSex" value="M">
-                            <label for="reg_petSexM">♂ Macho</label>
-                        </div>
-                        <div class="sex-option">
-                            <input id="reg_petSexF" type="radio" name="petSex" value="F">
-                            <label for="reg_petSexF">♀ Hembra</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <input type="submit" value="Registrar Mascota">
-            </form>
-        </div>
-    </div>
+			
+			<input type="submit" class="bg-red" value="Registrar"></input>
+		</form>
+	</div>
 </body>

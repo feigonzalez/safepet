@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - SafePet</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/app.js"></script>
+    <script src="assets/db.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFFFFF;
+            color: #333333;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: #FFFFFF;
+            padding: 24px;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        .back-button:hover {
+            background-color: #F5F5F5;
+        }
+
+        .back-button svg {
+            width: 20px;
+            height: 20px;
+            stroke: #333333;
+            stroke-width: 2;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333333;
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .profile-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.08);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .profile-photo-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .change-photo-btn {
+            background: none;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .change-photo-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .cancel-button {
+            background: none;
+            color: #828282;
+            border: 2px solid #E0E0E0;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-button:hover {
+            border-color: #828282;
+            color: #333333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .header-title {
+                font-size: 24px;
+            }
+
+            .profile-container {
+                padding: 24px 20px;
+            }
+
+            .profile-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Editar Perfil</h1>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <!-- Sección de foto de perfil -->
+            <div class="profile-photo-section">
+                <div class="profile-photo" id="profilePhoto">
+                    <span id="profileInitials">JP</span>
+                </div>
+                <button class="change-photo-btn" onclick="changePhoto()">Cambiar Foto</button>
+            </div>
+
+            <!-- Formulario de edición -->
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label class="form-label" for="fullName">Nombre Completo</label>
+                    <input type="text" id="fullName" class="form-input" placeholder="Ingresa tu nombre completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Correo Electrónico</label>
+                    <input type="email" id="email" class="form-input" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="phone">Teléfono</label>
+                    <input type="tel" id="phone" class="form-input" placeholder="+56 9 1234 5678">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="address">Dirección</label>
+                    <input type="text" id="address" class="form-input" placeholder="Tu dirección">
+                </div>
+
+                <button type="button" class="cancel-button" onclick="window.location.href='settings.html'">Cancelar</button>
+                <button type="submit" class="save-button">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function beforeLoad() {
+            try {
+                // Cargar información del usuario
+                let db = await selectAll();
+                let account = db ? db.account : null;
+                
+                // Datos de prueba si no hay cuenta configurada (mismos que en settings)
+                if (!account) {
+                    account = {
+                        name: "Francisca Espinosa",
+                        email: "fran@example.com",
+                        phone: "+56 9 8765 4321",
+                        address: "Valparaíso, Chile"
+                    };
+                }
+                
+                // Llenar el formulario con los datos actuales
+                fillForm(account);
+            } catch (error) {
+                console.log('Error loading data, using default values:', error);
+                // Usar los mismos datos por defecto que en settings
+                const defaultAccount = {
+                    name: "Francisca Espinosa",
+                    email: "fran@example.com",
+                    phone: "+56 9 8765 4321",
+                    address: "Valparaíso, Chile"
+                };
+                fillForm(defaultAccount);
+            }
+        }
+        
+        function fillForm(account) {
+            // Llenar campos del formulario
+            document.getElementById('fullName').value = account.name || '';
+            document.getElementById('email').value = account.email || '';
+            document.getElementById('phone').value = account.phone || '';
+            document.getElementById('address').value = account.address || '';
+            
+            // Actualizar iniciales en la foto
+            if (account.name) {
+                const initials = account.name
+                    .split(' ')
+                    .filter(Boolean)
+                    .map(n => n[0])
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase();
+                document.getElementById('profileInitials').textContent = initials || 'U';
+            }
+        }
+
+        function changePhoto() {
+            alert('Funcionalidad de cambio de foto próximamente disponible');
+        }
+
+        function saveProfile(event) {
+            event.preventDefault();
+            
+            // Obtener datos del formulario
+            const formData = {
+                name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value
+            };
+            
+            // Simular guardado (aquí se conectaría con la base de datos)
+            console.log('Guardando perfil:', formData);
+            
+            // Mostrar confirmación
+            alert('Perfil actualizado correctamente');
+            
+            // Volver a ajustes
+            window.location.href = 'settings.html';
+        }
+
+        // Cargar datos al inicializar la página
+        document.addEventListener('DOMContentLoaded', beforeLoad);
+    </script>
+</body>
+</html>
