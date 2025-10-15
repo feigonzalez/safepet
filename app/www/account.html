@@ -110,6 +110,13 @@
                 transform: translateY(0);
             }
         }
+        
+        /* Colores de marca */
+        .bg-red { background-color: #e74c3c; }
+        .text-red { color: #e74c3c; }
+        
+        /* Bordes redondeados */
+        .rounded { border-radius: 8px; }
     </style>
     <!--script>
         async function beforeLoad(){
@@ -233,20 +240,9 @@
 					<div class="detailRow">
 						<strong>Mascotas registradas:</strong> 1
 					</div>
-				</div>
-			</div>
         </div>
     </div>
-	
-    <!--div class="row compact">
-        <div class="column ph-1">
-            <a class="button bg-red" href="petList.html">Ver mis mascotas</a>
-        </div>
-    </div-->
-	
-    <div class="row">
-        <div class="column ph-1">
-			<div class="row">
+	<div class="row">
 				<!-- Datos de la primera mascota -->
 				mascota 1
 			</div>
@@ -254,10 +250,16 @@
 				<!-- Datos de la segunda mascota -->
 				mascota 2
 			</div>
-			<div class="row">
-				<a class="button bg-red" href="register.html">Añadir Mascota</a>
-			</div>
+    <div class="row ">
+        <div class="column ph-1">
+            
+			<a class="button bg-red" href="register.html">Añadir Mascota</a>
+		<a class="button bg-red" href="reportHistory.html">Historial de Alertas</a>
+            <a class="button bg-red" href="petList.html">Ver mis mascotas</a>
         </div>
+    </div>
+	
+   
     </div>
 
     <script>

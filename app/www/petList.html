@@ -2,6 +2,7 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="assets/style.css">
     <script src="assets/app.js"></script>
+    <script src="assets/db.js"></script>
     <style>
         .petImageDisplay{height:4rem;width:4rem;background-size:cover;
             background-position:50%;border-radius:50%;border:solid 1px #844}
@@ -12,55 +13,38 @@
         .cardTitle{display:flex;gap:0.5rem;align-items:center}
         .cardChevron{height:1.25rem;width:1.25rem}
     </style>
-    <!--script>
+    <script>
         async function beforeLoad(){
-            const list = document.querySelector('#petListContainer');
             const pets = await selectAllFrom('pets');
-            list.innerHTML = '';
-            for(const [id, pet] of Object.entries(pets||{})){
-                const sexSymbol = pet.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
-                const card = document.createElement('div');
-                card.className = 'row compact listCard';
-                card.innerHTML = `
-                    <div class="column compact"><div class="petImageDisplay" data-imgsrc="../media/${pet.images?.[0]||''}"></div></div>
-                    <div class="column ph-1 size-full-width ta-left">
-                        <div class="cardHeader">
+            const list = document.querySelector('#petListContainer');
+            
+            if(pets){
+                for(const id in pets){
+                    const pet = pets[id];
+                    const sexSymbol = pet.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
+                    const card = document.createElement('div');
+                    card.className = 'card row';
+                    card.style.cursor = 'pointer';
+                    card.innerHTML = `
+                        <div class="column compact"><div class="petImageDisplay" data-imgsrc="media/${pet.images?.[0]||''}"></div></div>
+                        <div class="column ph-1 size-full-width ta-left">
                             <div class="cardTitle">
                                 <div class="row ta-left bold">${pet.name} ${sexSymbol}</div>
                                 <div class="row ta-left metaText">${pet.species} (${pet.breed})</div>
                             </div>
-                            <button class="button round bg-redpale" role="button" aria-label="Desplegar acciones"><span class="icon" data-icon="chevron-down"></span></button>
                         </div>
-                        <div class="actionsMenu">
-                            <div class="row"><a class="button bg-red" role="button" href="lossAlert.html?id=${encodeURIComponent(id)}" onclick="event.stopPropagation()">Alertar pérdida de mascota</a></div>
-                            <div class="row"><a class="button bg-redpale" role="button" href="#" onclick="event.stopPropagation()">Agregar dueño</a></div>
-                        </div>
-                    </div>
-                    <div class="column compact"><span class="icon cardChevron" data-icon="chevron-right"></span></div>
-                `;
-                const toggleBtn = card.querySelector('button.button.round');
-                const menu = card.querySelector('.actionsMenu');
-                toggleBtn.addEventListener('click',(e)=>{
-                    e.stopPropagation();
-                    menu.classList.toggle('open');
-                });
-                const addOwnerLink = card.querySelector('.actionsMenu a.button.bg-redpale');
-                addOwnerLink.addEventListener('click', async (e)=>{
-                    e.preventDefault();
-                    const acc = await selectAllFrom('account');
-                    if((acc.plan||'free')==='free'){
-                        window.location.href = 'premiumRequired.html';
-                    } else {
-                        window.location.href = `addOwner.html?id=${encodeURIComponent(id)}`;
-                    }
-                });
-                card.addEventListener('click', ()=>{
-                    window.location.href = `alertDetail.html?id=${encodeURIComponent(id)}`;
-                });
-                list.appendChild(card);
+                        <div class="column compact"><span class="icon cardChevron" data-icon="chevron-right"></span></div>
+                    `;
+                    card.addEventListener('click', (e)=>{
+                        e.preventDefault();
+                        console.log('Navegando a petDetail.html con ID:', id);
+                        window.location.href = `petDetail.html?id=${encodeURIComponent(id)}`;
+                    });
+                    list.appendChild(card);
+                }
             }
         }
-    </script-->
+    </script>
 </head>
 
 <body class="column">

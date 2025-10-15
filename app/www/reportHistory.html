@@ -1,0 +1,307 @@
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="assets/style.css">
+	<script src="assets/app.js"></script>
+	<style>
+		.filterSection {
+			padding: 1rem;
+			background: white;
+			border-bottom: 1px solid var(--brand-border);
+			margin: -1rem -1rem 1rem -1rem;
+		}
+		.filterTabs {
+			display: flex;
+			gap: 0.5rem;
+			margin-bottom: 1rem;
+		}
+		.filterTab {
+			padding: 0.5rem 1rem;
+			border: 1px solid var(--brand-border);
+			border-radius: var(--radius-md);
+			background: white;
+			cursor: pointer;
+			transition: all 0.2s;
+			font-size: 0.9rem;
+		}
+		.filterTab.active {
+			background: var(--brand-primary);
+			color: white;
+			border-color: var(--brand-primary);
+		}
+		.searchBox {
+			position: relative;
+		}
+		.searchBox input {
+			width: 100%;
+			padding: 0.75rem 1rem 0.75rem 2.5rem;
+			border: 1px solid var(--brand-border);
+			border-radius: var(--radius-md);
+			font-size: 1rem;
+		}
+		.searchBox .icon {
+			position: absolute;
+			left: 0.75rem;
+			top: 50%;
+			transform: translateY(-50%);
+			opacity: 0.5;
+		}
+		.reportCard {
+			background: white;
+			border: 1px solid var(--brand-border);
+			border-radius: var(--radius-lg);
+			margin: 1rem 0;
+			overflow: hidden;
+			box-shadow: var(--shadow-1);
+		}
+		.reportHeader {
+			display: flex;
+			align-items: center;
+			padding: 1rem;
+			border-bottom: 1px solid #f0f0f0;
+		}
+		.petImage {
+			width: 60px;
+			height: 60px;
+			border-radius: var(--radius-md);
+			background-size: cover;
+			background-position: center;
+			margin-right: 1rem;
+		}
+		.petInfo h3 {
+			margin: 0 0 0.25rem 0;
+			color: var(--brand-primary);
+		}
+		.petInfo p {
+			margin: 0;
+			color: #666;
+			font-size: 0.9rem;
+		}
+		.statusBadge {
+			margin-left: auto;
+			padding: 0.25rem 0.75rem;
+			border-radius: var(--radius-full);
+			font-size: 0.8rem;
+			font-weight: 600;
+		}
+		.status-active {
+			background: #fff3cd;
+			color: #856404;
+		}
+		.status-found {
+			background: #d4edda;
+			color: #155724;
+		}
+		.status-closed {
+			background: #f8d7da;
+			color: #721c24;
+		}
+		.reportDetails {
+			padding: 1rem;
+		}
+		.detailRow {
+			display: flex;
+			justify-content: space-between;
+			margin: 0.5rem 0;
+			font-size: 0.9rem;
+		}
+		.detailRow .label {
+			color: #666;
+		}
+		.detailRow .value {
+			font-weight: 600;
+		}
+		.reportActions {
+			display: flex;
+			gap: 0.5rem;
+			padding: 1rem;
+			border-top: 1px solid #f0f0f0;
+		}
+		.actionBtn {
+			flex: 1;
+			padding: 0.5rem;
+			border: 1px solid var(--brand-border);
+			border-radius: var(--radius-md);
+			background: white;
+			cursor: pointer;
+			transition: all 0.2s;
+			font-size: 0.9rem;
+		}
+		.actionBtn:hover {
+			background: #f9f9f9;
+		}
+		.actionBtn.primary {
+			background: var(--brand-primary);
+			color: white;
+			border-color: var(--brand-primary);
+		}
+		.actionBtn.primary:hover {
+			background: var(--brand-primary-dark);
+		}
+		.emptyState {
+			text-align: center;
+			padding: 3rem 1rem;
+			color: #666;
+		}
+		.emptyState .icon {
+			font-size: 3rem;
+			margin-bottom: 1rem;
+			opacity: 0.3;
+		}
+		.statsSection {
+			display: flex;
+			gap: 1rem;
+			margin: 1rem 0;
+		}
+		.statCard {
+			flex: 1;
+			background: white;
+			border: 1px solid var(--brand-border);
+			border-radius: var(--radius-md);
+			padding: 1rem;
+			text-align: center;
+		}
+		.statNumber {
+			font-size: 1.5rem;
+			font-weight: bold;
+			color: var(--brand-primary);
+			margin-bottom: 0.25rem;
+		}
+		.statLabel {
+			font-size: 0.8rem;
+			color: #666;
+		}
+	</style>
+</head>
+
+<body class="column size-full-height">
+	<div class="row header">
+		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+		<h1>Historial de Reportes</h1>
+	</div>
+	
+	<div class="column" style="padding: 1rem;">
+		<!-- Estadísticas -->
+		<div class="statsSection">
+			<div class="statCard">
+				<div class="statNumber" id="activeReports">0</div>
+				<div class="statLabel">Reportes Activos</div>
+			</div>
+			<div class="statCard">
+				<div class="statNumber" id="foundPets">0</div>
+				<div class="statLabel">Mascotas Encontradas</div>
+			</div>
+			<div class="statCard">
+				<div class="statNumber" id="closedReports">0</div>
+				<div class="statLabel">Reportes Cerrados</div>
+			</div>
+		</div>
+		
+		<!-- Filtros -->
+		<div class="filterSection">
+			<div class="filterTabs">
+				<div class="filterTab active" onclick="filterReports('all')">Todos</div>
+				<div class="filterTab" onclick="filterReports('active')">Activos</div>
+				<div class="filterTab" onclick="filterReports('found')">Encontrados</div>
+				<div class="filterTab" onclick="filterReports('closed')">Cerrados</div>
+			</div>
+			<div class="searchBox">
+				<span class="icon" data-icon="search"></span>
+				<input type="text" placeholder="Buscar por nombre de mascota..." oninput="searchReports(this.value)">
+			</div>
+		</div>
+		
+		<!-- Lista de reportes -->
+		<div id="reportsList">
+			<!-- Los reportes se cargarán dinámicamente aquí -->
+		</div>
+		
+		<!-- Estado vacío (oculto por defecto) -->
+		<div id="emptyState" class="emptyState" style="display: none;">
+			<div class="icon" data-icon="pets"></div>
+			<h3>No hay reportes</h3>
+			<p>No se encontraron reportes que coincidan con tu búsqueda.</p>
+		</div>
+	</div>
+	
+	<script>
+		let currentFilter = 'all';
+		
+		function filterReports(status) {
+			currentFilter = status;
+			
+			// Actualizar tabs activos
+			document.querySelectorAll('.filterTab').forEach(tab => {
+				tab.classList.remove('active');
+			});
+			event.target.classList.add('active');
+			
+			// Filtrar reportes
+			const reports = document.querySelectorAll('.reportCard');
+			let visibleCount = 0;
+			
+			reports.forEach(report => {
+				const reportStatus = report.dataset.status;
+				if (status === 'all' || reportStatus === status) {
+					report.style.display = 'block';
+					visibleCount++;
+				} else {
+					report.style.display = 'none';
+				}
+			});
+			
+			// Mostrar estado vacío si no hay reportes visibles
+			document.getElementById('emptyState').style.display = visibleCount === 0 ? 'block' : 'none';
+		}
+		
+		function searchReports(query) {
+			const reports = document.querySelectorAll('.reportCard');
+			let visibleCount = 0;
+			
+			reports.forEach(report => {
+				const petName = report.dataset.pet.toLowerCase();
+				const matchesSearch = petName.includes(query.toLowerCase());
+				const matchesFilter = currentFilter === 'all' || report.dataset.status === currentFilter;
+				
+				if (matchesSearch && matchesFilter) {
+					report.style.display = 'block';
+					visibleCount++;
+				} else {
+					report.style.display = 'none';
+				}
+			});
+			
+			document.getElementById('emptyState').style.display = visibleCount === 0 ? 'block' : 'none';
+		}
+		
+		function viewReport(petId) {
+			window.location.href = `alertDetail.html?pet=${petId}`;
+		}
+		
+		function editReport(petId) {
+			alert(`Editar reporte de ${petId}`);
+		}
+		
+		function markAsFound(petId) {
+			if (confirm(`¿Confirmas que ${petId} ha sido encontrada?`)) {
+				alert(`Marcando ${petId} como encontrada`);
+				// Aquí se actualizaría el estado del reporte
+			}
+		}
+		
+		function thankRescuer(petId) {
+			alert(`Enviar mensaje de agradecimiento por encontrar a ${petId}`);
+		}
+		
+		function closeReport(petId) {
+			if (confirm(`¿Estás seguro de que quieres cerrar el reporte de ${petId}?`)) {
+				alert(`Cerrando reporte de ${petId}`);
+			}
+		}
+		
+		function duplicateReport(petId) {
+			if (confirm(`¿Quieres crear un nuevo reporte basado en ${petId}?`)) {
+				alert(`Duplicando reporte de ${petId}`);
+			}
+		}
+	</script>
+</body>

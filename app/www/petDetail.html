@@ -1,0 +1,123 @@
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/app.js"></script>
+    <script src="assets/db.js"></script>
+    <script src="assets/urlParams.js"></script>
+    <style>
+        #petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:0 auto}
+        .petSummary{margin-top:0.5rem;color:#555}
+        .detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0}
+        .detailItem{padding:0.5rem;background:#f8f9fa;border-radius:0.5rem}
+        .detailLabel{font-weight:bold;color:#666;font-size:0.9rem}
+        .detailValue{color:#333;margin-top:0.25rem}
+    </style>
+    <script>
+        async function beforeLoad(){
+            const petId = URLparams.id;
+            
+            if(!petId){
+                window.location.href = 'petList.html';
+                return;
+            }
+            
+            const pets = await selectAllFrom('pets');
+            const pet = pets[petId];
+            
+            if(!pet){
+                window.location.href = 'petList.html';
+                return;
+            }
+            
+            // Actualizar título
+            document.querySelector('h1').textContent = `Detalles de ${pet.name}`;
+            
+            // Actualizar imagen
+            const petImage = document.querySelector('#petImageDisplay');
+            if(pet.images && pet.images[0]){
+                petImage.style.backgroundImage = `url(media/${pet.images[0]})`;
+            }
+            
+            // Actualizar información básica
+            const sexSymbol = pet.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
+            document.querySelector('#petName').textContent = `${pet.name} ${sexSymbol}`;
+            document.querySelector('#petSummary').textContent = `${pet.species} (${pet.breed})`;
+            
+            // Actualizar detalles
+            document.querySelector('#detailSpecies').textContent = pet.species || 'No especificado';
+            document.querySelector('#detailBreed').textContent = pet.breed || 'No especificado';
+            document.querySelector('#detailColor').textContent = pet.color || 'No especificado';
+            document.querySelector('#detailSex').textContent = pet.sex || 'No especificado';
+        }
+        
+        function reportLoss() {
+            const petId = URLparams.id;
+            
+            if(!petId) {
+                alert('Error: No se pudo identificar la mascota');
+                return;
+            }
+            
+            if(confirm('¿Estás seguro de que quieres reportar la pérdida de esta mascota?')) {
+                // Simular el reporte de pérdida
+                alert('Reporte de pérdida enviado exitosamente. Se ha notificado a la comunidad y autoridades locales.');
+                
+                // Opcional: redirigir al historial de reportes
+                window.location.href = 'reportHistory.html';
+            }
+        }
+    </script>
+</head>
+
+<body class="column">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Detalles de Mascota</h1>
+    </div>
+    
+    <div class="row flex-grow">
+        <div class="column">
+            <div class="row">
+                <div id="petImageDisplay"></div>
+            </div>
+            
+            <div class="row">
+                <div class="column ta-center size-full-width">
+                    <h2 id="petName" class="row ta-center"></h2>
+                    <div id="petSummary" class="row ta-center petSummary"></div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="column size-full-width ph-1">
+                    <h3>Información de la Mascota</h3>
+                    <div class="detailGrid">
+                        <div class="detailItem">
+                            <div class="detailLabel">Especie</div>
+                            <div id="detailSpecies" class="detailValue"></div>
+                        </div>
+                        <div class="detailItem">
+                            <div class="detailLabel">Raza</div>
+                            <div id="detailBreed" class="detailValue"></div>
+                        </div>
+                        <div class="detailItem">
+                            <div class="detailLabel">Color</div>
+                            <div id="detailColor" class="detailValue"></div>
+                        </div>
+                        <div class="detailItem">
+                            <div class="detailLabel">Sexo</div>
+                            <div id="detailSex" class="detailValue"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="column size-full-width ph-1">
+                    <button id="reportLossBtn" class="button bg-red" onclick="reportLoss()">Reportar Pérdida</button>
+                    <a class="button bg-redpale" href="petList.html">Volver a Mis Mascotas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
