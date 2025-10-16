@@ -4,21 +4,7 @@
 	<script src="assets/app.js"></script>
 	<style>
 		iframe{border:none}
-		.heroTitle{font-weight:700;font-size:1.15rem}
-		.quickGrid{grid-template-columns:repeat(3,1fr);gap:0.5rem}
-		.quickItem{display:flex;flex-direction:column;align-items:center;gap:0.35rem;padding:0.5rem;border:solid 1px var(--brand-border);border-radius:0.75rem;background:#fff}
-		
-		/* Asegurar que el footer sea visible */
-		.row.footer {
-			background: white;
-			padding: 0.5rem;
-			box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-		}
-		
-		/* Asegurar que el mapa no cubra el footer */
-		.map-container {
-			height: calc(100vh - 80px);
-		}
+		#reportButton{position:absolute;bottom:0}
 	</style>
 </head>
 
@@ -26,7 +12,6 @@
 
 	<div class="pos-fixed pos-top pos-right">
 		<a class="button bg-redpale round" role="button" href="notifications.html"><span class="icon" data-icon="bell"></span></a>
-<a class="button bg-redpale round" role="button" href="settings.html"><span class="icon" data-icon="settings"></span></a>	
 	</div>
 	
 
@@ -39,7 +24,7 @@
 
 	<div class="row footer compact">
 		<div class="column">
-			<a class="button bg-redpale round" role="button" href="account.html"><span class="icon" data-icon="pets"></span></a>
+			<a class="button bg-redpale round" role="button" href="petList.html"><span class="icon" data-icon="pets"></span></a>
 		</div>
 		<div class="column">
 			<button id="reportButton" class="button bg-red round size-largest" role="button" onclick="loadModal('templates/reportModal.html')"><span class="icon" data-icon="warning"></span></button>

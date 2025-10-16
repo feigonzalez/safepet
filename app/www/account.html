@@ -1,286 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustes - SafePet</title>
     <link rel="stylesheet" href="assets/style.css">
     <script src="assets/app.js"></script>
-    <script src="assets/urlParams.js"></script>
+    <script src="assets/db.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        .petImageDisplay{height:4rem;width:4rem;background-size:cover;
-            background-position:50%;border-radius:50%;border:solid 1px #844}
-        .sectionTitle{font-weight:bold;margin:0.75rem 0.5rem;color:#333}
-        /* Perfil grande y atractivo */
-        .profileCard{border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-2);margin:0.5rem}
-        .profileHeader{background:linear-gradient(135deg,var(--brand-primary),#ff6b6b);color:#fff;display:flex;align-items:center;gap:0.75rem;padding:1rem}
-        .accountAvatar{height:4.5rem;width:4.5rem;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 2px 8px #0002}
-        .accountAvatarInitials{font-weight:700;color:#444}
-        .accountName{font-size:1.35rem}
-        .changePicLink{font-size:0.85rem;color:#fff8;text-decoration:underline;cursor:pointer}
-        .profileBody{background:#fff;padding:1rem}
-        .tabs{display:flex;gap:0.5rem;margin-bottom:0.5rem}
-        .tab{padding:0.35rem 0.75rem;border:solid 1px var(--brand-border);border-radius:1rem;background:#fff;color:#555;font-size:0.9rem}
-        .tab.active{background:var(--brand-primary-soft);color:#a22;border-color:#f5b}
-        .accountBadges{display:flex;gap:0.5rem;margin:0.25rem 0}
-        .contactRow{display:flex;align-items:center;gap:0.5rem;color:#444;margin-top:0.25rem}
-        .contactRow .icon{height:1.1rem;width:1.1rem}
-        .accountMeta{font-size:0.95rem;color:#666}
-        .petCard{align-items:center;justify-content:space-between}
-        
-        /* Nuevos estilos para el perfil mejorado */
-         .profileSummary {
-             display: flex;
-             align-items: center;
-             gap: 1rem;
-             padding: 1.5rem;
-             background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-             border-radius: var(--radius-lg);
-             box-shadow: var(--shadow-1);
-             border: 1px solid var(--brand-border);
-             transition: all 0.3s ease;
-             width: 100%;
-             margin: 0;
-         }
-        
-        .profileSummary:hover {
-            box-shadow: var(--shadow-2);
-            transform: translateY(-1px);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .profileCircle {
-             position: relative;
-             flex-shrink: 0;
-         }
-         
-         .profileInfo {
-             flex: 1;
-             min-width: 0;
-         }
-        
-        .profileName {
-            font-size: 1.2rem;
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FFFFFF;
+            color: #333333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #FFFFFF;
+            padding: 24px;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        .back-button:hover {
+            background-color: #F5F5F5;
+        }
+
+        .back-button svg {
+            width: 20px;
+            height: 20px;
+            stroke: #333333;
+            stroke-width: 2;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333333;
+        }
+
+        .settings-container {
+            flex: 1;
+            padding: 32px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .settings-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #E0E0E0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:hover {
+            background-color: #F5F5F5;
+        }
+
+        .settings-item.logout:hover {
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .settings-icon.profile {
+            stroke: #2DBBAD;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .settings-icon.pets {
+            stroke: #2DBBAD;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .settings-icon.logout {
+            stroke: #EF4444;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .settings-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-title {
+            font-size: 16px;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.25rem;
+            color: #333333;
+            margin-bottom: 4px;
         }
-        
-        .profileStatus {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+
+        .settings-description {
+            font-size: 14px;
+            font-weight: 400;
+            color: #828282;
         }
-        
-        .profilePlan {
-            font-size: 0.9rem;
-            padding: 0.25rem 0.5rem;
-            background: var(--brand-primary-soft);
-            border-radius: var(--radius-sm);
-            display: inline-block;
-            transition: all 0.2s ease;
+
+        .settings-item.logout .settings-title {
+            color: #EF4444;
         }
-        
-        .profilePlan:hover {
-            background: var(--brand-primary);
-            color: white;
+
+        .settings-arrow {
+            width: 20px;
+            height: 20px;
+            stroke: #828282;
+            stroke-width: 2;
+            flex-shrink: 0;
         }
-        
-        .accountDetails {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: var(--radius-md);
-            border-left: 4px solid var(--brand-primary);
-            animation: slideDown 0.3s ease;
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 32px;
         }
-        
-        .detailRow {
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
-            color: var(--text-primary);
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2DBBAD 0%, #1a9d8f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 14px 0 rgba(45, 187, 173, 0.3);
         }
-        
-        .detailRow:last-child {
-            margin-bottom: 0;
+
+        .profile-avatar-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
         }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            font-size: 16px;
+            font-weight: 400;
+            color: #828282;
+        }
+
+        .version-info {
+            text-align: center;
+            padding: 24px;
+            color: #828282;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .header-title {
+                font-size: 24px;
+            }
+
+            .settings-container {
+                padding: 24px 20px;
+            }
+
+            .settings-item {
+                padding: 16px 20px;
             }
         }
-        
-        /* Colores de marca */
-        .bg-red { background-color: #e74c3c; }
-        .text-red { color: #e74c3c; }
-        
-        /* Bordes redondeados */
-        .rounded { border-radius: 8px; }
     </style>
-    <!--script>
-        async function beforeLoad(){
-            // Render account info
-            const accountInfo = document.querySelector('#accountInfoContainer');
-            let account = await selectAllFrom('account');
-            if(account){
-                const initials = (account.name||'')
-                    .split(' ')
-                    .filter(Boolean)
-                    .map(n=>n[0])
-                    .slice(0,2)
-                    .join('')
-                    .toUpperCase();
-                const avatarHTML = initials
-                    ? `<div class="accountAvatar"><div class="accountAvatarInitials">${initials}</div></div>`
-                    : `<div class="accountAvatar"><span class="icon" data-icon="person-fill"></span></div>`;
-
-                accountInfo.innerHTML = `
-                    <div class="row">
-                        <div class="column size-full-width">
-                            <div class="profileCard">
-                                <div class="profileHeader">
-                                    ${avatarHTML}
-                                    <div class="column ta-left flex-grow">
-                                        <div class="row accountName bold ta-left">${account.name || 'Sin nombre'}</div>
-                                        <div class="row"><a class="changePicLink" href="#">Cambiar foto</a></div>
-                                    </div>
-                                </div>
-                                <div class="profileBody">
-                                    <div class="tabs"><div class="tab active">Perfil</div><div class="tab">Contacto</div></div>
-                                    <div class="row accountBadges ta-left">
-                                        <span class="chip">${(account.plan||'free').toUpperCase()}</span>
-                                        <span class="chip">${account.status || 'Sin estado'}</span>
-                                    </div>
-                                    <div class="row accountMeta ta-left">Información de contacto</div>
-                                    <div class="row contactRow ta-left"><span class="icon" data-icon="envelope-fill"></span>${account.email || 'Sin correo'}</div>
-                                    <div class="row contactRow ta-left"><span class="icon" data-icon="telephone-fill"></span>${account.phone || 'Sin teléfono'}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-            } else {
-                accountInfo.innerHTML = `
-                    <div class="row heroBox">
-                        <div class="column ta-left">
-                            <div class="row ta-left">Aún no has configurado tu cuenta.</div>
-                        </div>
-                    </div>`;
-            }
-
-            // Render pets list under account info
-            const petsContainer = document.querySelector('#accountPetsContainer');
-            const pets = await selectAllFrom('pets');
-            if(petsContainer){
-                petsContainer.innerHTML = '';
-                for(const [id, pet] of Object.entries(pets || {})){
-                    const sexSymbol = pet.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
-                    const card = document.createElement('a');
-                    card.href = `alertDetail.html?id=${encodeURIComponent(id)}&view=owner`;
-                    card.className = 'row compact listCard petCard';
-                    card.innerHTML = `
-                        <div class="column compact"><div class="petImageDisplay" data-imgsrc="../media/${pet.images?.[0]||''}"></div></div>
-                        <div class="column ph-1 ta-left">
-                            <div class="row ta-left bold">${pet.name} ${sexSymbol}</div>
-                            <div class="row ta-left metaText">${pet.species} (${pet.breed})</div>
-                        </div>
-                        <div class="column compact"><span class="icon" data-icon="chevron-right"></span></div>`;
-                    petsContainer.appendChild(card);
-                }
-            }
-            // Render section based on view param (notifications/messages)
-            const sectionContainer = document.querySelector('#accountSectionContainer');
-            const view = (params && params.view) || '';
-            if(view === 'notifications'){
-                sectionContainer.innerHTML = `
-                    <div class="row header"><h2>Notificaciones</h2></div>
-                    <div class="row compact card"><div class="column">Nueva alerta cerca de tu ubicación.</div></div>
-                    <div class="row compact card"><div class="column">Mensaje de un dueño: Gracias por tu reporte.</div></div>
-                `;
-            } else if(view === 'messages'){
-                sectionContainer.innerHTML = `
-                    <div class="row header"><h2>Mensajes</h2></div>
-                    <div class="row compact card"><div class="column"><div class="row bold">Dueño de Florencia</div><div class="row">¡Gracias por avisar! ¿Puedes compartir ubicación?</div></div></div>
-                `;
-            } else {
-                sectionContainer.innerHTML = '';
-            }
-        }
-    </script-->
 </head>
-<body class="column">
-
+<body>
     <div class="row header">
         <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-        <h1>Mi Cuenta</h1>
+        <h1>Ajustes</h1>
     </div>
-	
-    <div class="row">
-        <div class="column ph-1">
-			<!-- Datos resumidos de la cuenta -->
-			<!-- Se le puede hacer clic para ver los detalles de la cuenta -->
-            <div id="accountInfoContainer" onclick="toggleAccountDetails()" style="cursor: pointer; width: 100%;">
-				<div class="profileSummary">
-					<div class="profileCircle">
-						<img id="profileImage" src="assets/logo.png" alt="Foto de perfil" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-primary);">
-					</div>
-					<div class="profileInfo">
-						<div class="profileName">Francisca Espinosa</div>
-						<div class="profileStatus">Cuenta Activa</div>
-						<div class="profilePlan" onclick="goToSubscription(event)" style="color: var(--brand-primary); font-weight: 500; cursor: pointer;">Plan Gratis ▼</div>
-					</div>
-				</div>
-				<div id="accountDetails" class="accountDetails" style="display: none;">
-					<div class="detailRow">
-						<strong>Email:</strong> fran@example.com
-					</div>
-					<div class="detailRow">
-						<strong>Teléfono:</strong> +1 234 567 8900
-					</div>
-					<div class="detailRow">
-						<strong>Mascotas registradas:</strong> 1
-					</div>
+
+    <div class="settings-container">
+        <!-- Sección de perfil -->
+        <div class="profile-section">
+            <div class="profile-avatar">
+                <span class="profile-avatar-text" id="profileInitials">FE</span>
+            </div>
+            <div class="profile-name" id="profileName">Francisca Espinosa</div>
+            <div class="profile-email" id="profileEmail">fran@example.com</div>
         </div>
-    </div>
-	<div class="row">
-				<!-- Datos de la primera mascota -->
-				mascota 1
-			</div>
-			<div class="row">
-				<!-- Datos de la segunda mascota -->
-				mascota 2
-			</div>
-    <div class="row ">
-        <div class="column ph-1">
-            
-			<a class="button bg-red" href="register.html">Añadir Mascota</a>
-		<a class="button bg-red" href="reportHistory.html">Historial de Alertas</a>
-            <a class="button bg-red" href="petList.html">Ver mis mascotas</a>
+
+        <!-- Opciones de configuración -->
+        <div class="settings-card">
+            <a href="editProfile.html" class="settings-item">
+                <svg class="settings-icon profile" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <div class="settings-content">
+                    <div class="settings-title">Editar Perfil</div>
+                    <div class="settings-description">Actualiza tu información personal</div>
+                </div>
+                <svg class="settings-arrow" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+
+            <a href="petList.html" class="settings-item">
+                <svg class="settings-icon pets" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 0 0 6.853 2.842c.75 0 1.5-.05 2.25-.15a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-6.853a9.707 9.707 0 0 0-6.853-2.842c-.75 0-1.5.05-2.25.15a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5h6.853z"/>
+                    <path d="M12 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    <path d="M18 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                </svg>
+                <div class="settings-content">
+                    <div class="settings-title">Mis Mascotas</div>
+                    <div class="settings-description">Gestiona la información de tus mascotas</div>
+                </div>
+                <svg class="settings-arrow" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+
+            <div class="settings-item logout" onclick="confirmLogout()">
+                <svg class="settings-icon logout" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16,17 21,12 16,7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <div class="settings-content">
+                    <div class="settings-title">Cerrar Sesión</div>
+                    <div class="settings-description">Salir de tu cuenta SafePet</div>
+                </div>
+                <svg class="settings-arrow" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
         </div>
-    </div>
-	
-   
+
+        <div class="version-info">
+            SafePet v1.0.0
+        </div>
     </div>
 
     <script>
-        function toggleAccountDetails() {
-            const details = document.getElementById('accountDetails');
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-            } else {
-                details.style.display = 'none';
+        async function beforeLoad() {
+            try {
+                // Cargar información del usuario
+                let db = await selectAll();
+                let account = db ? db.account : null;
+                
+                // Datos de prueba si no hay cuenta configurada
+                if (!account) {
+                    account = {
+                        name: "Juan Pérez",
+                        email: "juan.perez@email.com"
+                    };
+                }
+                
+                // Actualizar información del perfil
+                updateProfileInfo(account);
+            } catch (error) {
+                console.log('Error loading data, using default values:', error);
+                // Usar datos por defecto en caso de error
+                const defaultAccount = {
+                    name: "Francisca Espinosa",
+                    email: "fran@example.com"
+                };
+                updateProfileInfo(defaultAccount);
             }
         }
         
-        function goToSubscription(event) {
-            event.stopPropagation(); // Evita que se active toggleAccountDetails
-            window.location.href = 'subscription.html';
+        function updateProfileInfo(account) {
+            const profileName = document.getElementById('profileName');
+            const profileEmail = document.getElementById('profileEmail');
+            const profileInitials = document.getElementById('profileInitials');
+            
+            if (profileName) profileName.textContent = account.name || 'Usuario';
+            if (profileEmail) profileEmail.textContent = account.email || 'Sin correo';
+            
+            // Generar iniciales
+            if (profileInitials && account.name) {
+                const initials = account.name
+                    .split(' ')
+                    .filter(Boolean)
+                    .map(n => n[0])
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase();
+                profileInitials.textContent = initials || 'U';
+            }
         }
-        
-        // Funcionalidad del botón de regreso
-        document.getElementById('backButton').addEventListener('click', function() {
-            window.history.back();
-        });
+
+        function goBack() {
+            // Navegar de vuelta a la página anterior o al índice
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function confirmLogout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                logout();
+            }
+        }
+
+        function logout() {
+            // Limpiar datos de sesión
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Redirigir a la página de autenticación
+            window.location.href = 'auth.html';
+        }
+
+        // Cargar datos al inicializar la página
+        document.addEventListener('DOMContentLoaded', beforeLoad);
     </script>
-	
 </body>
+</html>
