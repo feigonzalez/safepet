@@ -6,6 +6,29 @@
 		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
 		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
 	</style>
+	<script>
+		function validateReportForm(event) {
+			event.preventDefault();
+			
+			// Obtener valores de los campos
+			const petImage = document.getElementById('reg_petImage').files[0];
+			const petSpecies = document.getElementById('rep_petSpecies').value.trim();
+			const petBreed = document.getElementById('rep_petBreed').value.trim();
+			const petColor = document.getElementById('rep_petColor').value.trim();
+			const petSex = document.querySelector('input[name="petSex"]:checked');
+			
+			// Validar que al menos algunos campos estén llenos
+			if (!petImage && !petSpecies && !petBreed && !petColor && !petSex) {
+				alert('Por favor, completa al menos algunos datos de la mascota antes de reportar.');
+				return false;
+			}
+			
+			// Si hay datos, proceder con el reporte
+			alert('Reporte enviado exitosamente');
+			window.location.href = 'alertList.html';
+			return true;
+		}
+	</script>
 </head>
 <body class="column">
 	<div class="row header">
@@ -13,10 +36,10 @@
 		<h1>Reportar Hallazgo</h1>
 	</div>
 	<div class="row">
-		<form class="column mh-1" action="alertList.html">
+		<form class="column mh-1" onsubmit="return validateReportForm(event)">
 			<div class="row formEntry"><div class="column ta-center">
 				<div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage"></div>
-				<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
+				<input type="file" accept="image/*" capture="environment" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
 			</div></div>
             <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" "></div>
             <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "></div>

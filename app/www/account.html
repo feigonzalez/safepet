@@ -218,11 +218,10 @@
     <div class="row">
         <div class="column ph-1">
 			<!-- Datos resumidos de la cuenta -->
-			<!-- Se le puede hacer clic para ver los detalles de la cuenta -->
-            <div id="accountInfoContainer" onclick="toggleAccountDetails()" style="cursor: pointer; width: 100%;">
+            <div id="accountInfoContainer" style="width: 100%;">
 				<div class="profileSummary">
 					<div class="profileCircle">
-						<img id="profileImage" src="assets/logo.png" alt="Foto de perfil" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-primary);">
+						<img id="profileImage" src="assets/logo.png" alt="Foto de perfil" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-primary); cursor: pointer;" onclick="goToSettings()">
 					</div>
 					<div class="profileInfo">
 						<div class="profileName">Francisca Espinosa</div>
@@ -230,16 +229,7 @@
 						<div class="profilePlan" onclick="goToSubscription(event)" style="color: var(--brand-primary); font-weight: 500; cursor: pointer;">Plan Gratis ▼</div>
 					</div>
 				</div>
-				<div id="accountDetails" class="accountDetails" style="display: none;">
-					<div class="detailRow">
-						<strong>Email:</strong> fran@example.com
-					</div>
-					<div class="detailRow">
-						<strong>Teléfono:</strong> +1 234 567 8900
-					</div>
-					<div class="detailRow">
-						<strong>Mascotas registradas:</strong> 1
-					</div>
+			</div>
         </div>
     </div>
 	<div class="row">
@@ -263,18 +253,13 @@
     </div>
 
     <script>
-        function toggleAccountDetails() {
-            const details = document.getElementById('accountDetails');
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-            } else {
-                details.style.display = 'none';
-            }
-        }
-        
         function goToSubscription(event) {
             event.stopPropagation(); // Evita que se active toggleAccountDetails
             window.location.href = 'subscription.html';
+        }
+        
+        function goToSettings() {
+            window.location.href = 'settings.html';
         }
         
         // Funcionalidad del botón de regreso

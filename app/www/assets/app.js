@@ -1,5 +1,28 @@
 window.addEventListener("load",()=>{
 	processContents();
+	
+	// Manejo del botón 'Volver' de Android
+	document.addEventListener('backbutton', function(e) {
+		// Si hay un modal abierto, cerrarlo
+		let modal = document.querySelector(".modalBackdrop");
+		if(modal) {
+			modal.remove();
+			e.preventDefault();
+			return;
+		}
+		
+		// Si estamos en la página principal (index.html), cerrar la aplicación
+		if(window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+			navigator.app.exitApp();
+		} else {
+			// En otras páginas, comportamiento normal de retroceso
+			if(window.history.length > 1){
+				history.back();
+			} else {
+				window.location.href = 'index.html';
+			}
+		}
+	}, false);
 })
 
 async function processContents(self){
@@ -111,8 +134,13 @@ function loadModal(url){
 		modalBody.classList.add("modalBody")
 	let modalCloseButton = document.createElement("div")
 		modalCloseButton.classList.add("modalCloseButton")
-		modalCloseButton.addEventListener("click",()=>{
-			modalBackdrop.remove()
+		modalCloseButton.setAttribute("title", "Cerrar modal")
+		modalCloseButton.setAttribute("role", "button")
+		modalCloseButton.setAttribute("tabindex", "0")
+		modalCloseButton.addEventListener("click",(e)=>{
+			e.preventDefault();
+			e.stopPropagation();
+			closeModal();
 		})
 		modalBody.appendChild(modalCloseButton)
 	let modalContent = document.createElement("div")
