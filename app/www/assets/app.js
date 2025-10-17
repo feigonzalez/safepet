@@ -34,15 +34,25 @@ async function processContents(self){
 	// Repite el contenido de elementos con [foreach] por cada entrada del objeto
 	// señalado en el atributo.
 	for(let iterator of frame.querySelectorAll("[foreach]")){
-		data = eval(iterator.getAttribute("foreach"));
-		template = iterator.innerHTML;
-		iterator.innerHTML="";
+		let data = eval(iterator.getAttribute("foreach"));
+		let lastEntry=iterator;
 		for(let item of data){
-			let newEntry = template;
+			let newEntry = iterator.cloneNode(true);
 			for(let key in item){
-				newEntry=newEntry.replaceAll("${"+key+"}",item[key])
+				newEntry.innerHTML=newEntry.innerHTML.replaceAll("${"+key+"}",item[key])
 			}
-			iterator.innerHTML+=newEntry
+			lastEntry.after(newEntry)
+			lastEntry=newEntry;
+		}
+		iterator.remove()
+	}
+	
+	// Reemplaza el contenido de texto ${X} por el resultado de eval(X)
+	for(let toReplace of [...frame.innerHTML.matchAll(/\${(.*?)}/g)]){
+		try{
+			frame.innerHTML = frame.innerHTML.replaceAll(toReplace[0],eval(toReplace[1]));
+		} catch(e){
+			
 		}
 	}
 	
@@ -85,7 +95,6 @@ async function processContents(self){
 	// Hace que el botón #backButton redirija a la página previa
 	let backButton = frame.querySelector("#backButton")
 	if(backButton){
-		console.log(backButton)
 		backButton.addEventListener("click",()=>{
 			// Si hay historial previo, retrocede
 			if(window.history.length > 1){

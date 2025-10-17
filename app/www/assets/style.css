@@ -66,6 +66,7 @@ button:active, .button:active, input[type=button]:active, input[type=submit]:act
 .formEntry input:placeholder-shown{font-size:0.75em;bottom:100%;}
 
 .card{border:solid 1px var(--brand-border);border-radius:var(--radius-lg);background:#f7f7f7;padding:0.75rem;margin:0.5rem}
+.cardList .card{margin-top:0.1rem;margin-bottom:0.1rem}
 
 .round{height:3rem;width:3rem;border-radius:50%}
 
@@ -115,6 +116,10 @@ input[type=file]{display:none}
 .modalContent{padding:1rem}
 
 #backButton{filter:none;box-shadow:none !important;border:none !important;background:transparent !important;margin:0.25rem}
+
+[content]:empty{
+	padding:0.rem;height:0.8rem;width:3rem;background:#8888;border-radius:1rem;
+}
 
 /* --- UI utilities for consistent aesthetics across pages --- */
 .sectionTitle{font-size:1rem;color:#666;margin:0.5rem 1rem}
