@@ -35,8 +35,8 @@
 			Dentro de este elemento, cada vez que aparezca ${X} donde X sea alguna de estas llaves,
 			el texto será reemplazado por el valor de esa llave en esa notificación. -->
 	
-		<div class="column size-full-width">
-			<div class="row compact listCard" foreach="notifications">
+		<div class="column size-full-width" foreach="notifications">
+			<div class="row compact listCard">
 				<div class="column notifItem ta-left">
 					<div class="row ta-left bold">
 						<span class="icon notifIcon" data-icon="${type}"></span>

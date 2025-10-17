@@ -13,16 +13,129 @@
 		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 	
 	<style>
-		iframe{border:none}
-		#reportButton{position:absolute;bottom:0}
+		.heroTitle{font-weight:700;font-size:1.15rem}
+		.quickGrid{grid-template-columns:repeat(3,1fr);gap:0.5rem}
+		.quickItem{display:flex;flex-direction:column;align-items:center;gap:0.35rem;padding:0.5rem;border:solid 1px var(--brand-border);border-radius:0.75rem;background:#fff}
+		
+		/* Asegurar que el footer sea visible */
+		.row.footer {
+			background: white;
+			padding: 0.5rem;
+			box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+		}
+		
+		/* Contenedor del mapa - configuración correcta para Leaflet */
+		.map-container {
+			height: calc(100vh - 160px);
+			position: relative;
+			width: 100%;
+		}
+		
+		/* Estilos para el mapa - configuración específica para Leaflet */
+		#map {
+			height: 100%;
+			width: 100%;
+			min-height: 400px;
+			z-index: 1;
+		}
+		
+		/* Controles del mapa */
+		.map-controls {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			z-index: 1000;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+		
+		.map-control-btn {
+			background: white;
+			border: none;
+			border-radius: 6px;
+			padding: 8px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			transition: all 0.2s ease;
+		}
+		
+		.map-control-btn:hover {
+			background: #f5f5f5;
+			transform: translateY(-1px);
+		}
+		
+		.map-control-btn:active {
+			transform: translateY(0);
+		}
+		
+		/* Popup personalizado */
+		.custom-popup {
+			font-family: 'Poppins', sans-serif;
+		}
+		
+		.popup-content {
+			text-align: center;
+			padding: 8px;
+		}
+		
+		.popup-title {
+			font-weight: 600;
+			margin-bottom: 4px;
+			color: #333;
+		}
+		
+		.popup-description {
+			font-size: 0.9rem;
+			color: #666;
+		}
+		
+		/* Estilos específicos para popups de refugios */
+		.shelter-popup {
+			min-width: 280px;
+		}
+		
+		.shelter-details {
+			margin-top: 12px;
+		}
+		
+		.shelter-info {
+			margin-bottom: 8px;
+			padding: 6px 0;
+			border-bottom: 1px solid #eee;
+		}
+		
+		.shelter-info:last-child {
+			border-bottom: none;
+		}
+		
+		.shelter-info strong {
+			color: #28a745;
+		}
+		
+		.shelter-info a {
+			color: #007bff;
+			text-decoration: none;
+		}
+		
+		.shelter-info a:hover {
+			text-decoration: underline;
+		}
 	</style>
 </head>
 
 <body class="column size-full-height">
 
-	<div class="pos-fixed pos-top pos-right">
-		<a class="button bg-redpale round" role="button" href="notifications.html"><span class="icon" data-icon="bell"></span></a>
-<a class="button bg-redpale round" role="button" href="settings.html"><span class="icon" data-icon="settings"></span></a>	
+	<div class="pos-fixed pos-top pos-right" style="top: 20px; right: 20px; z-index: 1000; display: flex; gap: 8px;">
+		<a class="button bg-redpale round" role="button" href="notifications.html" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background-color: #ff6b6b; color: white; border-radius: 50%; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+			<span style="font-size: 18px;">🔔</span>
+		</a>
+		
 	</div>
 
 
@@ -750,7 +863,7 @@
 
 	<div class="row footer compact">
 		<div class="column">
-			<a class="button bg-redpale round" role="button" href="petList.html"><span class="icon" data-icon="pets"></span></a>
+			<a class="button bg-redpale round" role="button" href="account.html"><span class="icon" data-icon="pets"></span></a>
 		</div>
 		<div class="column">
 			<button id="reportButton" class="button bg-red round size-largest" role="button" onclick="loadModal('templates/reportModal.html')"><span class="icon" data-icon="warning"></span></button>
