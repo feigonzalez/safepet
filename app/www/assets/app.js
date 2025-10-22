@@ -1,28 +1,5 @@
 window.addEventListener("load",()=>{
 	processContents();
-	
-	// Manejo del botón 'Volver' de Android
-	document.addEventListener('backbutton', function(e) {
-		// Si hay un modal abierto, cerrarlo
-		let modal = document.querySelector(".modalBackdrop");
-		if(modal) {
-			modal.remove();
-			e.preventDefault();
-			return;
-		}
-		
-		// Si estamos en la página principal (index.html), cerrar la aplicación
-		if(window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-			navigator.app.exitApp();
-		} else {
-			// En otras páginas, comportamiento normal de retroceso
-			if(window.history.length > 1){
-				history.back();
-			} else {
-				window.location.href = 'index.html';
-			}
-		}
-	}, false);
 })
 
 async function processContents(self){
@@ -34,15 +11,25 @@ async function processContents(self){
 	// Repite el contenido de elementos con [foreach] por cada entrada del objeto
 	// señalado en el atributo.
 	for(let iterator of frame.querySelectorAll("[foreach]")){
-		data = eval(iterator.getAttribute("foreach"));
-		template = iterator.innerHTML;
-		iterator.innerHTML="";
+		let data = eval(iterator.getAttribute("foreach"));
+		let lastEntry=iterator;
 		for(let item of data){
-			let newEntry = template;
+			let newEntry = iterator.cloneNode(true);
 			for(let key in item){
-				newEntry=newEntry.replaceAll("${"+key+"}",item[key])
+				newEntry.innerHTML=newEntry.innerHTML.replaceAll("${"+key+"}",item[key])
 			}
-			iterator.innerHTML+=newEntry
+			lastEntry.after(newEntry)
+			lastEntry=newEntry;
+		}
+		iterator.remove()
+	}
+	
+	// Reemplaza el contenido de texto ${X} por el resultado de eval(X)
+	for(let toReplace of [...frame.innerHTML.matchAll(/\${(.*?)}/g)]){
+		try{
+			frame.innerHTML = frame.innerHTML.replaceAll(toReplace[0],eval(toReplace[1]));
+		} catch(e){
+			
 		}
 	}
 	
@@ -85,7 +72,6 @@ async function processContents(self){
 	// Hace que el botón #backButton redirija a la página previa
 	let backButton = frame.querySelector("#backButton")
 	if(backButton){
-		console.log(backButton)
 		backButton.addEventListener("click",()=>{
 			// Si hay historial previo, retrocede
 			if(window.history.length > 1){
@@ -134,13 +120,8 @@ function loadModal(url){
 		modalBody.classList.add("modalBody")
 	let modalCloseButton = document.createElement("div")
 		modalCloseButton.classList.add("modalCloseButton")
-		modalCloseButton.setAttribute("title", "Cerrar modal")
-		modalCloseButton.setAttribute("role", "button")
-		modalCloseButton.setAttribute("tabindex", "0")
-		modalCloseButton.addEventListener("click",(e)=>{
-			e.preventDefault();
-			e.stopPropagation();
-			closeModal();
+		modalCloseButton.addEventListener("click",()=>{
+			modalBackdrop.remove()
 		})
 		modalBody.appendChild(modalCloseButton)
 	let modalContent = document.createElement("div")
