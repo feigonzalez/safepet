@@ -387,9 +387,13 @@
 								iconAnchor: [15, 15]
 							})
 						})
-						.addTo(map)
-						.bindPopup('<div class="popup-content"><div class="popup-title">Tu ubicación actual</div><div class="popup-description">Lat: ' + userLat.toFixed(6) + '<br>Lng: ' + userLng.toFixed(6) + '</div></div>')
-						.openPopup();
+						.addTo(map);
+						
+						// Obtener dirección usando geocodificación inversa
+						getAddressFromCoordinates(userLat, userLng, function(address) {
+							userMarker.bindPopup('<div class="popup-content"><div class="popup-title">Tu ubicación actual</div><div class="popup-description">' + address + '</div></div>')
+							.openPopup();
+						});
 						
 						// Actualizar refugios y alertas basados en la ubicación
 						updateLocationBasedContent();
@@ -439,14 +443,18 @@
 						// Agregar marcador en la ubicación por defecto
 						userMarker = L.marker([defaultLat, defaultLng], {
 							icon: L.divIcon({
-								className: 'default-location-marker',
-								html: '<div style="background-color: #28a745; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">🏠</div>',
+								className: 'user-location-marker',
+								html: '<div style="background-color: #6c757d; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">📍</div>',
 								iconSize: [30, 30],
 								iconAnchor: [15, 15]
 							})
 						})
-						.addTo(map)
-						.bindPopup('<div class="popup-content"><div class="popup-title">Ubicación por defecto</div><div class="popup-description">Santiago, Chile<br>Lat: ' + defaultLat.toFixed(6) + '<br>Lng: ' + defaultLng.toFixed(6) + '</div></div>');
+						.addTo(map);
+						
+						// Obtener dirección para la ubicación por defecto
+						getAddressFromCoordinates(defaultLat, defaultLng, function(address) {
+							userMarker.bindPopup('<div class="popup-content"><div class="popup-title">Ubicación por defecto</div><div class="popup-description">' + address + '</div></div>');
+						});
 						
 						// Actualizar refugios y alertas basados en la ubicación por defecto
 						updateLocationBasedContent();
@@ -845,6 +853,67 @@
 				shelterMarkers.push(marker);
 			});
 		}
+		
+		// Función para obtener dirección desde coordenadas usando geocodificación inversa
+		function getAddressFromCoordinates(lat, lng, callback) {
+			// Usar el servicio de Nominatim de OpenStreetMap para geocodificación inversa
+			const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+			
+			fetch(url)
+				.then(response => response.json())
+				.then(data => {
+					if (data && data.display_name) {
+						// Formatear la dirección de manera más específica y exacta
+						let address = '';
+						
+						// Si hay información de dirección estructurada, usarla
+						if (data.address) {
+							const addr = data.address;
+							
+							// Priorizar calle y número de casa (dirección exacta)
+							if (addr.road && addr.house_number) {
+								address = `${addr.road} ${addr.house_number}`;
+							} else if (addr.road) {
+								address = addr.road;
+								// Si no hay número de casa, agregar información adicional para ser más específico
+								if (addr.neighbourhood) {
+									address += `, ${addr.neighbourhood}`;
+								} else if (addr.suburb) {
+									address += `, ${addr.suburb}`;
+								}
+							} else if (addr.neighbourhood) {
+								address = addr.neighbourhood;
+							} else if (addr.suburb) {
+								address = addr.suburb;
+							} else {
+								// Usar el nombre completo si no hay información específica
+								address = data.display_name.split(',')[0];
+							}
+							
+							// Si la dirección es muy corta o genérica, agregar más contexto
+							if (address.length < 10 || !addr.house_number) {
+								if (addr.city || addr.town) {
+									address += `, ${addr.city || addr.town}`;
+								}
+							}
+						} else {
+							// Si no hay dirección estructurada, usar solo la primera parte del display_name
+							address = data.display_name.split(',')[0];
+						}
+						
+						callback(address);
+					} else {
+						// Si no se puede obtener la dirección, mostrar mensaje genérico sin coordenadas
+						callback('Ubicación no disponible');
+					}
+				})
+				.catch(error => {
+					console.error('Error obteniendo dirección:', error);
+					// En caso de error, mostrar mensaje genérico sin coordenadas
+					callback('Ubicación no disponible');
+				});
+		}
+		
 		document.addEventListener('DOMContentLoaded', function() {
 			console.log('DOM cargado, esperando 500ms antes de inicializar mapa...');
 			setTimeout(() => {
@@ -866,7 +935,7 @@
 
 	<div class="row footer compact">
 		<div class="column">
-			<a class="button bg-redpale round" role="button" href="account.html"><span class="icon" data-icon="pets"></span></a>
+			<a class="button bg-redpale round" role="button" href="petList.html"><span class="icon" data-icon="pets"></span></a>
 		</div>
 		<div class="column">
 			<button id="reportButton" class="button bg-red round size-largest" role="button" onclick="loadModal('templates/reportModal.html')"><span class="icon" data-icon="warning"></span></button>
