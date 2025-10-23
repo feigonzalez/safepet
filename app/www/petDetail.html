@@ -50,7 +50,7 @@
             document.querySelector('#detailSex').textContent = pet.sex || 'No especificado';
         }
         
-        function reportLoss() {
+        async function reportLoss() {
             const petId = URLparams.id;
             
             if(!petId) {
@@ -58,12 +58,21 @@
                 return;
             }
             
-            if(confirm('¿Estás seguro de que quieres reportar la pérdida de esta mascota?')) {
+            const confirmed = await showVerificationModal(
+                'Reportar Pérdida',
+                '¿Estás seguro de que quieres reportar la pérdida de esta mascota? Se notificará a la comunidad y autoridades locales.',
+                'Reportar Pérdida',
+                'Cancelar'
+            );
+            
+            if (confirmed) {
                 // Simular el reporte de pérdida
-                alert('Reporte de pérdida enviado exitosamente. Se ha notificado a la comunidad y autoridades locales.');
+                ValidationUtils.showSuccessMessage('Reporte de pérdida enviado exitosamente. Se ha notificado a la comunidad y autoridades locales.');
                 
                 // Opcional: redirigir al historial de reportes
-                window.location.href = 'reportHistory.html';
+                setTimeout(() => {
+                    window.location.href = 'reportHistory.html';
+                }, 2000);
             }
         }
     </script>

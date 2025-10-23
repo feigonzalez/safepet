@@ -2,29 +2,122 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
 	<script src="assets/app.js"></script>
+	<script src="assets/validation.js"></script>
+	<script src="assets/navigation.js"></script>
+	<script src="assets/camera.js"></script>
 	<style>
 		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
 		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
+		
+		/* Estilos para validaciones */
+        .field-error {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        .error {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        
+        .formEntry input, .formEntry select {
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        
+        .formEntry input:focus, .formEntry select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
 	</style>
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const validationRules = ValidationUtils.SafePetValidations.petReportForm;
+            
+            // Configurar validación en tiempo real
+            ValidationUtils.setupRealTimeValidation(form, validationRules);
+            
+            // Validación especial para archivo de imagen
+            const imageInput = document.getElementById('reg_petImage');
+            imageInput.addEventListener('change', function() {
+                const validation = ValidationUtils.validateFile(this, ['image/jpeg', 'image/png', 'image/gif'], 5 * 1024 * 1024);
+                if (!validation.isValid) {
+                    ValidationUtils.showErrorMessage(validation.errors[0]);
+                    this.value = '';
+                    document.getElementById('petImageDisplay').style.backgroundImage = '';
+                }
+            });
+            
+            // Manejar envío del formulario
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Validar campos de texto
+                const validation = ValidationUtils.validateForm(form, validationRules);
+                
+                // Validar radio buttons de sexo
+                const sexValid = ValidationUtils.validateRadioGroup(form, 'petSex', 'Selecciona el sexo de la mascota');
+                
+                if (validation.isValid && sexValid) {
+                    // Mostrar modal de confirmación antes de reportar
+                    const confirmed = await showVerificationModal(
+                        'Confirmar Reporte',
+                        '¿Estás seguro de que quieres reportar este hallazgo con la información proporcionada?',
+                        'Enviar Reporte',
+                        'Revisar Datos'
+                    );
+                    
+                    if (confirmed) {
+                        // Simular proceso de reporte
+                        const submitButton = form.querySelector('input[type="submit"]');
+                        const originalValue = submitButton.value;
+                        
+                        submitButton.disabled = true;
+                        submitButton.value = 'Reportando...';
+                        
+                        setTimeout(() => {
+                            ValidationUtils.showSuccessMessage('Hallazgo reportado exitosamente');
+                            
+                            // Redirigir después del éxito
+                            setTimeout(() => {
+                                window.location.href = 'alertList.html';
+                            }, 1500);
+                        }, 1500);
+                    }
+                } else {
+                    ValidationUtils.showErrorMessage('Por favor corrige los errores en el formulario');
+                }
+            });
+        });
+    </script>
 </head>
 <body class="column">
 	<div class="row header">
-		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+		 <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
 		<h1>Reportar Hallazgo</h1>
 	</div>
 	<div class="row">
-		<form class="column mh-1" action="alertList.html">
+		<form class="column mh-1" id="reportForm">
 			<div class="row formEntry"><div class="column ta-center">
-				<div id="petImageDisplay" class="fileUploadControl" data-input="reg_petImage"></div>
-				<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
+				<div class="photo-upload-container">
+					<div id="petImageDisplay" class="photo-circle" onclick="showPhotoOptions()">
+						<div class="photo-placeholder">
+							<span class="camera-icon">📷</span>
+							<p>Agregar Foto</p>
+						</div>
+					</div>
+					<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')" style="display: none;">
+				</div>
 			</div></div>
-            <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" "></div>
-            <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "></div>
-            <div class="row formEntry"><label for="rep_petColor">Color</label>		<input id="rep_petColor" type="text" name="petColor" placeholder=" "></div>
+            <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" " required></div>
+            <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "required></div>
+            <div class="row formEntry"><label for="rep_petColor">Color</label>		<input id="rep_petColor" type="text" name="petColor" placeholder=" "required></div>
             <div class="row formEntry">
                 <div class="column ta-left"><label>Sexo</label></div>
-                <div class="column"><input id="rep_petSexM" type="radio" name="petSex" value="M">	<label for="rep_petSexM">Macho</label></div>
-                <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F">	<label for="rep_petSexF">Hembra</label></div>
+                <div class="column"><input id="rep_petSexM" type="radio" name="petSex" value="M" required>	<label for="rep_petSexM">Macho</label></div>
+                <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F" required>	<label for="rep_petSexF">Hembra</label></div>
             </div>
 			
 			<input type="submit" class="bg-red" value="Reportar"></input>

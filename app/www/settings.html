@@ -351,8 +351,15 @@
             }
         }
 
-        function confirmLogout() {
-            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        async function confirmLogout() {
+            const confirmed = await showVerificationModal(
+                'Cerrar Sesión',
+                '¿Estás seguro de que quieres cerrar sesión?',
+                'Cerrar Sesión',
+                'Cancelar'
+            );
+            
+            if (confirmed) {
                 logout();
             }
         }

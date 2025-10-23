@@ -133,3 +133,118 @@ input[type=file]{display:none}
 /* Chips y hero */
 .chip{display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.5rem;border:solid 1px var(--brand-border);border-radius:1rem;background:#fff;font-size:0.85rem;color:#555;margin:0.25rem}
 .heroBox{padding:1rem;border:solid 1px var(--brand-border);border-radius:var(--radius-lg);background:#fff;margin:0.5rem;box-shadow:var(--shadow-2)}
+
+/* Photo Upload Circle */
+.photo-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.photo-circle {
+    background: var(--brand-primary-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-circle:hover {
+    border-color: #d32f2f;
+    background: #ffdddd;
+    transform: scale(1.05);
+}
+
+.photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--brand-primary);
+}
+
+.camera-icon {
+    font-size: 1rem;
+    margin-bottom: 0.1rem;
+}
+
+.photo-placeholder p {
+    margin: 0;
+    font-size: 0.5rem;
+    font-weight: 600;
+}
+
+.photo-circle.has-image {
+    border: 2px solid var(--brand-primary);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.photo-circle.has-image .photo-placeholder {
+    display: none;
+}
+
+/* Modal Styles */
+.modal {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal h2 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.modal .button {
+    margin: 0.5rem 0;
+    justify-content: flex-start;
+    padding: 0 1rem;
+}
+
+.modal .button .icon {
+    margin-right: 0.5rem;
+}
+
+/* Verification Modal */
+.verification-modal {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.verification-modal h3 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.verification-modal p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.verification-modal .button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.verification-modal .button {
+    flex: 1;
+    margin: 0;
+}

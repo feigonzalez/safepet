@@ -113,24 +113,162 @@ function closeModal(){
 }
 
 function loadModal(url){
-	let modalBackdrop = document.createElement("div")
-		modalBackdrop.classList.add("modalBackdrop")
-		document.body.appendChild(modalBackdrop)
-	let modalBody = document.createElement("div")
-		modalBody.classList.add("modalBody")
-	let modalCloseButton = document.createElement("div")
-		modalCloseButton.classList.add("modalCloseButton")
-		modalCloseButton.addEventListener("click",()=>{
-			modalBackdrop.remove()
-		})
-		modalBody.appendChild(modalCloseButton)
-	let modalContent = document.createElement("div")
-		modalContent.classList.add("modalContent")
-		modalBody.appendChild(modalContent)
-	fetch(url).then(r=>r.ok?r.text():"").then(t=>{
-		modalContent.innerHTML=t;
-		/*Se añade el modal al final para que no se muestre antes de cargar el contenido*/
-		modalBackdrop.appendChild(modalBody)
-		processContents(modalBackdrop)
-	})
+	let modal = document.createElement("div");
+	modal.className="modalBackdrop";
+	modal.innerHTML=`<div class="modalBody"><div class="modalCloseButton" onclick="closeModal()"></div><div class="modalContent" id="modalContent"></div></div>`;
+	document.body.appendChild(modal);
+	fetch(url).then(r=>r.text()).then(html=>{
+		document.getElementById("modalContent").innerHTML=html;
+		processContents(document.getElementById("modalContent"));
+	});
+}
+
+// Función para mostrar opciones de foto
+function showPhotoOptions() {
+    return new Promise((resolve, reject) => {
+        const modal = document.createElement('div');
+        modal.className = 'modalBackdrop';
+        modal.innerHTML = `
+            <div class="modal">
+                <div class="column mh-1">
+                    <div class="row ta-center">
+                        <h2 style="margin:0.5rem 0">Seleccionar Foto</h2>
+                        <p class="metaText" style="margin:0.5rem 1rem">¿Cómo quieres agregar la foto de tu mascota?</p>
+                    </div>
+                    <div class="row compact">
+                        <div class="column">
+                            <button class="button bg-red" id="takePhotoBtn">
+                                <span class="icon" data-icon="camera"></span>
+                                &nbsp;&nbsp;Tomar Foto
+                            </button>
+                            <button class="button" id="selectPhotoBtn">
+                                <span class="icon" data-icon="image"></span>
+                                &nbsp;&nbsp;Seleccionar de Galería
+                            </button>
+                            <button class="button" id="cancelPhotoBtn">
+                                <span class="icon" data-icon="x"></span>
+                                &nbsp;&nbsp;Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        modal.querySelector('#takePhotoBtn').addEventListener('click', async () => {
+            try {
+                await CameraManager.capturePhoto('reg_petImage', 'petImageDisplay');
+                modal.remove();
+                resolve('camera');
+            } catch (error) {
+                modal.remove();
+                reject(error);
+            }
+        });
+
+        modal.querySelector('#selectPhotoBtn').addEventListener('click', () => {
+            document.getElementById('reg_petImage').click();
+            modal.remove();
+            resolve('gallery');
+        });
+
+        modal.querySelector('#cancelPhotoBtn').addEventListener('click', () => {
+            modal.remove();
+            reject(new Error('Operación cancelada por el usuario'));
+        });
+    });
+}
+
+// Función para mostrar modal de verificación
+function showVerificationModal(title, message, confirmText = 'Confirmar', cancelText = 'Cancelar') {
+    return new Promise((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'modalBackdrop';
+        modal.innerHTML = `
+            <div class="verification-modal">
+                <h3>${title}</h3>
+                <p>${message}</p>
+                <div class="button-group">
+                    <button class="button" id="cancelVerificationBtn">${cancelText}</button>
+                    <button class="button bg-red" id="confirmVerificationBtn">${confirmText}</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        modal.querySelector('#confirmVerificationBtn').addEventListener('click', () => {
+            modal.remove();
+            resolve(true);
+        });
+
+        modal.querySelector('#cancelVerificationBtn').addEventListener('click', () => {
+            modal.remove();
+            resolve(false);
+        });
+    });
+}
+
+// Mejorar la función showUploadedImageAsBg para trabajar con el círculo
+function showUploadedImageAsBg(src, target) {
+    const targetElement = document.getElementById(target);
+    if (src.files && src.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            targetElement.style.backgroundImage = `url(${e.target.result})`;
+            targetElement.classList.add('has-image');
+        };
+        reader.readAsDataURL(src.files[0]);
+    }
+}
+
+// Función específica para escanear QR en registro
+async function scanQRForRegistration() {
+    try {
+        const confirmed = await showVerificationModal(
+            'Escanear Código QR',
+            '¿Estás seguro de que quieres escanear el código QR? Esto puede completar automáticamente algunos campos del formulario.',
+            'Escanear',
+            'Cancelar'
+        );
+        
+        if (confirmed) {
+            const qrContent = await CameraManager.scanQRCode();
+            if (qrContent) {
+                // Procesar el contenido del QR y llenar campos automáticamente
+                processQRContent(qrContent);
+            }
+        }
+    } catch (error) {
+        console.error('Error al escanear QR:', error);
+        alert('Error al escanear QR: ' + error.message);
+    }
+}
+
+// Función para procesar contenido QR y llenar formulario
+function processQRContent(qrContent) {
+    try {
+        // Intentar parsear como JSON
+        const data = JSON.parse(qrContent);
+        
+        // Llenar campos si existen en el QR
+        if (data.species) document.getElementById('rep_petSpecies').value = data.species;
+        if (data.breed) document.getElementById('rep_petBreed').value = data.breed;
+        if (data.color) document.getElementById('rep_petColor').value = data.color;
+        if (data.sex) {
+            if (data.sex.toLowerCase() === 'm' || data.sex.toLowerCase() === 'macho') {
+                document.getElementById('rep_petSexM').checked = true;
+            } else if (data.sex.toLowerCase() === 'f' || data.sex.toLowerCase() === 'hembra') {
+                document.getElementById('rep_petSexF').checked = true;
+            }
+        }
+        
+        alert('Datos del QR cargados automáticamente. Revisa y completa la información faltante.');
+    } catch (e) {
+        // Si no es JSON, mostrar el contenido como texto
+        alert(`Código QR detectado: ${qrContent}\n\nPor favor, completa manualmente los datos del formulario.`);
+    }
 }
