@@ -1,0 +1,8 @@
+{
+	"appId": "com.safepet.gpsTest",
+	"appName": "SP GPS Test",
+	"webDir": "www",
+	"android": {
+		"allowMixedContent": true 
+	}
+}

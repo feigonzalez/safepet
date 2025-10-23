@@ -1,0 +1,107 @@
+<head>
+	<meta charset="utf-8">
+</head>
+<script defer>
+	var watchID;
+	
+	function locate(){
+		addNotice({status:"WAIT",
+			message:"Obteniendo ubicación..."})
+		if(!navigator.geolocation){
+			addNotice({status:"FAIL",
+				message:"Este navegador no permite geolocalización."});
+			return;
+		}
+		navigator.geolocation.getCurrentPosition(
+			(position)=>{	//On Success
+				addNotice({status:"WAIT",
+					message:"Publicando ubicación..."})
+				postLocation({"lat":position.coords.latitude,
+					"long":position.coords.longitude})
+			},
+			()=>{	//On Error
+				addNotice({status:"FAIL",
+					message:"No se pudo obtener ubicación"})
+			}
+		)
+	}
+	
+	function beginTracking(){
+		addNotice({status:"WAIT",
+			message:"Comenzando seguimiento..."})
+		if(!navigator.geolocation){
+			addNotice({status:"FAIL",
+				message:"Este navegador no permite geolocalización."});
+			return;
+		}
+		watchID = navigator.geolocation.watchPosition(
+			(position)=>{	//On Success
+				addNotice({status:"WAIT",
+					message:"Publicando ubicación..."})
+				postLocation({"lat":position.coords.latitude,
+					"long":position.coords.longitude})
+			},
+			()=>{	//On Error
+				addNotice({status:"FAIL",
+					message:"No se pudo obtener ubicación"})
+			}
+		)
+	}
+	
+	function clearTracking(){
+		navigator.geolocation.clearWatch(watchID)
+		addNotice({status:"DONE",
+			message:"Seguimiento terminado"})
+	}
+	
+	function addNotice(update){
+		document.querySelector("#noticeList").innerHTML=
+			"<div class='notice'><span class='noticeBadge "+update.status+"'>"+update.status+"</span><span class='noticeContent'>"+update.message+"</span></div>"+document.querySelector("#noticeList").innerHTML
+	}
+	
+	function postLocation(loc){
+		console.log("Post location ["+loc.lat+"; "+loc.long+"]")
+		fetch("http://dintdt.c1.biz/safepet/updateTrackerInfo.php",{
+			method:"POST",
+			body:new URLSearchParams({
+				tracker_id:0,
+				latitude:loc.lat,
+				longitude:loc.long})
+			})
+			.then(r=>r.ok?r.json():{"status":"NONE"})
+			.then(j=>{
+				if(j.status=="GOOD"){
+					j.message=`[${j.latitude};${j.longitude}]`;
+				}
+				addNotice(j)
+			}) 
+	}
+	
+	window.addEventListener("load",()=>{
+		document.querySelector("#button_locate").addEventListener("click",()=>{locate();})
+		document.querySelector("#button_track").addEventListener("click",()=>{beginTracking();})
+		document.querySelector("#button_clear").addEventListener("click",()=>{clearTracking();})
+	})
+</script>
+<body>
+	<div id="buttons">
+		<button id="button_locate">Publicar ubicación</button>
+		<button id="button_track">Comenzar seguimiento</button>
+		<button id="button_clear">Terminar seguimiento</button>
+	</div>
+	<div id="noticeList"></div>
+</body>
+<style>
+	*{font-size:5vw}
+	body{margin:0;display:flex;flex-direction:column}
+	button{display:block;width:80vw;text-align:center;padding:0.5em;margin:0.5em auto}
+	#buttons, #noticeList{height:50vh;}
+	#noticeList{overflow-y:scroll}
+	
+	.notice{margin:0.1rem;font-family:monospace;}
+	.noticeBadge{padding:0 0.5rem;border-radius:1rem;color:#fff;background-color:#000;margin:0.2rem}
+	.noticeBadge.OKAY, .noticeBadge.GOOD{background-color:#4a4}
+	.noticeBadge.FAIL{background-color:#a44}
+	.noticeBadge.WAIT{background-color:#888}
+	.noticeBadge.DONE{background-color:#44a}
+</style>

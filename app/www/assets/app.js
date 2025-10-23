@@ -33,6 +33,9 @@ async function processContents(self){
 		}
 	}
 	
+	// Borra los campos de templating (de formato ${...}) que quedaron sin reemplazar.
+	frame.innerHTML=frame.innerHTML.replaceAll(/\${(.*?)}/gm,"");
+	
 	for(let hasContent of frame.querySelectorAll("[content]")){
 		hasContent.innerHTML=hasContent.getAttribute("content");
 	}
@@ -65,9 +68,6 @@ async function processContents(self){
 	for(let span of frame.querySelectorAll(".grid [colspan]")){
 		span.style.gridColumn=span.getAttribute("colspan")+" span";
 	}
-	
-	// Borra los campos de templating (de formato ${...}) que quedaron sin reemplazar.
-	frame.innerHTML=frame.innerHTML.replaceAll(/\${(.*?)}/gm,"");
 	
 	// Hace que el botón #backButton redirija a la página previa
 	let backButton = frame.querySelector("#backButton")
