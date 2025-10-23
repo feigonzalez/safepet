@@ -3,6 +3,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="assets/style.css">
 	<script src="assets/app.js"></script>
+	<script src="assets/db.js"></script>
+	<script src="assets/validation.js"></script>
 	
 	<!-- Leaflet CSS -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
@@ -147,13 +149,13 @@
 			<!-- Controles del mapa -->
 			<div class="map-controls">
 				<button class="map-control-btn" onclick="centerOnUser()" title="Mi ubicación">
-					<span class="icon" data-icon="location"></span>📍
+					📍
 				</button>
 				<button class="map-control-btn" onclick="togglePetMarkers()" title="Mostrar/Ocultar mascotas">
-					<span class="icon" data-icon="pets"></span>🐕
+					🐕
 				</button>
 				<button class="map-control-btn" onclick="toggleAlerts()" title="Mostrar/Ocultar alertas">
-					<span class="icon" data-icon="warning"></span>⚠️
+					⚠️
 				</button>
 				<button class="map-control-btn" onclick="toggleShelters()" title="Mostrar/Ocultar refugios">
 					🏠
@@ -231,12 +233,19 @@
 				// Marcar como inicializado
 				mapInitialized = true;
 
-				// Agregar capa de tiles de OpenStreetMap
+				// Agregar capa de tiles de OpenStreetMap con manejo de errores
 				const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 					attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 					maxZoom: 19,
 					minZoom: 1,
-					subdomains: ['a', 'b', 'c']
+					subdomains: ['a', 'b', 'c'],
+					errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5NYXBhIG5vIGRpc3BvbmlibGU8L3RleHQ+PC9zdmc+',
+					crossOrigin: true
+				});
+				
+				// Manejar errores de carga de tiles
+				tileLayer.on('tileerror', function(error) {
+					console.warn('Error cargando tile del mapa:', error);
 				});
 				
 				tileLayer.addTo(map);
@@ -364,11 +373,22 @@
 						const userLat = position.coords.latitude;
 						const userLng = position.coords.longitude;
 						
+						// Validar coordenadas obtenidas
+						const coordValidation = GeolocationUtils.validateCoordinates(userLat, userLng);
+						if (!coordValidation.isValid) {
+							console.error('Coordenadas inválidas:', coordValidation.errors);
+							GeolocationUtils.showGeolocationError('Coordenadas obtenidas no son válidas');
+							return;
+						}
+						
 						// Almacenar la ubicación del usuario
 						userLocation = { lat: userLat, lng: userLng };
 						
 						// Remover indicador de carga
 						document.body.removeChild(loadingDiv);
+						
+						// Mostrar mensaje de éxito
+						GeolocationUtils.showGeolocationSuccess('Ubicación obtenida correctamente');
 						
 						// Centrar el mapa en la ubicación del usuario
 						map.setView([userLat, userLng], 16);
@@ -412,20 +432,23 @@
 						let errorMessage = 'No se pudo obtener tu ubicación. ';
 						switch(error.code) {
 							case error.PERMISSION_DENIED:
-								errorMessage += 'Permisos de ubicación denegados. Usando ubicación por defecto.';
+								errorMessage += 'Permisos de ubicación denegados.';
 								break;
 							case error.POSITION_UNAVAILABLE:
-								errorMessage += 'Ubicación no disponible. Usando ubicación por defecto.';
+								errorMessage += 'Ubicación no disponible.';
 								break;
 							case error.TIMEOUT:
-								errorMessage += 'Tiempo de espera agotado. Usando ubicación por defecto.';
+								errorMessage += 'Tiempo de espera agotado.';
 								break;
 							default:
-								errorMessage += 'Error desconocido. Usando ubicación por defecto.';
+								errorMessage += 'Error desconocido.';
 								break;
 						}
 						
 						console.log(errorMessage);
+						
+						// Mostrar error usando el sistema de validación
+						GeolocationUtils.showGeolocationError(errorMessage + ' Usando ubicación por defecto.');
 						
 						// Usar ubicación por defecto de Santiago
 						const defaultLat = -33.4489;
@@ -458,19 +481,6 @@
 						
 						// Actualizar refugios y alertas basados en la ubicación por defecto
 						updateLocationBasedContent();
-						
-						// Mostrar mensaje informativo en lugar de alert
-						const messageDiv = document.createElement('div');
-						messageDiv.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #ffc107; color: #856404; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 10000; text-align: center; max-width: 300px;';
-						messageDiv.innerHTML = '📍 Usando ubicación por defecto (Santiago)';
-						document.body.appendChild(messageDiv);
-						
-						// Remover mensaje después de 3 segundos
-						setTimeout(() => {
-							if (document.body.contains(messageDiv)) {
-								document.body.removeChild(messageDiv);
-							}
-						}, 3000);
 					},
 					{
 						enableHighAccuracy: true,

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="assets/style.css">
     <script src="assets/app.js"></script>
     <script src="assets/db.js"></script>
+    <script src="assets/validation.js"></script>
+    <script src="assets/navigation.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -138,6 +140,19 @@
             outline: none;
             border-color: #667eea;
         }
+        
+        /* Estilos para validaciones */
+        .field-error {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        .error {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
 
         .save-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -214,25 +229,25 @@
             </div>
 
             <!-- Formulario de edición -->
-            <form id="profileForm" onsubmit="saveProfile(event)">
+            <form id="profileForm">
                 <div class="form-group">
                     <label class="form-label" for="fullName">Nombre Completo</label>
-                    <input type="text" id="fullName" class="form-input" placeholder="Ingresa tu nombre completo" required>
+                    <input type="text" id="fullName" name="name" class="form-input" placeholder="Ingresa tu nombre completo" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="email">Correo Electrónico</label>
-                    <input type="email" id="email" class="form-input" placeholder="tu@email.com" required>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="tu@email.com" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="phone">Teléfono</label>
-                    <input type="tel" id="phone" class="form-input" placeholder="+56 9 1234 5678">
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="+56 9 1234 5678" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="address">Dirección</label>
-                    <input type="text" id="address" class="form-input" placeholder="Tu dirección">
+                    <input type="text" id="address" name="address" class="form-input" placeholder="Tu dirección completa" required>
                 </div>
 
                 <button type="button" class="cancel-button" onclick="window.location.href='settings.html'">Cancelar</button>
@@ -297,29 +312,56 @@
             alert('Funcionalidad de cambio de foto próximamente disponible');
         }
 
-        function saveProfile(event) {
-            event.preventDefault();
-            
-            // Obtener datos del formulario
-            const formData = {
-                name: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value
-            };
-            
-            // Simular guardado (aquí se conectaría con la base de datos)
-            console.log('Guardando perfil:', formData);
-            
-            // Mostrar confirmación
-            alert('Perfil actualizado correctamente');
-            
-            // Volver a ajustes
-            window.location.href = 'settings.html';
-        }
-
         // Cargar datos al inicializar la página
-        document.addEventListener('DOMContentLoaded', beforeLoad);
+        document.addEventListener('DOMContentLoaded', function() {
+            beforeLoad();
+            
+            // Configurar validaciones en tiempo real
+            ValidationUtils.setupRealTimeValidation('profileForm', SafePetValidations.profile);
+            
+            // Configurar manejo del formulario
+            const form = document.getElementById('profileForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Limpiar errores previos
+                ValidationUtils.clearFormErrors(form);
+                
+                // Validar formulario
+                const isValid = ValidationUtils.validateForm(form, SafePetValidations.profile);
+                
+                if (isValid) {
+                    // Obtener datos del formulario
+                    const formData = {
+                        name: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        address: document.getElementById('address').value
+                    };
+                    
+                    // Simular guardado (aquí se conectaría con la base de datos)
+                    console.log('Guardando perfil:', formData);
+                    
+                    // Mostrar mensaje de éxito
+                    ValidationUtils.showSuccessMessage('Perfil actualizado correctamente');
+                    
+                    // Volver a ajustes después de un breve delay
+                    setTimeout(() => {
+                        window.location.href = 'settings.html';
+                    }, 1500);
+                } else {
+                    ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');
+                }
+            });
+            
+            // Configurar botón de cancelar
+            const cancelButton = document.querySelector('.cancel-button');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', function() {
+                    NavigationUtils.goBack();
+                });
+            }
+        });
     </script>
 </body>
 </html>

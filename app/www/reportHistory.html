@@ -281,26 +281,47 @@
 			alert(`Editar reporte de ${petId}`);
 		}
 		
-		function markAsFound(petId) {
-			if (confirm(`¿Confirmas que ${petId} ha sido encontrada?`)) {
-				alert(`Marcando ${petId} como encontrada`);
+		async function markAsFound(petId) {
+			const confirmed = await showVerificationModal(
+				'Marcar como Encontrada',
+				`¿Confirmas que ${petId} ha sido encontrada?`,
+				'Confirmar',
+				'Cancelar'
+			);
+			
+			if (confirmed) {
+				ValidationUtils.showSuccessMessage(`${petId} ha sido marcada como encontrada`);
 				// Aquí se actualizaría el estado del reporte
 			}
 		}
 		
 		function thankRescuer(petId) {
-			alert(`Enviar mensaje de agradecimiento por encontrar a ${petId}`);
+			ValidationUtils.showSuccessMessage(`Mensaje de agradecimiento enviado por encontrar a ${petId}`);
 		}
 		
-		function closeReport(petId) {
-			if (confirm(`¿Estás seguro de que quieres cerrar el reporte de ${petId}?`)) {
-				alert(`Cerrando reporte de ${petId}`);
+		async function closeReport(petId) {
+			const confirmed = await showVerificationModal(
+				'Cerrar Reporte',
+				`¿Estás seguro de que quieres cerrar el reporte de ${petId}?`,
+				'Cerrar Reporte',
+				'Cancelar'
+			);
+			
+			if (confirmed) {
+				ValidationUtils.showSuccessMessage(`Reporte de ${petId} cerrado exitosamente`);
 			}
 		}
 		
-		function duplicateReport(petId) {
-			if (confirm(`¿Quieres crear un nuevo reporte basado en ${petId}?`)) {
-				alert(`Duplicando reporte de ${petId}`);
+		async function duplicateReport(petId) {
+			const confirmed = await showVerificationModal(
+				'Duplicar Reporte',
+				`¿Quieres crear un nuevo reporte basado en ${petId}?`,
+				'Crear Reporte',
+				'Cancelar'
+			);
+			
+			if (confirmed) {
+				ValidationUtils.showSuccessMessage(`Nuevo reporte creado basado en ${petId}`);
 			}
 		}
 	</script>
