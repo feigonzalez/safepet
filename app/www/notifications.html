@@ -10,15 +10,32 @@
 	</style>
 	<script>
 		async function beforeLoad(){
+			// Solicita las notificaciones a la API
 			notifications = await fetch("http://dintdt.c1.biz/safepet/pullNotifications.php",{
 				method:"POST",
 				body:new URLSearchParams({"account_id":0})
+					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
 			})
-			.then(r=>r.ok?r.json():{});
+				.then(r=>r.ok?r.json():{});
+			// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
 			for(let n of notifications){
 				n["metaText"]=n.timestamp
 			}
 		}
+		
+		/*
+		Este código:
+		
+		feed = await fetch("http://api.allorigins.win/raw?url=https%3A//tenenciaresponsablemascotas.cl/feed/")
+			.then(r=>r.ok?r.text():"")
+			.then(c=>new window.DOMParser().parseFromString(c, "text/xml"))
+		
+		usa un servidor proxy para obtener el feed de noticias de tenenciaresponsablemascotas.cl,
+		y almacena el XML resultante en la variable "feed".
+		TODO: Habría que ver cómo parsear el XML para obtener las noticias como tales, para luego mostrarlas.
+		Parece que cada noticia corresponde a un elemento <item> del XML
+		*/
+		
 	</script>
 </head>
 <body class="column">

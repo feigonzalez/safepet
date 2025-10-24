@@ -1,0 +1,6 @@
+= Mapa y GPS =
+Leaflet.js
+OpenStreetMap
+
+= Proxy para feeds RSS =
+AllOrigins
