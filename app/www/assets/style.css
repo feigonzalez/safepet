@@ -81,6 +81,7 @@ button:active, .button:active, input[type=button]:active, input[type=submit]:act
 .pos-fixed{position:fixed}
 .pos-top{top:0.5rem}
 .pos-right{right:0.5rem}
+.pos-left{left:0.5rem}
 
 .bg-red{background-color:var(--brand-primary) !important;color:#fff !important}
 .bg-green{background-color:#4B4 !important;color:#fff !important}

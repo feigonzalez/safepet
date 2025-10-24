@@ -54,7 +54,7 @@ async function processContents(self){
 	
 	// Fija la imagen de fondo para los elementos con [data-icon]
 	for(let icon of frame.querySelectorAll("[data-icon]")){
-		icon.style.backgroundImage="url(\"assets/"+icon.dataset.icon+".svg\")";
+		icon.style.backgroundImage="url(\"assets/icons/"+icon.dataset.icon+".svg\")";
 	}
 	
 	// Maneja los elementos de grilla:
