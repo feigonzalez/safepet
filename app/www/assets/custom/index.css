@@ -105,3 +105,5 @@
 		}
 
         .leaflet-popup{z-index:1}
+        .leaflet-control-zoom{display:none}
+        .leaflet-control-attribution{transform: translateX(100%) translateY(50%) rotate(-90deg) translateY(-50%); transform-origin: left;}
