@@ -2,6 +2,7 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
 	<script src="assets/app.js"></script>
+	<script src="assets/connect.js"></script>
 	<style>
 		.notifItem{display:flex;align-items:flex-start}
 		.notifTitle{padding-left:0.5rem}
@@ -11,12 +12,23 @@
 	<script>
 		async function beforeLoad(){
 			// Solicita las notificaciones a la API
+			
+			//notifications = await request("http://dintdt.c1.biz/safepet/pullNotifications.php",{"account_id":0})
+			//console.log("Requesting Notifications from server...");
+			//notifications = await request("http://localhost/safepet/server/pullNotifications.php",{"account_id":0})
+			//console.log("Received.");
+			
+			//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
+
+				//Versión insegura
 			notifications = await fetch("http://dintdt.c1.biz/safepet/pullNotifications.php",{
 				method:"POST",
 				body:new URLSearchParams({"account_id":0})
 					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
 			})
 				.then(r=>r.ok?r.json():{});
+
+
 			// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
 			for(let n of notifications){
 				n["metaText"]=n.timestamp
@@ -51,8 +63,8 @@
 			Dentro de este elemento, cada vez que aparezca ${X} donde X sea alguna de estas llaves,
 			el texto será reemplazado por el valor de esa llave en esa notificación. -->
 	
-		<div class="column size-full-width">
-			<div class="row compact listCard" foreach="notifications">
+		<div class="column list size-full-width">
+			<div class="row compact card" foreach="notifications">
 				<div class="column notifItem ta-left">
 					<div class="row ta-left bold">
 						<span class="icon notifIcon" data-icon="${type}"></span>

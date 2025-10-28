@@ -4,3 +4,6 @@ OpenStreetMap
 
 = Proxy para feeds RSS =
 AllOrigins
+
+= Código para generar llaves públicas y privadas =
+https://gist.github.com/mholt/813db71291de8e45371fe7c4749df99c

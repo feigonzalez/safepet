@@ -15,10 +15,11 @@ async function processContents(self){
 		let lastEntry=iterator;
 		for(let item of data){
 			let newEntry = iterator.cloneNode(true);
+			lastEntry.after(newEntry)
+			newEntry.removeAttribute("foreach");
 			for(let key in item){
 				newEntry.innerHTML=newEntry.innerHTML.replaceAll("${"+key+"}",item[key])
 			}
-			lastEntry.after(newEntry)
 			lastEntry=newEntry;
 		}
 		iterator.remove()
@@ -38,6 +39,7 @@ async function processContents(self){
 	
 	for(let hasContent of frame.querySelectorAll("[content]")){
 		hasContent.innerHTML=hasContent.getAttribute("content");
+		hasContent.removeAttribute("content");
 	}
 	
 	// Fija el [placeholder] los inputs de tipo texto a " " para las animaciones css
