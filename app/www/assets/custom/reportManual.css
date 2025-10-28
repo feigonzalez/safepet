@@ -1,0 +1,25 @@
+
+		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
+		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
+		
+		/* Estilos para validaciones */
+        .field-error {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        .error {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        
+        .formEntry input, .formEntry select {
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        
+        .formEntry input:focus, .formEntry select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }

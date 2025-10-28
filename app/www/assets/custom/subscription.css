@@ -1,0 +1,47 @@
+
+		.planCard {
+			border: 2px solid var(--brand-border);
+			border-radius: var(--radius-xl);
+			padding: 1.5rem;
+			margin: 1rem 0;
+			background: white;
+			box-shadow: var(--shadow-1);
+			transition: all 0.3s ease;
+		}
+		
+		.planCard.featured {
+			border-color: var(--brand-primary);
+			box-shadow: var(--shadow-2);
+		}
+		
+		.planTitle {
+			font-size: 1.5rem;
+			font-weight: 700;
+			color: var(--brand-primary);
+			margin-bottom: 0.5rem;
+		}
+		
+		.planPrice {
+			font-size: 2rem;
+			font-weight: 700;
+			color: var(--text-color);
+			margin-bottom: 1rem;
+		}
+		
+		.planFeature {
+			display: flex;
+			align-items: center;
+			margin: 0.5rem 0;
+			font-size: 0.95rem;
+		}
+		
+		.planFeature .icon {
+			margin-right: 0.5rem;
+			width: 1rem;
+			height: 1rem;
+		}
+		
+		.currentPlan {
+			background: var(--brand-primary-soft);
+			border-color: var(--brand-primary);
+		}

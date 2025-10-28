@@ -1,97 +1,12 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
+	<link rel="stylesheet" href="assets/custom/reportManual.css">
 	<script src="assets/app.js"></script>
 	<script src="assets/validation.js"></script>
 	<script src="assets/navigation.js"></script>
 	<script src="assets/camera.js"></script>
-	<style>
-		#petImageDisplay{width:50vw;height:50vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
-		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
-		
-		/* Estilos para validaciones */
-        .field-error {
-            color: #dc3545;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-            display: block;
-        }
-        
-        .error {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-        }
-        
-        .formEntry input, .formEntry select {
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
-        
-        .formEntry input:focus, .formEntry select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-	</style>
-	<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            const validationRules = ValidationUtils.SafePetValidations.petReportForm;
-            
-            // Configurar validación en tiempo real
-            ValidationUtils.setupRealTimeValidation(form, validationRules);
-            
-            // Validación especial para archivo de imagen
-            const imageInput = document.getElementById('reg_petImage');
-            imageInput.addEventListener('change', function() {
-                const validation = ValidationUtils.validateFile(this, ['image/jpeg', 'image/png', 'image/gif'], 5 * 1024 * 1024);
-                if (!validation.isValid) {
-                    ValidationUtils.showErrorMessage(validation.errors[0]);
-                    this.value = '';
-                    document.getElementById('petImageDisplay').style.backgroundImage = '';
-                }
-            });
-            
-            // Manejar envío del formulario
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Validar campos de texto
-                const validation = ValidationUtils.validateForm(form, validationRules);
-                
-                // Validar radio buttons de sexo
-                const sexValid = ValidationUtils.validateRadioGroup(form, 'petSex', 'Selecciona el sexo de la mascota');
-                
-                if (validation.isValid && sexValid) {
-                    // Mostrar modal de confirmación antes de reportar
-                    const confirmed = await showVerificationModal(
-                        'Confirmar Reporte',
-                        '¿Estás seguro de que quieres reportar este hallazgo con la información proporcionada?',
-                        'Enviar Reporte',
-                        'Revisar Datos'
-                    );
-                    
-                    if (confirmed) {
-                        // Simular proceso de reporte
-                        const submitButton = form.querySelector('input[type="submit"]');
-                        const originalValue = submitButton.value;
-                        
-                        submitButton.disabled = true;
-                        submitButton.value = 'Reportando...';
-                        
-                        setTimeout(() => {
-                            ValidationUtils.showSuccessMessage('Hallazgo reportado exitosamente');
-                            
-                            // Redirigir después del éxito
-                            setTimeout(() => {
-                                window.location.href = 'alertList.html';
-                            }, 1500);
-                        }, 1500);
-                    }
-                } else {
-                    ValidationUtils.showErrorMessage('Por favor corrige los errores en el formulario');
-                }
-            });
-        });
-    </script>
+	<script src="assets/custom/reportManual.js"></script>
 </head>
 <body class="column">
 	<div class="row header">
