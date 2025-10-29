@@ -114,7 +114,7 @@
             const chatInfo = chatData[currentChatId];
             if (chatInfo) {
                 document.getElementById('contactName').textContent = chatInfo.name;
-                document.getElementById('contactStatus').textContent = chatInfo.status;
+                //document.getElementById('contactStatus').textContent = chatInfo.status;
                 document.getElementById('contactAvatar').style.backgroundImage = `url('${chatInfo.avatar}')`;
                 messages = [...chatInfo.messages];
                 renderMessages();

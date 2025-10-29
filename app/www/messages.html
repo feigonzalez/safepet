@@ -3,7 +3,43 @@
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/custom/messages.css">
     <script src="assets/app.js"></script>
-    <script src="assets/navigation.js"></script>
+
+    <script>
+		const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
+			// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
+		var messages;
+		async function beforeLoad(){
+			let response = await fetch("http://dintdt.c1.biz/safepet/getLatestChats.php",{
+				method:"POST",
+				body:new URLSearchParams({"account_id":0})
+					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
+			})
+				.then(r=>r.ok?r.json():{});
+			if(response.status=="GOOD"){
+				messages=response.messages;
+			}
+			for(let m of messages){
+				m.recency = getRecency(m.timestamp);
+			}
+			
+			//Actualiza la recencia (qué tan reciente es) de los mensajes de la lista
+			setInterval(()=>{
+				for(let timestamp of document.querySelectorAll(".timestamp")){
+					timestamp.textContent=getRecency(parseInt(timestamp.dataset.time));
+				}
+			},15000)
+		}
+		
+		function getRecency(timestamp){
+			let timescale="second";
+			let recency = timestamp - (Date.now()/1000)
+			if(Math.abs(recency)>60){ recency/=60; timescale="minute"}
+			if(Math.abs(recency)>60){ recency/=60; timescale="hour"}
+			if(Math.abs(recency)>24){ recency/=24; timescale="day"}
+			return timeFormat.format(Math.floor(recency),timescale)
+		}
+    </script>
+	
 </head>
 <body class="column">
     <div class="row header">
@@ -11,33 +47,24 @@
         <h1>Mensajes</h1>
     </div>
     <div class="row">
-        <div class="column size-full-width">
+        <div class="column list size-full-width">
 	
 		<!-- Debería ser un template con un atributo foreach="chats" o algo parecido -->
-            <div class="row compact listCard chatItem" onclick="openChat('dueno-dargon', 'Dueño de Dargón')">
-                <div class="column msgItem ta-left">
-                    <div class="msgAvatar" data-imgsrc="media/dargon.jpg"></div>
-                    <div class="chatContent">
-                        <div class="chatHeader">
-                            <div class="bold">Dueño de Dargón</div>
-                            <div class="timestamp">Hace 5 min</div>
-                        </div>
-                        <div class="lastMessage">Hola, vi a tu mascota cerca del parque central</div>
-                    </div>
-                    <div class="unreadBadge">2</div>
-                </div>
+			<div class="card row compact chatItem" foreach="messages">
+				<a href="chat.html?id=${paircode}" class="row">
+					<div class="column msgItem ta-left">
+						<div class="row chatHeader">
+							<div class="column compact"><div class="msgAvatar" data-imgsrc="media/dargon.jpg"></div></div>
+							<div class="column ta-left">Dueño de Dargón</div>
+							<div class="column ta-right compact no-wrap"><div class="timestamp" data-time="${timestamp}" content="${recency}"></div></div>
+						</div>
+						<div class="chatContent row">
+							<div class="column ta-left lastMessage" content="${content}"></div>
+							<!--div class="column compact"><div class="unreadBadge">2</div></div-->
+						</div>
+					</div>
+				</a>
             </div>
         </div>
     </div>
-
-    <script>
-        // Función para abrir una conversación individual
-        function openChat(chatId, contactName) {
-            // Navegar a la vista de conversación con parámetros
-            navigateWithParams('chat.html', {
-                chatId: chatId,
-                contactName: contactName
-            });
-        }
-    </script>
 </body>
