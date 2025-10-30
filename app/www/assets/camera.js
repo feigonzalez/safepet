@@ -197,7 +197,7 @@ class CameraManager {
                         </div>
                         <div class="row compact">
                             <div class="column">
-                                <button class="button bg-red" id="takePhotoBtn">
+                                <button class="button bg-primary" id="takePhotoBtn">
                                     <span class="icon" data-icon="camera"></span>
                                     &nbsp;&nbsp;Tomar Foto
                                 </button>

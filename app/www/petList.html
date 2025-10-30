@@ -15,12 +15,17 @@
 				type:"Plan Gratis",
 				image:"assets/logo.png"
 			}
+			document.querySelector("#accountName").textContent=accountData["name"];
+			document.querySelector("#profileImage").dataset.imgsrc=accountData["image"];
 		
 			petData = await selectAllFrom('pets');
 			pets=[]
 			for(key in petData){
-				pets.push(petData[key])
+				let data = petData[key]
+					data.imageURL = data.images[0];
+				pets.push(data)
 			}
+			fillIterable(document.querySelector("[foreach=pets]"),pets)
 		}
 	</script>
 </head>
@@ -29,7 +34,7 @@
 	<div class="row header">
 		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
 		<div class="column ta-left">
-			<a href="account.html"><h1>Hola, <span content="${accountData.name}"></span></h1></a>
+			<a href="account.html"><h1>Hola, <span id="accountName"></span></h1></a>
 		</div>
 		<div class="column ta-right ph-1">
 			<a href="account.html"><div id="profileImage" class="icon" data-imgsrc="${accountData.image}"></div></a>
@@ -39,17 +44,17 @@
 	<div class="row">
 		<div class="column list"> <!-- Lista de mascotas -->
 	
-			<div class="card row compact" foreach="pets">
+			<div class="card row compact" await foreach="pets">
 				<a href="petDetail.html?id=${id}" class="row">
 					<div class="column compact">
 						<div class="petImageDisplay" data-img="${imageURL}"></div>
 					</div>
 					<div class="column ph-1 size-full-width ta-left">
 						<div class="cardTitle row ta-left bold">
-							<span content="${name}"></span> <span content="${sexSymbol}"></span>
+							<span content="${name}"></span> <!--span content="${sexSymbol}"></span-->
 						</div>
 						<div class="row ta-left metaText">
-							<span content="${species}"></span> (<span content="${breed}"></span>)
+							<span content="${species} (${breed})"></span>
 						</div>
 					</div>
 					<div class="column compact">
@@ -60,8 +65,8 @@
 			
 			<div class="row compact">
 				<div class="column ph-1">
-					<a class="button bg-red" href="register.html">Añadir Mascota</a>
-					<!-- a class="button bg-red" href="reportHistory.html">Historial de Alertas</a --> <!-- ????? -->
+					<a class="button bg-primary" href="register.html">Añadir Mascota</a>
+					<!-- a class="button bg-primary" href="reportHistory.html">Historial de Alertas</a --> <!-- ????? -->
 				</div>
 			</div>
 			

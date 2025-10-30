@@ -26,28 +26,28 @@
 	</div>
 	
 	<div class="pos-fixed pos-top pos-right">
-		<a class="button bg-redpale round" role="button" href="notifications.html">
+		<a class="button bg-default round" role="button" href="notifications.html">
 			<span class="icon" data-icon="bell"></span>
 		</a>
 	</div>
  
 	<div class="pos-fixed pos-top pos-left">
 		<!-- Controles del mapa -->
-		<button class="button map-control-btn" onclick="centerOnUser()" title="Mi ubicación">📍</button>
-		<button class="button map-control-btn" onclick="togglePetMarkers()" title="Mostrar/Ocultar mascotas">🐕</button>
-		<button class="button map-control-btn" onclick="toggleAlerts()" title="Mostrar/Ocultar alertas">⚠️</button>
-		<button class="button map-control-btn" onclick="toggleShelters()" title="Mostrar/Ocultar refugios">🏠</button>
+		<button class="button bg-default" onclick="centerOnUser()" title="Mi ubicación">📍</button>
+		<button class="button bg-default" onclick="togglePetMarkers()" title="Mostrar/Ocultar mascotas">🐕</button>
+		<button class="button bg-default" onclick="toggleAlerts()" title="Mostrar/Ocultar alertas">⚠️</button>
+		<button class="button bg-default" onclick="toggleShelters()" title="Mostrar/Ocultar refugios">🏠</button>
 	</div>
 
 	<div class="row footer compact">
 		<div class="column">
-			<button class="bg-redpale round" onclick="verifyAccountAndRedirect()"><span class="icon" data-icon="pets"></span></button>
+			<button class="bg-secondary round" onclick="verifyAccountAndRedirect()"><span class="icon" data-icon="pets"></span></button>
 		</div>
 		<div class="column">
-			<button id="reportButton" class="button bg-red round size-largest" role="button" onclick="loadModal('templates/reportModal.html')"><span class="icon" data-icon="warning"></span></button>
+			<button id="reportButton" class="button bg-primary round size-largest" role="button" onclick="loadModal('templates/reportModal.html')"><span class="icon" data-icon="warning"></span></button>
 		</div>
 		<div class="column">
-			<a class="button bg-redpale round" role="button" href="messages.html"><span class="icon" data-icon="chat"></span></a>
+			<a class="button bg-secondary round" role="button" href="messages.html"><span class="icon" data-icon="chat"></span></a>
 		</div>
 	</div>
 

@@ -23,7 +23,7 @@
 							<p>Agregar Foto</p>
 						</div>
 					</div>
-					<input type="file" accept="image/*" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')" style="display: none;">
+					<input type="file" accept="image/*" capture="environtment" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
 				</div>
 			</div></div>
             <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" " required></div>
@@ -35,9 +35,7 @@
                 <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F" required>	<label for="rep_petSexF">Hembra</label></div>
             </div>
 
-            
-			
-			<input type="submit" class="bg-red" value="Registrar"></input>
+			<input type="submit" class="bg-primary" value="Registrar"></input>
         </form>
     </div>
 </body>

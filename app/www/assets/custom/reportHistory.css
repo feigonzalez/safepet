@@ -2,7 +2,7 @@
 		.filterSection {
 			padding: 1rem;
 			background: white;
-			border-bottom: 1px solid var(--brand-border);
+			border-bottom: 1px solid var(--color-border);
 			margin: -1rem -1rem 1rem -1rem;
 		}
 		.filterTabs {
@@ -12,7 +12,7 @@
 		}
 		.filterTab {
 			padding: 0.5rem 1rem;
-			border: 1px solid var(--brand-border);
+			border: 1px solid var(--color-border);
 			border-radius: var(--radius-md);
 			background: white;
 			cursor: pointer;
@@ -20,9 +20,9 @@
 			font-size: 0.9rem;
 		}
 		.filterTab.active {
-			background: var(--brand-primary);
+			background: var(--color-primary);
 			color: white;
-			border-color: var(--brand-primary);
+			border-color: var(--color-primary);
 		}
 		.searchBox {
 			position: relative;
@@ -30,7 +30,7 @@
 		.searchBox input {
 			width: 100%;
 			padding: 0.75rem 1rem 0.75rem 2.5rem;
-			border: 1px solid var(--brand-border);
+			border: 1px solid var(--color-border);
 			border-radius: var(--radius-md);
 			font-size: 1rem;
 		}
@@ -43,7 +43,7 @@
 		}
 		.reportCard {
 			background: white;
-			border: 1px solid var(--brand-border);
+			border: 1px solid var(--color-border);
 			border-radius: var(--radius-lg);
 			margin: 1rem 0;
 			overflow: hidden;
@@ -65,7 +65,7 @@
 		}
 		.petInfo h3 {
 			margin: 0 0 0.25rem 0;
-			color: var(--brand-primary);
+			color: var(--color-primary);
 		}
 		.petInfo p {
 			margin: 0;
@@ -115,7 +115,7 @@
 		.actionBtn {
 			flex: 1;
 			padding: 0.5rem;
-			border: 1px solid var(--brand-border);
+			border: 1px solid var(--color-border);
 			border-radius: var(--radius-md);
 			background: white;
 			cursor: pointer;
@@ -126,12 +126,12 @@
 			background: #f9f9f9;
 		}
 		.actionBtn.primary {
-			background: var(--brand-primary);
+			background: var(--color-primary);
 			color: white;
-			border-color: var(--brand-primary);
+			border-color: var(--color-primary);
 		}
 		.actionBtn.primary:hover {
-			background: var(--brand-primary-dark);
+			background: var(--color-primary-dark);
 		}
 		.emptyState {
 			text-align: center;
@@ -151,7 +151,7 @@
 		.statCard {
 			flex: 1;
 			background: white;
-			border: 1px solid var(--brand-border);
+			border: 1px solid var(--color-border);
 			border-radius: var(--radius-md);
 			padding: 1rem;
 			text-align: center;
@@ -159,7 +159,7 @@
 		.statNumber {
 			font-size: 1.5rem;
 			font-weight: bold;
-			color: var(--brand-primary);
+			color: var(--color-primary);
 			margin-bottom: 0.25rem;
 		}
 		.statLabel {

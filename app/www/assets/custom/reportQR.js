@@ -30,7 +30,7 @@
 				cameraBox.innerHTML = `
 					<div class="ta-center">
 						<p>Error al inicializar la cámara</p>
-						<button class="button bg-red" onclick="location.reload()">Reintentar</button>
+						<button class="button bg-primary" onclick="location.reload()">Reintentar</button>
 						<button class="button" onclick="window.location.href='reportManual.html'">Continuar sin QR</button>
 					</div>
 				`;

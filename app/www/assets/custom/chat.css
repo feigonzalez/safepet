@@ -60,7 +60,7 @@
         
         .message.sent {
             align-self: flex-end;
-            background-color: var(--brand-primary);
+            background-color: var(--color-primary);
             color: white;
             border-bottom-right-radius: 4px;
         }

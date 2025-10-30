@@ -11,14 +11,14 @@
                     <div class="row formEntry"><label for="reg_email">Email</label><input id="reg_email" type="email" name="email" placeholder="ejemplo@correo.com" required></div>
                     <div class="row formEntry"><label for="reg_phone">Teléfono</label><input id="reg_phone" type="tel" name="phone" placeholder="+56 9 1234 5678" required></div>
                     <div class="row formEntry"><label for="reg_password">Contraseña</label><input id="reg_password" type="password" name="password" placeholder="Mínimo 6 caracteres" required></div>
-                    <div class="row"><button class="bg-red cta" type="submit">Registrarse</button></div>
+                    <div class="row"><button class="bg-primary cta" type="submit">Registrarse</button></div>
                 </form>
                 <div class="row hint">¿Ya tienes cuenta? <a href="auth.html?mode=login">Inicia sesión</a></div>
             ` : `
                 <form id="loginForm" class="column">
                     <div class="row formEntry"><label for="login_email">Email</label><input id="login_email" type="email" name="email" placeholder="ejemplo@correo.com" required></div>
                     <div class="row formEntry"><label for="login_password">Contraseña</label><input id="login_password" type="password" name="password" placeholder="Tu contraseña" required></div>
-                    <div class="row"><button class="bg-red cta" type="submit">Iniciar sesión</button></div>
+                    <div class="row"><button class="bg-primary cta" type="submit">Iniciar sesión</button></div>
                 </form>
                 <div class="row hint">¿No tienes cuenta? <a href="auth.html?mode=register">Regístrate</a></div>
             `;
