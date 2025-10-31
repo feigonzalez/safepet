@@ -1,18 +1,17 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
+	<link rel="stylesheet" href="assets/notifications.css">
 	<script src="assets/app.js"></script>
-	<script src="assets/connect.js"></script>
-	<style>
-		.notifItem{display:flex;align-items:flex-start}
-		.notifTitle{padding-left:0.5rem}
-		.notifIcon{height:2rem !important;width:2rem !important}
-		.notifMeta{font-size:0.85rem;color:#666;margin-top:0.25rem}
-	</style>
-	<script>
+	<script src="assets/validation.js"></script>
+</head>
+<body>
+<script>
 		var notifications;
 		async function beforeLoad(){
 		
+			// CÓDIGO ORIGINAL COMENTADO - Ahora usamos el sistema de noticias RSS
+			/*
 			// Solicita las notificaciones a la API
 			
 			//notifications = await request("http://dintdt.c1.biz/safepet/pullNotifications.php",{"account_id":0})
@@ -37,22 +36,8 @@
 			}
 			
 			fillIterable(document.querySelector("[foreach=notifications]"),notifications)
-		}
-		
-		/*
-		Este código:
-		
-		feed = await fetch("http://api.allorigins.win/raw?url=https%3A//tenenciaresponsablemascotas.cl/feed/")
-			.then(r=>r.ok?r.text():"")
-			.then(c=>new window.DOMParser().parseFromString(c, "text/xml"))
-		
-		usa un servidor proxy para obtener el feed de noticias de tenenciaresponsablemascotas.cl,
-		y almacena el XML resultante en la variable "feed".
-		TODO: Habría que ver cómo parsear el XML para obtener las noticias como tales, para luego mostrarlas.
-		Parece que cada noticia corresponde a un elemento <item> del XML
-		*/
-		
-	</script>
+			*/
+		} </script>
 </head>
 <body class="column">
 	<div class="row header">
@@ -62,25 +47,74 @@
 	<div class="row">
 		<div class="column list size-full-width">
 		
-			<!-- Este elemento, que tiene un atributo "foreach", se repetirá por cada
-			notificación que se encuentre en la variable notifications 
-			Cada notificación es un JSON con las llaves "title", "icon", "metaText", y "description"
-			Dentro de este elemento, cada vez que aparezca ${X} donde X sea alguna de estas llaves,
-			el texto será reemplazado por el valor de esa llave en esa notificación. -->
-			
-			<div class="row compact card" await foreach="notifications">
-				<div class="column notifItem ta-left">
-					<div class="row ta-left bold">
-						<span class="icon notifIcon" data-icon="${type}"></span>
-						<span class="notifTitle" content="${title}"></span>
-					</div>
-					<div class="column ta-left">
-						<div class="row ta-left metaText" content="${metaText}"></div>
-						<div class="row ta-left" content="${description}"></div>
+			<!-- Contenedor para todas las notificaciones -->
+			<div id="all-notifications" style="width: 100%; padding: 10px;">
+				
+				<!-- Notificaciones estáticas -->
+				<div class="row compact card">
+					<div class="column notifItem ta-left">
+						<div class="row ta-left bold">
+							<span class="icon notifIcon" data-icon="warning"></span>
+							<span class="notifTitle">New Notification</span>
+						</div>
+						<div class="column ta-left">
+							<div class="row ta-left metaText">2025-10-09 17:23:58</div>
+							<div class="row ta-left">This is a notification made with the pushNotification endpoint</div>
+						</div>
 					</div>
 				</div>
+				
+				<div class="row compact card">
+					<div class="column notifItem ta-left">
+						<div class="row ta-left bold">
+							<span class="icon notifIcon" data-icon="warning"></span>
+							<span class="notifTitle">New Notification 2</span>
+						</div>
+						<div class="column ta-left">
+							<div class="row ta-left metaText">2025-10-09 17:24:28</div>
+							<div class="row ta-left">This is another notification made with the endpoint</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row compact card">
+					<div class="column notifItem ta-left">
+						<div class="row ta-left bold">
+							<span class="icon notifIcon" data-icon="chat"></span>
+							<span class="notifTitle">Hola</span>
+						</div>
+						<div class="column ta-left">
+							<div class="row ta-left metaText">2025-10-10 13:01:21</div>
+							<div class="row ta-left">Esta es una notificación</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Contenedor para noticias RSS -->
+				<div id="noticias-feed">
+					<!-- Las noticias se cargarán aquí dinámicamente -->
+				</div>
+				
 			</div>
 			
 		</div>
 	</div>
+
+	<!-- Modal para leer noticias completas -->
+	<div id="news-modal" class="news-modal" style="display: none;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 id="modal-title">Título de la noticia</h2>
+				<button class="close-btn" onclick="closeNewsModal()">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div id="modal-meta" class="modal-meta"></div>
+				<div id="modal-content" class="modal-text"></div>
+				<div class="modal-footer">
+					<button onclick="openOriginalLink()" class="original-link-btn">Ver artículo original</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="assets/custom/notifications.js"></script>
 </body>
