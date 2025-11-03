@@ -1,41 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="assets/style.css">
-	<link rel="stylesheet" href="assets/custom/register.css">
-	<script src="assets/app.js"></script>
-	<script src="assets/validation.js"></script>
-	<script src="assets/navigation.js"></script>
-	<script src="assets/camera.js"></script>
-	<script src="assets/custom/register.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir mascotas</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="css/register.css">
 </head>
-<body class="column">
-	<div class="row header">
-		 <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-		<h1>Añadir Mascota</h1>
-	</div>
-	<div class="row">
-		<form class="column mh-1" id="reportForm">
-			<div class="row formEntry"><div class="column ta-center">
-				<div class="photo-upload-container">
-					<div id="petImageDisplay" class="photo-circle" onclick="showPhotoOptions()">
-						<div class="photo-placeholder">
-							<span class="camera-icon">📷</span>
-							<p>Agregar Foto</p>
-						</div>
-					</div>
-					<input type="file" accept="image/*" capture="environtment" name="petImage" id="reg_petImage" onchange="showUploadedImageAsBg(this,'petImageDisplay')">
-				</div>
-			</div></div>
-            <div class="row formEntry"><label for="rep_petSpecies">Especie</label>	<input id="rep_petSpecies" type="text" name="petSpecies" placeholder=" " required></div>
-            <div class="row formEntry"><label for="rep_petBreed">Raza</label>		<input id="rep_petBreed" type="text" name="petBreed" placeholder=" "required></div>
-            <div class="row formEntry"><label for="rep_petColor">Color</label>		<input id="rep_petColor" type="text" name="petColor" placeholder=" "required></div>
-            <div class="row formEntry">
-                <div class="column ta-left"><label>Sexo</label></div>
-                <div class="column"><input id="rep_petSexM" type="radio" name="petSex" value="M" required>	<label for="rep_petSexM">Macho</label></div>
-                <div class="column"><input id="rep_petSexF" type="radio" name="petSex" value="F" required>	<label for="rep_petSexF">Hembra</label></div>
+<body class="uber-body">
+    <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Añadir mascotas</h1>
+    </div>
+
+    <div class="uber-content">
+        <form class="uber-form" id="petForm">
+            <!-- Sección de foto -->
+            <div class="uber-photo-section">
+                <div class="uber-photo-upload-container" onclick="showPhotoOptions()">
+                    <div class="uber-photo-circle">
+                        <div class="uber-photo-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <img id="petImageDisplay" style="display: none;" alt="Pet preview">
+                    </div>
+                </div>
+                <input type="file" id="reg_petImage" accept="image/*" style="display: none;" onchange="showUploadedImage(this,'petImageDisplay')">
             </div>
 
-			<input type="submit" class="bg-primary" value="Registrar"></input>
+            <!-- Campo Nombre -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="petName">Nombre</label>
+                <input type="text" id="petName" class="uber-input" placeholder="Ingresa el nombre de tu mascota" required>
+            </div>
+
+            <!-- Campo Especie -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="petSpecies">Especie</label>
+                <input type="text" id="petSpecies" class="uber-input" placeholder="Ingresa la especie" required>
+            </div>
+
+            <!-- Campo Raza -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="petBreed">Raza</label>
+                <input type="text" id="petBreed" class="uber-input" placeholder="Ingresa la raza">
+            </div>
+
+            <!-- Campo Color -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="petColor">Color</label>
+                <input type="text" id="petColor" class="uber-input" placeholder="Ingresa el color principal">
+            </div>
+
+            <!-- Campo Sexo -->
+            <div class="uber-field-group">
+                <label class="uber-label">Sexo</label>
+                <div class="uber-gender-options">
+                    <label class="uber-gender-option">
+                        <input type="radio" name="sex" value="macho" required>
+                        <div class="uber-radio-custom"></div>
+                        <span>Macho</span>
+                    </label>
+                    <label class="uber-gender-option">
+                        <input type="radio" name="sex" value="hembra" required>
+                        <div class="uber-radio-custom"></div>
+                        <span>Hembra</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Botón de envío -->
+            <button type="submit" class="uber-submit-btn">Añadir Mascota</button>
         </form>
     </div>
+
+    <script src="assets/app.js"></script>
+    <script src="assets/validation.js"></script>
+    <script src="assets/navigation.js"></script>
+    <script src="assets/camera.js"></script>
+    <script>
+        // Al enviar el formulario, mostramos el modal de éxito
+        document.getElementById('petForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            loadModal('templates/petAddedModal.html');
+        });
+    </script>
 </body>
+</html>

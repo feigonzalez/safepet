@@ -1,5 +1,5 @@
 
-        async function beforeLoad() {
+async function beforeLoad() {
             try {
                 // Cargar información del usuario
                 let db = await selectAll();
@@ -46,7 +46,10 @@
                     .slice(0, 2)
                     .join('')
                     .toUpperCase();
-                document.getElementById('profileInitials').textContent = initials || 'U';
+                const initialsEl = document.getElementById('profileInitials');
+                if (initialsEl) {
+                    initialsEl.textContent = initials || 'U';
+                }
             }
         }
 
@@ -58,21 +61,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             beforeLoad();
             
-            // Configurar validaciones en tiempo real
-            ValidationUtils.setupRealTimeValidation('profileForm', SafePetValidations.profile);
-            
-            // Configurar manejo del formulario
+            // Preparar referencias a formulario y reglas de validación
             const form = document.getElementById('profileForm');
+            const validationRules = ValidationUtils.SafePetValidations.profileForm;
+
+            // Configurar validaciones en tiempo real
+            ValidationUtils.setupRealTimeValidation(form, validationRules);
+
+            // Configurar manejo del formulario
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
-                // Limpiar errores previos
-                ValidationUtils.clearFormErrors(form);
-                
                 // Validar formulario
-                const isValid = ValidationUtils.validateForm(form, SafePetValidations.profile);
+                const validation = ValidationUtils.validateForm(form, validationRules);
                 
-                if (isValid) {
+                if (validation.isValid) {
                     // Obtener datos del formulario
                     const formData = {
                         name: document.getElementById('fullName').value,
@@ -84,13 +87,8 @@
                     // Simular guardado (aquí se conectaría con la base de datos)
                     console.log('Guardando perfil:', formData);
                     
-                    // Mostrar mensaje de éxito
-                    ValidationUtils.showSuccessMessage('Perfil actualizado correctamente');
-                    
-                    // Volver a ajustes después de un breve delay
-                    setTimeout(() => {
-                        window.location.href = 'settings.html';
-                    }, 1500);
+                    // Mostrar modal de éxito
+                    loadModal('templates/profileUpdatedModal.html');
                 } else {
                     ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');
                 }

@@ -1,5 +1,5 @@
 
-        * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -14,52 +14,11 @@
             flex-direction: column;
         }
 
-        .header {
-            background: #FFFFFF;
-            padding: 24px;
-            border-bottom: 1px solid #E0E0E0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            padding: 4px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-        }
-
-        .back-button:hover {
-            background-color: #F5F5F5;
-        }
-
-        .back-button svg {
-            width: 20px;
-            height: 20px;
-            stroke: #333333;
-            stroke-width: 2;
-        }
-
-        .header-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #333333;
-        }
+        /* Usa el header global de style.css para mantener consistencia */
 
         .settings-container {
             flex: 1;
-            padding: 32px 24px;
+            padding: 16px; /* 1rem como en PetList */
             max-width: 600px;
             margin: 0 auto;
             width: 100%;
@@ -67,17 +26,17 @@
 
         .settings-card {
             background: #FFFFFF;
-            border-radius: 16px;
-            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-1);
             overflow: hidden;
-            margin-bottom: 24px;
+            margin-bottom: 8px; /* 0.5rem consistente con .card */
         }
 
         .settings-item {
             display: flex;
             align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid #E0E0E0;
+            padding: 12px 16px; /* 0.75rem 1rem */
+            border-bottom: 1px solid var(--color-border);
             cursor: pointer;
             transition: background-color 0.2s ease;
             text-decoration: none;
@@ -104,13 +63,13 @@
         }
 
         .settings-icon.profile {
-            stroke: #2DBBAD;
+            stroke: var(--color-primary);
             fill: none;
             stroke-width: 2;
         }
 
         .settings-icon.pets {
-            stroke: #2DBBAD;
+            stroke: var(--color-primary);
             fill: none;
             stroke-width: 2;
         }
@@ -154,19 +113,20 @@
 
         .profile-section {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 16px; /* 1rem */
         }
 
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 4.5rem; /* ~72px como en PetList */
+            height: 4.5rem;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2DBBAD 0%, #1a9d8f 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, #ff6b6b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 16px;
-            box-shadow: 0 4px 14px 0 rgba(45, 187, 173, 0.3);
+            box-shadow: 0 4px 14px 0 rgba(255, 68, 68, 0.3);
+            overflow: hidden;
         }
 
         .profile-avatar-text {
@@ -176,40 +136,33 @@
         }
 
         .profile-name {
-            font-size: 24px;
+            font-size: 1.35rem; /* como accountName en PetList */
             font-weight: 700;
             color: #333333;
             margin-bottom: 8px;
         }
 
         .profile-email {
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 400;
             color: #828282;
         }
 
         .version-info {
             text-align: center;
-            padding: 24px;
+            padding: 16px; /* 1rem */
             color: #828282;
-            font-size: 14px;
+            font-size: 0.9rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-
-            .header-title {
-                font-size: 24px;
-            }
 
             .settings-container {
-                padding: 24px 20px;
+                padding: 16px;
             }
 
             .settings-item {
-                padding: 16px 20px;
+                padding: 12px 16px;
             }
         }
