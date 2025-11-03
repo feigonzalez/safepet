@@ -1,3 +1,4 @@
+
 const SERVER_URL="http://dintdt.c1.biz/safepet/"
 // const SERVER_URL="http://localhost/safepet/server/";
 const LOCALE = "cl-ES";		//Chile - Español
@@ -144,6 +145,15 @@ async function processContents(self){
 			frame.querySelector("#"+controller.dataset.input).click()
 		})
 	}
+	
+	/*
+	for(let clickable of frame.querySelectorAll("[onclick]")){
+		clickable.addEventListener("click",()=>{
+			eval(clickable.getAttribute("onclick"))
+		})
+		//clickable.removeAttribute("onclick");
+	}
+	*/
 }
 
 function showUploadedImage(src,target){
@@ -153,12 +163,6 @@ function showUploadedImage(src,target){
 	}
 }
 
-function showUploadedImageAsBg(src,target){
-	const file = src.files[0];
-	if(file){
-		document.querySelector("#"+target).style.backgroundImage = "url("+URL.createObjectURL(file)+")"
-	}
-}
 /*
 	Closes a modal. This assumes there's a single modal open.
 */
@@ -172,9 +176,13 @@ function loadModal(url){
 	modal.className="modalBackdrop";
 	modal.innerHTML=`<div class="modalBody"><div class="modalCloseButton" onclick="closeModal()"></div><div class="modalContent" id="modalContent"></div></div>`;
 	document.body.appendChild(modal);
+	modal.querySelector(".modalCloseButton").addEventListener("click",()=>{
+		closeModal();
+	})
 	fetch(url).then(r=>r.text()).then(html=>{
-		document.getElementById("modalContent").innerHTML=html;
-		processContents(document.getElementById("modalContent"));
+		let modalContent = document.getElementById("modalContent")
+		modalContent.innerHTML=html;
+		processContents(modalContent);
 	});
 }
 
@@ -278,6 +286,12 @@ function showUploadedImageAsBg(src, target) {
         };
         reader.readAsDataURL(src.files[0]);
     }
+	/*
+	const file = src.files[0];
+	if(file){
+		document.querySelector("#"+target).style.backgroundImage = "url("+URL.createObjectURL(file)+")"
+	}
+	*/
 }
 
 // Función específica para escanear QR en registro

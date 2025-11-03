@@ -2,6 +2,7 @@
 	"appId": "com.safepet.app",
 	"appName": "SafePet",
 	"webDir": "www",
+	"bundledWebRuntime": false,
 	"android": {
 		"allowMixedContent": true 
 	}

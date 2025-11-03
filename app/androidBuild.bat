@@ -1,0 +1,1 @@
+npx cap run --target ZHA237PK4F android
