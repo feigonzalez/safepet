@@ -18,14 +18,22 @@ window.addEventListener("load",()=>{
 })
 
 function replaceContents(frame,data){
-	for(let attrName of frame.getAttributeNames()){
-		for(let toReplace of [...frame.getAttribute(attrName).matchAll(/\${(.*?)}/g)]){
-			let newValue = "";
-			if(toReplace[1] in data) newValue=data[toReplace[1]];
-			else newValue = eval(toReplace[1])
-			frame.setAttribute(attrName,frame.getAttribute(attrName).replaceAll(toReplace[0],newValue))
-		}
-	}
+    for(let attrName of frame.getAttributeNames()){
+        for(let toReplace of [...frame.getAttribute(attrName).matchAll(/\${(.*?)}/g)]){
+            let newValue = "";
+            if(toReplace[1] in data) {
+                newValue = data[toReplace[1]];
+            } else {
+                try {
+                    newValue = eval(toReplace[1]);
+                } catch(e) {
+                    console.error(e);
+                    newValue = "";
+                }
+            }
+            frame.setAttribute(attrName,frame.getAttribute(attrName).replaceAll(toReplace[0],newValue))
+        }
+    }
 	for(let key in data){
 		frame.innerHTML=frame.innerHTML.replaceAll("${"+key+"}",data[key])
 	}
@@ -164,11 +172,24 @@ function showUploadedImage(src,target){
 }
 
 /*
-	Closes a modal. This assumes there's a single modal open.
+    Cierra un modal.
+    - Si se entrega un elemento, cierra el modalBackdrop más cercano.
+    - Si no, cierra el modalBackdrop superior (último añadido).
 */
-function closeModal(){
-	let modal = document.querySelector(".modalBackdrop");
-	if(modal) modal.remove()
+function closeModal(el){
+    let modal = null;
+    if (el && typeof el.closest === 'function') {
+        modal = el.closest('.modalBackdrop');
+    }
+    if (!modal) {
+        const modals = document.querySelectorAll('.modalBackdrop');
+        modal = modals.length ? modals[modals.length - 1] : null;
+    }
+    if (modal) modal.remove();
+    // Si el botón tiene data-redirect, navegar después de cerrar el modal
+    if (el && el.dataset && el.dataset.redirect) {
+        window.location.href = el.dataset.redirect;
+    }
 }
 
 function loadModal(url){

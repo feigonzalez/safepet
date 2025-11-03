@@ -5,56 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Perfil - SafePet</title>
     <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="assets/custom/editProfile.css">
+    <link rel="stylesheet" href="css/editProfile.css">
     <script src="assets/app.js"></script>
     <script src="assets/db.js"></script>
     <script src="assets/validation.js"></script>
     <script src="assets/navigation.js"></script>
     <script src="assets/custom/editProfile.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="uber-body">
     <div class="row header">
         <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
         <h1>Editar Perfil</h1>
     </div>
 
-    <div class="profile-container">
-        <div class="profile-card">
+    <div class="uber-content">
+        <form class="uber-form" id="profileForm">
             <!-- Sección de foto de perfil -->
-            <div class="profile-photo-section">
-                <div class="profile-photo" id="profilePhoto">
-                    <span id="profileInitials">JP</span>
+            <div class="uber-photo-section">
+                <div class="uber-photo-upload-container" onclick="selectProfileImage()">
+                    <div class="uber-photo-circle">
+                        <div class="uber-photo-placeholder" id="profilePhotoPlaceholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <img id="profileImageDisplay" style="display: none;" alt="Profile preview">
+                    </div>
                 </div>
-                <button class="change-photo-btn" onclick="changePhoto()">Cambiar Foto</button>
+                <input type="file" id="profileImage" accept="image/*" style="display: none;" onchange="previewProfileImage(event)">
             </div>
 
-            <!-- Formulario de edición -->
-            <form id="profileForm">
-                <div class="form-group">
-                    <label class="form-label" for="fullName">Nombre Completo</label>
-                    <input type="text" id="fullName" name="name" class="form-input" placeholder="Ingresa tu nombre completo" required>
-                </div>
+            <!-- Campo Nombre Completo -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="fullName">Nombre Completo</label>
+                <input type="text" id="fullName" name="name" class="uber-input" placeholder="Ingresa tu nombre completo" required>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="email">Correo Electrónico</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="tu@email.com" required>
-                </div>
+            <!-- Campo Email -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" class="uber-input" placeholder="tu@email.com" required>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="+56 9 1234 5678" required>
-                </div>
+            <!-- Campo Teléfono -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="phone">Teléfono</label>
+                <input type="tel" id="phone" name="phone" class="uber-input" placeholder="+56 9 1234 5678" required>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="address">Dirección</label>
-                    <input type="text" id="address" name="address" class="form-input" placeholder="Tu dirección completa" required>
-                </div>
+            <!-- Campo Dirección -->
+            <div class="uber-field-group">
+                <label class="uber-label" for="address">Dirección</label>
+                <input type="text" id="address" name="address" class="uber-input" placeholder="Tu dirección completa" required>
+            </div>
 
-                <button type="button" class="cancel-button" onclick="window.location.href='settings.html'">Cancelar</button>
-                <button type="submit" class="save-button">Guardar Cambios</button>
-            </form>
-        </div>
+            <!-- Botones -->
+            <div class="uber-button-group">
+                <button type="button" class="uber-cancel-btn cancel-button">Cancelar</button>
+                <button type="submit" class="uber-submit-btn">Guardar Cambios</button>
+            </div>
+        </form>
     </div>
+
+    <script>
+        // Funciones para manejo de imagen de perfil
+        function selectProfileImage() {
+            document.getElementById('profileImage').click();
+        }
+        
+        function previewProfileImage(event) {
+            const file = event.target.files[0];
+            const imageDisplay = document.getElementById('profileImageDisplay');
+            const placeholder = document.getElementById('profilePhotoPlaceholder');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageDisplay.src = e.target.result;
+                    imageDisplay.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>

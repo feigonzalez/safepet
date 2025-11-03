@@ -1,25 +1,53 @@
 
-		#petImageDisplay{width:40vw;height: 40vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%}
-		textarea[name=petDescription]{height:5em;font-family:inherit;font-size:1em;resize:none}
-		
-		/* Estilos para validaciones */
-        .field-error {
-            color: #dc3545;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-            display: block;
-        }
-        
-        .error {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-        }
-        
-        .formEntry input, .formEntry select {
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
-        
-        .formEntry input:focus, .formEntry select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
+/* Estilos para la foto de perfil */
+.photo-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.photo-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    border: 2px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.photo-circle:hover {
+    border-color: #ff6b35;
+    background-color: #fafafa;
+}
+
+.photo-placeholder {
+    text-align: center;
+    color: #666;
+}
+
+.camera-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.photo-placeholder p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Compatibilidad con imagen existente */
+#petImageDisplay {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed #ddd;
+}
