@@ -96,3 +96,10 @@ async function request(url,body){
 		return decryptData(requestKeys.privateKey,response.data)
 	}
 }
+
+async function unsafeRequest(url,body){
+	return await fetch(url,{
+		method:"POST",
+		body:new URLSearchParams(body)})
+	.then(r=>r.ok?r.json():{"status":"NULL"})
+}

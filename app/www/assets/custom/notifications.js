@@ -132,71 +132,6 @@ function createNewsHTML(items) {
     }).join('');
 }
 
-// Función para abrir el modal con la noticia completa
-function openNewsModal(index) {
-    const item = allNewsItems[index];
-    if (!item) return;
-    
-    currentNewsItem = item;
-    
-    // Llenar el modal con el contenido
-    document.getElementById('modal-title').textContent = item.title;
-    document.getElementById('modal-meta').innerHTML = `
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-            <span style="font-size: 1.2em;">${item.icon}</span>
-            <span style="color: #666; font-size: 0.9em;">${item.source}</span>
-            <span style="color: #999; font-size: 0.8em;">•</span>
-            <span style="color: #666; font-size: 0.9em;">Publicado: ${item.meta}</span>
-        </div>
-    `;
-    
-    // Mostrar el contenido completo disponible
-    let content = item.fullContent || item.description;
-    
-    // Mejorar el formato del contenido
-    if (content) {
-        // Dividir en párrafos más inteligentemente
-        let paragraphs = content.split(/\n\s*\n|\.\s+(?=[A-Z])/);
-        
-        // Filtrar párrafos vacíos y muy cortos
-        paragraphs = paragraphs.filter(p => p.trim().length > 20);
-        
-        // Formatear cada párrafo
-        const formattedContent = paragraphs.map(p => {
-            let paragraph = p.trim();
-            // Asegurar que termine con punto
-            if (!paragraph.endsWith('.') && !paragraph.endsWith('!') && !paragraph.endsWith('?')) {
-                paragraph += '.';
-            }
-            return `<p style="margin-bottom: 15px; line-height: 1.6; text-align: justify;">${paragraph}</p>`;
-        }).join('');
-        
-        document.getElementById('modal-content').innerHTML = formattedContent;
-    } else {
-        document.getElementById('modal-content').innerHTML = '<p style="color: #666; font-style: italic;">Contenido no disponible.</p>';
-    }
-    
-    // Actualizar el botón para mostrar "Ver fuente original"
-    const originalButton = document.querySelector('#news-modal .original-link-btn');
-    if (originalButton) {
-        originalButton.innerHTML = '🔗 Ver fuente original';
-        originalButton.onclick = openOriginalLink;
-    }
-    
-    // Mostrar el modal
-    document.getElementById('news-modal').style.display = 'flex';
-    
-    // Prevenir scroll del body
-    document.body.style.overflow = 'hidden';
-}
-
-// Función para cerrar el modal
-function closeNewsModal() {
-    document.getElementById('news-modal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-    currentNewsItem = null;
-}
-
 // Función para abrir el enlace original
 function openOriginalLink() {
     if (currentNewsItem && currentNewsItem.link) {
@@ -232,21 +167,6 @@ async function loadNotifications() {
         container.innerHTML = '<div class="error">Error al cargar las noticias</div>';
     }
 }
-
-// Cerrar modal al hacer click fuera de él
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('news-modal');
-    if (event.target === modal) {
-        closeNewsModal();
-    }
-});
-
-// Cerrar modal con la tecla Escape
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeNewsModal();
-    }
-});
 
 // Cargar noticias cuando se carga la página
 document.addEventListener('DOMContentLoaded', loadNotifications);

@@ -4,26 +4,23 @@
 	<link rel="stylesheet" href="assets/notifications.css">
 	<script src="assets/app.js"></script>
 	<script src="assets/validation.js"></script>
+	<script src="assets/custom/notifications.js"></script>
 </head>
 <body>
 <script>
 		var notifications;
 		async function beforeLoad(){
-		
-			// CÓDIGO ORIGINAL COMENTADO - Ahora usamos el sistema de noticias RSS
-			/*
+			
 			// Solicita las notificaciones a la API
 			
-			//notifications = await request("http://dintdt.c1.biz/safepet/pullNotifications.php",{"account_id":0})
-			
 			//console.log("Requesting Notifications from server...");
-			//notifications = await request("http://localhost/safepet/server/pullNotifications.php",{"account_id":0})
+			//notifications = await request(SERVER_URL+"safepet/pullNotifications.php",{"account_id":0})
 			//console.log("Received.");
 			
 			//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
 
 				//Versión insegura
-			notifications = await fetch("http://dintdt.c1.biz/safepet/pullNotifications.php",{
+			notifications = await fetch(SERVER_URL+"pullNotifications.php",{
 				method:"POST",
 				body:new URLSearchParams({"account_id":0})
 					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
@@ -32,11 +29,12 @@
 				
 			// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
 			for(let n of notifications){
-				n["metaText"]=n.timestamp
+				try{n["metaText"]=getRecency(n.timestamp)}
+				catch(e){n["metaText"]=n.timestamp}
 			}
 			
 			fillIterable(document.querySelector("[foreach=notifications]"),notifications)
-			*/
+			
 		} </script>
 </head>
 <body class="column">
@@ -51,41 +49,15 @@
 			<div id="all-notifications" style="width: 100%; padding: 10px;">
 				
 				<!-- Notificaciones estáticas -->
-				<div class="row compact card">
+				<div class="row compact card" await foreach="notifications">
 					<div class="column notifItem ta-left">
 						<div class="row ta-left bold">
-							<span class="icon notifIcon" data-icon="warning"></span>
-							<span class="notifTitle">New Notification</span>
+							<span class="icon notifIcon" data-icon="${type}"></span>
+							<span class="notifTitle" content="${title}"></span>
 						</div>
 						<div class="column ta-left">
-							<div class="row ta-left metaText">2025-10-09 17:23:58</div>
-							<div class="row ta-left">This is a notification made with the pushNotification endpoint</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row compact card">
-					<div class="column notifItem ta-left">
-						<div class="row ta-left bold">
-							<span class="icon notifIcon" data-icon="warning"></span>
-							<span class="notifTitle">New Notification 2</span>
-						</div>
-						<div class="column ta-left">
-							<div class="row ta-left metaText">2025-10-09 17:24:28</div>
-							<div class="row ta-left">This is another notification made with the endpoint</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row compact card">
-					<div class="column notifItem ta-left">
-						<div class="row ta-left bold">
-							<span class="icon notifIcon" data-icon="chat"></span>
-							<span class="notifTitle">Hola</span>
-						</div>
-						<div class="column ta-left">
-							<div class="row ta-left metaText">2025-10-10 13:01:21</div>
-							<div class="row ta-left">Esta es una notificación</div>
+							<div class="row ta-left metaText" content="${metaText}"></div>
+							<div class="row ta-left" content="${description}"></div>
 						</div>
 					</div>
 				</div>
@@ -100,21 +72,4 @@
 		</div>
 	</div>
 
-	<!-- Modal para leer noticias completas -->
-	<div id="news-modal" class="news-modal" style="display: none;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h2 id="modal-title">Título de la noticia</h2>
-				<button class="close-btn" onclick="closeNewsModal()">&times;</button>
-			</div>
-			<div class="modal-body">
-				<div id="modal-meta" class="modal-meta"></div>
-				<div id="modal-content" class="modal-text"></div>
-				<div class="modal-footer">
-					<button onclick="openOriginalLink()" class="original-link-btn">Ver artículo original</button>
-				</div>
-			</div>
-		</div>
-	</div>
-<script src="assets/custom/notifications.js"></script>
 </body>

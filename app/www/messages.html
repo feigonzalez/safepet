@@ -3,13 +3,12 @@
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/custom/messages.css">
     <script src="assets/app.js"></script>
+    <!--script src="assets/custom/messages.js"></script-->
 
     <script>
-		const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
-			// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
 		var messages;
 		async function beforeLoad(){
-			let response = await fetch("http://dintdt.c1.biz/safepet/getLatestChats.php",{
+			let response = await fetch(SERVER_URL+"getLatestChats.php",{
 				method:"POST",
 				body:new URLSearchParams({"account_id":0})
 					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
@@ -29,15 +28,6 @@
 					timestamp.textContent=getRecency(parseInt(timestamp.dataset.time));
 				}
 			},15000)
-		}
-		
-		function getRecency(timestamp){
-			let timescale="second";
-			let recency = timestamp - (Date.now()/1000)
-			if(Math.abs(recency)>60){ recency/=60; timescale="minute"}
-			if(Math.abs(recency)>60){ recency/=60; timescale="hour"}
-			if(Math.abs(recency)>24){ recency/=24; timescale="day"}
-			return timeFormat.format(Math.floor(recency),timescale)
 		}
     </script>
 	

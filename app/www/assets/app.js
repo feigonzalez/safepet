@@ -1,3 +1,9 @@
+const SERVER_URL="http://dintdt.c1.biz/safepet/"
+// const SERVER_URL="http://localhost/safepet/server/";
+const LOCALE = "cl-ES";		//Chile - Español
+const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
+	// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
+
 window.addEventListener("load",()=>{
 	if(typeof beforeLoad === "function")
 		beforeLoad();
@@ -11,20 +17,28 @@ window.addEventListener("load",()=>{
 })
 
 function replaceContents(frame,data){
+	for(let attrName of frame.getAttributeNames()){
+		for(let toReplace of [...frame.getAttribute(attrName).matchAll(/\${(.*?)}/g)]){
+			let newValue = "";
+			if(toReplace[1] in data) newValue=data[toReplace[1]];
+			else newValue = eval(toReplace[1])
+			frame.setAttribute(attrName,frame.getAttribute(attrName).replaceAll(toReplace[0],newValue))
+		}
+	}
 	for(let key in data){
 		frame.innerHTML=frame.innerHTML.replaceAll("${"+key+"}",data[key])
-		for(let toReplace of [...frame.innerHTML.matchAll(/\${(.*?)}/g)]){
-			try{
-				let newValue=eval("data."+toReplace[1]);
-				frame.innerHTML = frame.innerHTML.replaceAll(toReplace[0],newValue);
-			} catch(e){
-				console.error(e)
-			}
+	}
+	for(let toReplace of [...frame.innerHTML.matchAll(/\${(.*?)}/g)]){
+		try{
+			let newValue=eval(toReplace[1]);
+			frame.innerHTML = frame.innerHTML.replaceAll(toReplace[0],newValue);
+		} catch(e){
+			console.error(e)
 		}
-		for(let hasContent of frame.querySelectorAll("[content]")){
-			hasContent.innerHTML=hasContent.getAttribute("content");
-			hasContent.removeAttribute("content");
-		}
+	}
+	for(let hasContent of frame.querySelectorAll("[content]")){
+		hasContent.innerHTML=hasContent.getAttribute("content");
+		hasContent.removeAttribute("content");
 	}
 }
 
@@ -40,6 +54,31 @@ function fillIterable(iterable,data){
 		lastEntry=newEntry;
 	}
 	iterable.remove()
+}
+
+function getRecency(timestamp){
+	let timescale="second";
+	let recency = timestamp - (Date.now()/1000)
+	if(Math.abs(recency)>60){
+		recency/=60; timescale="minute";
+		if(Math.abs(recency)>60){
+			recency/=60; timescale="hour";
+			if(Math.abs(recency)>24){
+				recency/=24; timescale="day";
+			}
+		}
+	}
+	return timeFormat.format(Math.floor(recency),timescale)
+}
+
+function getDateOrTimeString(timestamp){
+	let today = new Date().toLocaleDateString(LOCALE);
+	let thatDate = new Date(timestamp*1000);
+	if(thatDate.toLocaleDateString(LOCALE) == today){
+		return thatDate.toLocaleTimeString(LOCALE)
+	} else {
+		return thatDate.toLocaleString(LOCALE);
+	}
 }
 
 async function processContents(self){

@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="assets/custom/chat.css">
     <script src="assets/app.js"></script>
     <script src="assets/navigation.js"></script>
+    <script src="assets/connect.js"></script>
     <script src="assets/custom/chat.js"></script>
 </head>
 <body class="chatContainer">
@@ -23,8 +24,12 @@
     </div>
     
     <div class="messagesArea" id="messagesArea">
-        <div class="dateHeader">Hoy</div>
-        <!-- Los mensajes se cargarán dinámicamente aquí -->
+        <!--div class="dateHeader">Hoy</div-->
+        <div class="message ${data.inbound?'received':'sent'}" await foreach="messages">
+			<div content="${content}"></div>
+			<div class="messageTime" content="${getDateOrTimeString(data.timestamp)}"></div>
+		</div>
+		
     </div>
     
     <div class="typingIndicator" id="typingIndicator" style="display: none;">
