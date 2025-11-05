@@ -1,5 +1,5 @@
 
-        async function beforeLoad() {
+async function beforeLoad() {
             try {
                 // Cargar información del usuario
                 let db = await selectAll();
@@ -47,14 +47,7 @@
             }
         }
 
-        function goBack() {
-            // Navegar de vuelta a la página anterior o al índice
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = 'index.html';
-            }
-        }
+        
 
         async function confirmLogout() {
             const confirmed = await showVerificationModal(

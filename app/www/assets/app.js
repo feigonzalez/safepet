@@ -97,12 +97,7 @@ async function processContents(self){
 	// Borra los campos de templating (de formato ${...}) que quedaron sin reemplazar.
 	//frame.innerHTML=frame.innerHTML.replaceAll(/\${(.*?)}/gm,"");
 	
-	/*
-	for(let hasContent of frame.querySelectorAll(":not([foreach]) [content]")){
-		hasContent.innerHTML=hasContent.getAttribute("content");
-		hasContent.removeAttribute("content");
-	}
-	*/
+	
 	
 	// Fija el [placeholder] los inputs de tipo texto a " " para las animaciones css
 	for(let input of frame.querySelectorAll("input[type=text]")){
@@ -154,14 +149,7 @@ async function processContents(self){
 		})
 	}
 	
-	/*
-	for(let clickable of frame.querySelectorAll("[onclick]")){
-		clickable.addEventListener("click",()=>{
-			eval(clickable.getAttribute("onclick"))
-		})
-		//clickable.removeAttribute("onclick");
-	}
-	*/
+	
 }
 
 function showUploadedImage(src,target){

@@ -1,92 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Añadir mascotas</title>
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="css/register.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Añadir mascotas</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/custom/register.css">
+	<script src="assets/app.js"></script>
+	<script src="assets/validation.js"></script>
+	<script src="assets/navigation.js"></script>
+    
+   
+   
 </head>
-<body class="uber-body">
-    <div class="row header">
+<body class="column">
+
+  <!-- Encabezado -->
+   <div class="row header">
         <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
         <h1>Añadir mascotas</h1>
     </div>
 
-    <div class="uber-content">
-        <form class="uber-form" id="petForm">
-            <!-- Sección de foto -->
-            <div class="uber-photo-section">
-                <div class="uber-photo-upload-container" onclick="showPhotoOptions()">
-                    <div class="uber-photo-circle">
-                        <div class="uber-photo-placeholder">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <img id="petImageDisplay" style="display: none;" alt="Pet preview">
-                    </div>
-                </div>
-                <input type="file" id="reg_petImage" accept="image/*" style="display: none;" onchange="showUploadedImage(this,'petImageDisplay')">
-            </div>
+  <!-- Contenido -->
+  <div class="row">
+    <div class="column list">
+      <form id="petForm" class="column form">
 
-            <!-- Campo Nombre -->
-            <div class="uber-field-group">
-                <label class="uber-label" for="petName">Nombre</label>
-                <input type="text" id="petName" class="uber-input" placeholder="Ingresa el nombre de tu mascota" required>
+        <!-- Imagen -->
+        <div class="row center ph-1">
+          <div class="uber-photo-upload-container" onclick="document.getElementById('reg_petImage').click()">
+            <div class="uber-photo-circle">
+              <div class="uber-photo-placeholder" id="photoPlaceholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                        stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="13" r="4"
+                        stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <img id="petImageDisplay" alt="Vista previa" style="display:none;">
             </div>
+          </div>
+          <input type="file" id="reg_petImage" accept="image/*" style="display:none;"
+                 onchange="showUploadedImage(this,'petImageDisplay')">
+        </div>
 
-            <!-- Campo Especie -->
-            <div class="uber-field-group">
-                <label class="uber-label" for="petSpecies">Especie</label>
-                <input type="text" id="petSpecies" class="uber-input" placeholder="Ingresa la especie" required>
+        <!-- Campos -->
+        <div class="column ph-1">
+          <div class="uber-field-group">
+            <label class="uber-label" for="petName">Nombre</label>
+            <input type="text" id="petName" class="uber-input" placeholder="Ingresa su nombre" required>
+          </div>
+
+          <div class="uber-field-group">
+            <label class="uber-label" for="petSpecies">Especie</label>
+            <input type="text" id="petSpecies" class="uber-input" placeholder="Ingresa la especie" required>
+          </div>
+
+          <div class="uber-field-group">
+            <label class="uber-label" for="petBreed">Raza</label>
+            <input type="text" id="petBreed" class="uber-input" placeholder="Ingresa la raza">
+          </div>
+
+          <div class="uber-field-group">
+            <label class="uber-label" for="petColor">Color</label>
+            <input type="text" id="petColor" class="uber-input" placeholder="Ingresa el color">
+          </div>
+
+          <!-- Sexo -->
+          <div class="uber-field-group">
+            <label class="uber-label">Sexo</label>
+            <div class="uber-gender-options">
+              <label class="uber-gender-option">
+                <input type="radio" name="sex" value="macho" required>
+                <span class="checkmark"></span>
+                Macho
+              </label>
+              <label class="uber-gender-option">
+                <input type="radio" name="sex" value="hembra" required>
+                <span class="checkmark"></span>
+                Hembra
+              </label>
             </div>
+          </div>
 
-            <!-- Campo Raza -->
-            <div class="uber-field-group">
-                <label class="uber-label" for="petBreed">Raza</label>
-                <input type="text" id="petBreed" class="uber-input" placeholder="Ingresa la raza">
-            </div>
-
-            <!-- Campo Color -->
-            <div class="uber-field-group">
-                <label class="uber-label" for="petColor">Color</label>
-                <input type="text" id="petColor" class="uber-input" placeholder="Ingresa el color principal">
-            </div>
-
-            <!-- Campo Sexo -->
-            <div class="uber-field-group">
-                <label class="uber-label">Sexo</label>
-                <div class="uber-gender-options">
-                    <label class="uber-gender-option">
-                        <input type="radio" name="sex" value="macho" required>
-                        <div class="uber-radio-custom"></div>
-                        <span>Macho</span>
-                    </label>
-                    <label class="uber-gender-option">
-                        <input type="radio" name="sex" value="hembra" required>
-                        <div class="uber-radio-custom"></div>
-                        <span>Hembra</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Botón de envío -->
-            <button type="submit" class="uber-submit-btn">Añadir Mascota</button>
-        </form>
+          <!-- Botón -->
+          <div class="row center pv-1">
+            <button type="submit" class="button bg-primary rounded submit-btn">Añadir Mascota</button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <script src="assets/app.js"></script>
-    <script src="assets/validation.js"></script>
-    <script src="assets/navigation.js"></script>
-    <script src="assets/camera.js"></script>
-    <script>
-        // Al enviar el formulario, mostramos el modal de éxito
-        document.getElementById('petForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            loadModal('templates/petAddedModal.html');
-        });
-    </script>
+  <script>
+    function showUploadedImage(input, imgId) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = document.getElementById(imgId);
+        const placeholder = document.getElementById('photoPlaceholder');
+        img.src = reader.result;
+        img.style.display = 'block';
+        img.style.objectFit = 'cover';
+        placeholder.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('petForm').addEventListener('submit', e => {
+      e.preventDefault();
+      loadModal('templates/petAddedModal.html');
+    });
+  </script>
 </body>
 </html>

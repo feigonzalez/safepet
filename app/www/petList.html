@@ -6,8 +6,6 @@
 	<script src="assets/urlParams.js"></script>
 	<script src="assets/db.js"></script>
 	<style>
-		/* Baseline móvil: fijar font-size estable para rem/em */
-		html{font-size:16px}
 	</style>
 	<script>
 		async function beforeLoad(){
@@ -25,9 +23,6 @@
 			for(key in petData){
 				let data = petData[key]
 					data.imageURL = data.images[0];
-					// Alinear el id con la clave del objeto para que petDetail.html
-					// pueda resolver correctamente pets[petId]
-					data.id = key;
 				pets.push(data)
 			}
 			fillIterable(document.querySelector("[foreach=pets]"),pets)
@@ -39,10 +34,10 @@
 	<div class="row header">
 		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
 		<div class="column ta-left">
-        <a href="settings.html"><h1>Hola, <span id="accountName"></span></h1></a>
+			<a href="settings.html"><h1>Hola, <span id="accountName"></span></h1></a>
 		</div>
 		<div class="column ta-right ph-1">
-        <a href="settings.html"><div id="profileImage" class="icon" data-imgsrc="${accountData.image}"></div></a>
+			<a href="settings.html"><div id="profileImage" class="icon" data-imgsrc="${accountData.image}"></div></a>
 		</div>
 	</div>
 	

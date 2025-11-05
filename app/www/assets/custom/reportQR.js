@@ -1,38 +1,51 @@
+document.addEventListener("DOMContentLoaded", async function() {
+  const reader = document.getElementById("reader");
+  const statusText = document.getElementById("statusText");
 
-		// Función para inicializar el escáner QR cuando se carga la página
-		document.addEventListener('DOMContentLoaded', async function() {
-			try {
-				// Mostrar mensaje de carga
-				const cameraBox = document.querySelector('.cameraBox');
-				cameraBox.innerHTML = '<p class="ta-center">Iniciando cámara...</p>';
-				
-				// Iniciar el escáner QR automáticamente
-				const qrContent = await CameraManager.showQRScanner();
-				
-				// Procesar el resultado del QR
-				if (qrContent) {
-					console.log('QR escaneado:', qrContent);
-					
-					// Aquí puedes procesar el contenido del QR
-					// Por ejemplo, si contiene información de la mascota
-					if (qrContent.includes('safepet') || qrContent.includes('pet-id')) {
-						// Redirigir al formulario de reporte con datos prellenados
-						window.location.href = `reportManual.html?qr=${encodeURIComponent(qrContent)}`;
-					} else {
-						// Mostrar el contenido del QR y permitir continuar
-						alert(`Código QR detectado: ${qrContent}\n\nSerás redirigido al formulario de reporte.`);
-						window.location.href = 'reportManual.html';
-					}
-				}
-			} catch (error) {
-				console.error('Error al inicializar escáner:', error);
-				const cameraBox = document.querySelector('.cameraBox');
-				cameraBox.innerHTML = `
-					<div class="ta-center">
-						<p>Error al inicializar la cámara</p>
-						<button class="button bg-primary" onclick="location.reload()">Reintentar</button>
-						<button class="button" onclick="window.location.href='reportManual.html'">Continuar sin QR</button>
-					</div>
-				`;
-			}
-		});
+  try {
+    const cameras = await Html5Qrcode.getCameras();
+    if (!cameras || cameras.length === 0) throw new Error("No se encontró ninguna cámara");
+
+    const cameraId = cameras[0].id;
+    const html5QrCode = new Html5Qrcode("reader");
+
+    await html5QrCode.start(
+      cameraId,
+      { fps: 10, qrbox: { width: 200, height: 200 } },
+      qrContent => handleQR(qrContent, html5QrCode),
+      () => { statusText.textContent = "Escaneando..."; }
+    );
+  } catch (error) {
+    console.error("Error al inicializar escáner:", error);
+    showCameraError();
+  }
+});
+
+function handleQR(qrContent, html5QrCode) {
+  const status = document.getElementById("statusText");
+  status.textContent = "✅ Código QR detectado correctamente";
+
+  const frame = document.querySelector(".scan-frame");
+  frame.style.borderColor = "#27ae60";
+  frame.style.boxShadow = "0 0 15px rgba(39, 174, 96, 0.5)";
+
+  html5QrCode.stop().then(() => {
+    if (qrContent.includes("safepet") || qrContent.includes("pet-id")) {
+      window.location.href = `reportManual.html?qr=${encodeURIComponent(qrContent)}`;
+    } else {
+      alert(`Código QR detectado: ${qrContent}`);
+      window.location.href = "reportManual.html";
+    }
+  });
+}
+
+function showCameraError() {
+  const box = document.querySelector(".center-content");
+  box.innerHTML = `
+    <div style="text-align:center;">
+      <p style="color:#666;"> Error al inicializar la cámara</p>
+      <button style="background:#e74c3c;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:600;margin:6px;cursor:pointer;" onclick="location.reload()">Reintentar</button>
+      <button style="background:#ccc;color:black;border:none;padding:10px 16px;border-radius:8px;font-weight:600;margin:6px;cursor:pointer;" onclick="window.location.href='reportManual.html'">Continuar sin QR</button>
+    </div>
+  `;
+}

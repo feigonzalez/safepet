@@ -1,20 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="assets/style.css">
-	<script src="assets/app.js"></script>
-	<script src="assets/camera.js"></script>
-	<script src="assets/custom/reportQR.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escanear código QR - SafePet</title>
+
+  <!-- Estilos base -->
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/custom/petList.css">
+  <link rel="stylesheet" href="assets/custom/reportQR.css">
+
+  <!-- Librerías -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="assets/app.js"></script>
+  <script src="assets/custom/reportQR.js" defer></script>
 </head>
 
 <body class="column">
-	<div class="row header">
-		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-		<h1>Escáner QR</h1>
-	</div>
-	<div class="row">
-		<div class="column ph-1 size-full-width">
-			<div class="cameraBox column size-full-width" aria-label="Cámara"></div>
-			<p class="metaText ta-center">Apunta la cámara al QR de la chapa. Al detectar el código, se abrirá el formulario de reporte automáticamente.</p>
-		</div>
-	</div>
+
+  <!-- Encabezado -->
+   <div class="row header">
+        <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+        <h1>Escanear código QR</h1>
+    </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="row">
+    <div class="column list center-content">
+
+      <div class="scan-frame">
+        <div id="reader"></div>
+        <div class="scan-line"></div>
+      </div>
+
+      <p id="statusText" class="scan-status">
+        Apunta la cámara al código QR
+      </p>
+      
+      	<div class="row compact">
+				<div class="column ph-1">
+					<a class="button bg-primary" href="reportManual.html"> Realizar reporte manual</a>
+					<!-- a class="button bg-primary" href="reportHistory.html">Historial de Alertas</a --> <!-- ????? -->
+				</div>
+			</div>
+
+    </div>
+    
+  </div>
+
+  <!-- BOTÓN INFERIOR -->
+
+   
+  
+
 </body>
+</html>
