@@ -23,20 +23,7 @@ const chatData = {
 				time: '14:30',
 				status: 'read'
 			},
-			{
-				id: 2,
-				text: '¿Podrías darme más detalles sobre dónde exactamente?',
-				sent: true,
-				time: '14:32',
-				status: 'read'
-			},
-			{
-				id: 3,
-				text: 'Estaba cerca de la fuente, jugando con otros perros',
-				sent: false,
-				time: '14:35',
-				status: 'read'
-			}
+			...
 		]
 	},
 };
@@ -110,23 +97,28 @@ function createMessageElement(message) {
 }
 
 // Enviar mensaje
-function sendMessage() {
+async function sendMessage() {
 	const input = document.getElementById('messageInput');
-	const text = input.value.trim();
+	const content = input.value.trim();
 	
-	if (text) {
+	if (content) {
 		const newMessage = {
-			id: messages.length + 1,
-			text: text,
-			sent: true,
-			time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-			status: 'sent'
+			content: content,
+			inbound: false,
+			type: "text",
+			timestamp: Math.floor(new Date()/1000),
+			//status: 'sent'
 		};
 		
 		messages.push(newMessage);
-		renderMessages();
 		input.value = '';
 		updateSendButton();
+		sendRequest = await unsafeRequest(SERVER_URL+`postChat.php`,
+			{...{account_id:account_id,pair_code:getUrlParams()["id"]},
+			 ...newMessage})
+		if(sendRequest.status=="GOOD"){	//Mostrar mensaje sólo si se pudo enviar correctamente
+			document.getElementById("messagesArea").appendChild(newMessageElement(newMessage))
+		}
 	}
 }
 
@@ -159,3 +151,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Botón enviar
 	sendButton.addEventListener('click', sendMessage);
 });
+
+function newMessageElement(data){
+	console.log("send:",data)
+	let msg = document.createElement("div");
+		msg.classList.add("message");
+		msg.classList.add(data.inbound?"received":"sent")
+	let content = document.createElement("div")
+		msg.appendChild(content)
+		content.textContent=data.content
+	let messageTime = document.createElement("div")
+		msg.appendChild(messageTime)
+		messageTime.classList.add("messageTime")
+		messageTime.textContent=getDateOrTimeString(data.timestamp)
+	return msg;
+}

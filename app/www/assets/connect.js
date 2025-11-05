@@ -101,5 +101,11 @@ async function unsafeRequest(url,body){
 	return await fetch(url,{
 		method:"POST",
 		body:new URLSearchParams(body)})
-	.then(r=>r.ok?r.json():{"status":"NULL"})
+	.then(r=>r.ok?r.text():"NULL")
+	.then((j)=>{
+		if(j.status!="NULL")
+			try{ return JSON.parse(j) }
+			catch(e){ return {"status":"TEXT","json":j} }
+		else return j
+	})
 }

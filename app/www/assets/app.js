@@ -1,3 +1,4 @@
+const account_id = 0;	//Valor de prueba. TODO: Obtener account_id desde la BD local o LocalStorage.
 
 const SERVER_URL="http://dintdt.c1.biz/safepet/"
 // const SERVER_URL="http://localhost/safepet/server/";
