@@ -1,59 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suscripción - SafePet</title>
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="assets/custom/settings.css">
-    <link rel="stylesheet" href="assets/custom/subscription.css">
-    <script src="assets/app.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suscripción - SafePet</title>
+
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/custom/settings.css">
+  <link rel="stylesheet" href="assets/custom/subscription.css">
+  <script src="assets/app.js"></script>
 </head>
 
-<body>
-    <div class="row header">
-        <button id="backButton" class="column compact">
-            <span class="icon" data-icon="chevron-left"></span>
-        </button>
-        <h1>Suscripción</h1>
-    </div>
+<body class="column">
 
-    <div class="settings-container">
-        <!-- Plan Premium -->
-        <div class="settings-card">
-            <div class="planTitle">Plan Premium</div>
-            <div class="planPrice">$9.990 <span style="font-size: 0.8rem; color: #666;">/mes</span></div>
+  <!-- Header -->
+  <div class="row header">
+    <button id="backButton" class="column compact">
+      <span class="icon" data-icon="chevron-left"></span>
+    </button>
+    <h1>Suscripción</h1>
+  </div>
+
+  <!-- Contenido -->
+  <div class="column list ph-1 mv-1">
+
+            <!-- PLAN GRATIS -->
+            <div class="planCard">
+            <div class="planTitle">Plan Gratis</div>
+            <div class="planPrice">$0 <span style="font-size: 0.9rem; color: #777;">/mes</span></div>
+
             <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(120deg);"></span>
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Registrar 1 mascota
+            </div>
+            <div class="planFeature">
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Acceso básico a alertas
+            </div>
+            <div class="planFeature">
+                <span class="icon" data-icon="x-circle" style="opacity: 0.3;"></span>
+                Sin collar QR
+            </div>
+
+            <button class="button bg-default" onclick="selectPlan('Gratis')">Usar este plan</button>
+            </div>
+
+            <!-- PLAN BÁSICO -->
+            <div class="planCard featured">
+            <div class="planTitle">Plan Básico</div>
+            <div class="planPrice">$5.990 <span style="font-size: 0.9rem; color: #777;">/mes</span></div>
+
+            <div class="planFeature">
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Registrar de 2 a 4 mascotas
+            </div>
+            <div class="planFeature">
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Collar QR incluido
+            </div>
+            <div class="planFeature">
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Soporte por correo
+            </div>
+
+            <button class="button bg-primary" onclick="selectPlan('Básico')">Suscribirse Ahora</button>
+            </div>
+
+            <!-- PLAN PREMIUM -->
+            <div class="planCard">
+            <div class="planTitle">Plan Premium</div>
+            <div class="planPrice">$9.990 <span style="font-size: 0.9rem; color: #777;">/mes</span></div>
+
+            <div class="planFeature">
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
                 Mascotas ilimitadas
             </div>
             <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(120deg);"></span>
-                Soporte 24/7
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Collar QR + GPS y geocerca
             </div>
             <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(120deg);"></span>
-                Códigos QR personalizados
+                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
+                Soporte prioritario 24/7
             </div>
-            <button class="button bg-primary" onclick="alert('Funcionalidad de pago próximamente')">
-                Suscribirse Ahora
-            </button>
-        </div>
 
-        <!-- Plan Familiar -->
-        <div class="settings-card">
-            <div class="planTitle">Plan Familiar</div>
-            <div class="planPrice">$14.990 <span style="font-size: 0.8rem; color: #666;">/mes</span></div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(120deg);"></span>
-                Todo lo del Plan Premium
+            <button class="button bg-primary" onclick="selectPlan('Premium')">Suscribirse Ahora</button>
             </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(120deg);"></span>
-                Compartir mascotas entre cuentas
-            </div>
-            <button class="button bg-primary" onclick="alert('Funcionalidad de pago próximamente')">
-                Suscribirse Ahora
-            </button>
-        </div>
 
-    </div>
+  </div>
+
+  <script>
+    function selectPlan(plan) {
+      alert(`Has seleccionado el plan ${plan}. (Funcionalidad de pago próximamente)`);
+      // En el futuro: guardar selección o redirigir a checkout.html
+    }
+  </script>
 </body>
+</html>
