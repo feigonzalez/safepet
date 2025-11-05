@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuenta requerida - SafePet</title>
+
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js"></script>
+  <script src="assets/navigation.js"></script>
+
+  <style>
+    /* --- ESTRUCTURA GENERAL --- */
+    body {
+      background: #fff;
+      color: var(--text-color);
+      font-family: "Poppins", system-ui, sans-serif;
+    }
+
+    .require-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      padding: 2rem 1.5rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* --- LOGO --- */
+    .require-logo {
+      width: 90px;
+      height: auto;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 2px 4px #0001);
+    }
+
+    /* --- TEXTOS --- */
+    .require-title {
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+      color: #222;
+    }
+
+    .require-subtitle {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+      max-width: 380px;
+    }
+
+    /* --- BOTONES --- */
+    .require-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .button {
+      width: 100%;
+      border-radius: 2rem;
+      font-weight: 600;
+      height: 2.8rem;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-1);
+    }
+
+    .button.bg-primary:hover {
+      background: #e03d3d;
+      transform: translateY(-1px);
+    }
+
+    .button.bg-default {
+      background: #fff;
+      border: 1px solid var(--color-border);
+      color: #222;
+    }
+
+    .button.bg-default:hover {
+      background: #fafafa;
+    }
+  </style>
+</head>
+
+<body class="column size-full-height">
+
+  <!-- Header -->
+  <div class="row header">
+    <button id="backButton" class="column compact">
+      <span class="icon" data-icon="chevron-left"></span>
+    </button>
+    <h1>Cuenta requerida</h1>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="require-container">
+    <img src="assets/logo.png" alt="SafePet" class="require-logo">
+
+    <h2 class="require-title">Inicia sesión o regístrate</h2>
+    <p class="require-subtitle">
+      Para continuar, necesitas una cuenta SafePet.  
+      Inicia sesión si ya tienes una, o crea una nueva para acceder a todas las funciones.
+    </p>
+
+    <div class="require-buttons">
+      <button class="button bg-primary" onclick="navigateTo('login.html')">Iniciar sesión</button>
+      <button class="button bg-default" onclick="navigateTo('registerAccount.html')">Crear cuenta</button>
+    </div>
+  </div>
+
+  <script>
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

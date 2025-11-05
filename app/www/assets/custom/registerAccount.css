@@ -1,0 +1,86 @@
+body {
+      background: #fff;
+      color: var(--text-color);
+      font-family: "Poppins", system-ui, sans-serif;
+    }
+
+    .auth-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: left;
+      height: 100%;
+      padding: 2rem 1.5rem;
+    }
+
+    .auth-logo {
+      width: 90px;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 2px 4px #0001);
+    }
+
+    .auth-title {
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      color: #222;
+      text-align: center;
+    }
+
+    form {
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .uber-label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+      text-align: left;
+    }
+
+    .uber-input {
+      width: 100%;
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .uber-input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 0.15rem #f4433615;
+      outline: none;
+    }
+
+    .button {
+      width: 100%;
+      border-radius: 2rem;
+      font-weight: 600;
+      height: 2.8rem;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-1);
+    }
+
+    .button.bg-primary:hover {
+      background: #e03d3d;
+      transform: translateY(-1px);
+    }
+
+    .metaText {
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .metaText a {
+      color: var(--color-primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
