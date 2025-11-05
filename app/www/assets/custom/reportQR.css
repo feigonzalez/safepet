@@ -6,31 +6,6 @@ body {
   padding: 0;
 }
 
-/* === HEADER === */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-#backButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-right: 0.4rem;
-  display: flex;
-  align-items: center;
-}
-
-.icon.chevron-left::before {
-  content: "‹";
-  font-size: 1.8rem;
-  color: #222;
-  line-height: 1;
-}
-
 /* === CONTENIDO PRINCIPAL === */
 .center-content {
   display: flex;

@@ -5,13 +5,17 @@ document.addEventListener("DOMContentLoaded", async function() {
   try {
     const cameras = await Html5Qrcode.getCameras();
     if (!cameras || cameras.length === 0) throw new Error("No se encontró ninguna cámara");
-
-    const cameraId = cameras[0].id;
+    let cameraId = null;
+	for(let camera of cameras){ if(camera.label.indexOf("back")!=-1) cameraId = camera.id}
+	if(cameraId == null){
+		console.warn("No se encontró cámara trasera. Usando primera cámara detectada.");
+		cameraId = cameras[0].id;
+	}
     const html5QrCode = new Html5Qrcode("reader");
 
     await html5QrCode.start(
       cameraId,
-      { fps: 10, qrbox: { width: 200, height: 200 } },
+      { fps: 10, qrbox: { width: 200, height: 200 }, facingMode: { exact: "environment"} },
       qrContent => handleQR(qrContent, html5QrCode),
       () => { statusText.textContent = "Escaneando..."; }
     );
