@@ -1,3 +1,4 @@
+
 const account_id = 0;	//Valor de prueba. TODO: Obtener account_id desde la BD local o LocalStorage.
 
 const LOCALE = "cl-ES";		//Chile - Español
@@ -185,18 +186,22 @@ function closeModal(el){
 }
 
 function loadModal(url){
-	let modal = document.createElement("div");
-	modal.className="modalBackdrop";
-	modal.innerHTML=`<div class="modalBody"><div class="modalCloseButton" onclick="closeModal()"></div><div class="modalContent" id="modalContent"></div></div>`;
-	document.body.appendChild(modal);
-	modal.querySelector(".modalCloseButton").addEventListener("click",()=>{
-		closeModal();
-	})
-	fetch(url).then(r=>r.text()).then(html=>{
-		let modalContent = document.getElementById("modalContent")
-		modalContent.innerHTML=html;
-		processContents(modalContent);
-	});
+    let modal = document.createElement("div");
+    modal.className="modalBackdrop";
+    modal.innerHTML=`<div class="modalBody"><div class="modalCloseButton" onclick="closeModal()"></div><div class="modalContent" id="modalContent"></div></div>`;
+    document.body.appendChild(modal);
+    // Compatibilidad con estilos que requieren .active para mostrar el modal
+    if (modal.classList) {
+        modal.classList.add('active');
+    }
+    modal.querySelector(".modalCloseButton").addEventListener("click",()=>{
+        closeModal();
+    })
+    fetch(url).then(r=>r.text()).then(html=>{
+        let modalContent = document.getElementById("modalContent")
+        modalContent.innerHTML=html;
+        processContents(modalContent);
+    });
 }
 
 // Función para mostrar opciones de foto
