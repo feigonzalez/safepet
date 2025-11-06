@@ -1,7 +1,5 @@
 const account_id = 0;	//Valor de prueba. TODO: Obtener account_id desde la BD local o LocalStorage.
 
-const SERVER_URL="http://dintdt.c1.biz/safepet/"
-// const SERVER_URL="http://localhost/safepet/server/";
 const LOCALE = "cl-ES";		//Chile - Español
 const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
 	// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
@@ -150,7 +148,12 @@ async function processContents(self){
 		})
 	}
 	
-	
+	for(let replacer of document.querySelectorAll("a[replace]")){
+		replacer.onclick=(ev)=>{
+			ev.preventDefault();
+			window.location.replace(replacer.getAttribute("href"));
+		}
+	}
 }
 
 function showUploadedImage(src,target){

@@ -1,60 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crear cuenta - SafePet</title>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Crear cuenta - SafePet</title>
+		<link rel="stylesheet" href="assets/style.css">
+		<link rel="stylesheet" href="assets/custom/registerAccount.css">
+		<script src="assets/app.js"></script>
+		<script src="assets/connect.js"></script>
+	</head>
+	<body class="column size-full-height">
+		<div class="row header">
+			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+			<h1>Crear cuenta</h1>
+		</div>
+		<div class="row"><img src="assets/logo.png" alt="SafePet" class="auth-logo"></div>
+		<div class="row"><h2 class="auth-title">Regístrate en SafePet</h2></div>
+		<div class="row">
+			<form id="registerForm" class="column ph-2">
+				<div class="row"><div class="column">
+					<label for="name" class="uber-label">Nombre completo</label>
+					<input type="text" id="name" class="uber-input" placeholder="Juan Pérez" required>
+				</div></div>
+				<div class="row"><div class="column">
+					<label for="email" class="uber-label">Correo electrónico</label>
+					<input type="email" id="email" class="uber-input" placeholder="correo@ejemplo.com" required>
+				</div></div>
+				<div class="row"><div class="column">
+					<label for="password" class="uber-label">Contraseña</label>
+					<input type="password" id="password" class="uber-input" placeholder="********" required>
+				</div></div>
+				<div class="row"><div class="column">
+					<button type="submit" class="button bg-primary">Crear cuenta</button>
+				</div></div>
+			</form>
+		</div>
+		<div class="row">
+			<p class="metaText">¿Ya tienes una cuenta? <a class="link" href="login.html" replace>Inicia sesión</a></p>
+		</div>
+		<script>
+			document.getElementById('registerForm').addEventListener('submit', async e => {
+				e.preventDefault();
+				const name = e.target.name.value.trim();
+				const email = e.target.email.value.trim();
+				const password = e.target.password.value.trim();
+				let register = await request(SERVER_URL+"registerAccount.php",{username:email,password:password})
+				if(register.status=="GOOD"){
+					console.log(register)
+					localStorage.setItem("account_id",register["account_id"]);
+				}
+				window.location.replace = 'petList.html';
+			});
 
-  <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/custom/registerAccount.css">
-  <script src="assets/app.js"></script>
-  <script src="assets/db.js"></script>
-
-  
-</head>
-
-<body class="column size-full-height">
-
-  <!-- Header -->
-  <div class="row header">
-    <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-    <h1>Crear cuenta</h1>
-  </div>
-
-  <!-- Contenido -->
-  <div class="auth-container">
-    <img src="assets/logo.png" alt="SafePet" class="auth-logo">
-    <h2 class="auth-title">Regístrate en SafePet</h2>
-
-    <form id="registerForm">
-      <label for="name" class="uber-label">Nombre completo</label>
-      <input type="text" id="name" class="uber-input" placeholder="Juan Pérez" required>
-
-      <label for="email" class="uber-label">Correo electrónico</label>
-      <input type="email" id="email" class="uber-input" placeholder="correo@ejemplo.com" required>
-
-      <label for="password" class="uber-label">Contraseña</label>
-      <input type="password" id="password" class="uber-input" placeholder="********" required>
-
-      <button type="submit" class="button bg-primary">Crear cuenta</button>
-
-      <p class="metaText">
-        ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
-      </p>
-    </form>
-  </div>
-
-  <script>
-    document.getElementById('registerForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const name = e.target.name.value.trim();
-      const email = e.target.email.value.trim();
-      const password = e.target.password.value.trim();
-
-      await addToDB('users', { name, email, password });
-      alert('Cuenta creada exitosamente');
-      window.location.href = 'login.html';
-    });
-  </script>
-</body>
+			window.addEventListener("load",()=>{
+				if(!localStorage.getItem("shownAccountTutorial")){
+					loadModal("templates/accountBenefitsModal.html");
+					localStorage.setItem("shownAccountTutorial",true)
+				}
+			});
+		</script>
+	</body>
 </html>

@@ -3,12 +3,14 @@
 	<link rel="stylesheet" href="assets/style.css">
 	<link rel="stylesheet" href="assets/custom/petList.css">
 	<script src="assets/app.js"></script>
+	<script src="assets/connect.js"></script>
 	<script src="assets/urlParams.js"></script>
-	<script src="assets/db.js"></script>
 	<style>
 	</style>
 	<script>
 		async function beforeLoad(){
+			let account_id = localStorage.getItem("account_id");
+			if(!account_id) window.history.back();
 			accountData = {
 				name:"Francisca",
 				lastname:"Espinosa",
@@ -18,7 +20,7 @@
 			document.querySelector("#accountName").textContent=accountData["name"];
 			document.querySelector("#profileImage").dataset.imgsrc=accountData["image"];
 		
-			petData = await selectAllFrom('pets');
+			petData = await request(SERVER_URL+"getPetList.php",{account_id:account_id});
 			pets=[]
 			for(key in petData){
 				let data = petData[key]

@@ -1,3 +1,6 @@
+const SERVER_URL="http://dintdt.c1.biz/safepet/"
+// const SERVER_URL="http://localhost/safepet/server/";
+
 // La llave pública del servidor web donde están los endpoints de la API
 const serverPublicJWK = {"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":"xwCjMDAPoO3wAqh982Fqklx0XC_yw8cpwAihn28KUEMma5GgZZ0duNZ8yu-NwgfYHS3y8i4kuIcEfbZbooawbWqhOWJFDxrsCWfKfGSFlO98dL0ondxkeD6q-xF8S5-o6b6pgX5RM9d2_a1YML_qS9kEm39hMa3rSIFY0GMrSWpG-Ox3653jvomn8Vt8oSQIT4Mf3R-tke-7Kw1U5plTcqKHb15FZ1SACw2G8ZDBc_uukWIp2oAeykLrej9DgGk6f87-fj2GPNkmADeCT6q0tLxHWdM_qh20fRbPWdpfcHnZ2ctYDWzgZPzNHJ2j4bhbytwXakT2BtepCDxMf2EDQQ"}
 
@@ -78,6 +81,7 @@ async function generateKeyPair(){
 }
 
 async function request(url,body){
+	/*
 	// Crea un nuevo par de llaves privada/pública para esta petición
 	//console.log("Requesting from ["+url+"]")
 	let requestKeys = await generateKeyPair();
@@ -95,6 +99,8 @@ async function request(url,body){
 	if(response.status != "NULL"){
 		return decryptData(requestKeys.privateKey,response.data)
 	}
+	*/
+	return unsafeRequest(url,body)
 }
 
 async function unsafeRequest(url,body){
@@ -103,9 +109,10 @@ async function unsafeRequest(url,body){
 		body:new URLSearchParams(body)})
 	.then(r=>r.ok?r.text():"NULL")
 	.then((j)=>{
-		if(j.status!="NULL")
+		if(j=="NULL")
+			return {"status":"NULL"}
+		else
 			try{ return JSON.parse(j) }
 			catch(e){ return {"status":"TEXT","json":j} }
-		else return j
 	})
 }

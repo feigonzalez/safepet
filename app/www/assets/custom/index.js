@@ -236,13 +236,13 @@ function addRealSheltersAndServices() {
         shelterMarkers.push(marker);
     });
 
-    console.log(`âœ… Refugios y servicios cargados: ${places.length}`);
+    console.log(`âœ?Refugios y servicios cargados: ${places.length}`);
 }
 // FUNCIONES DE INTERFAZ
 
 function centerOnUser() {
     if (!map) {
-        alert('El mapa no estÃ¡ listo. Espera un momento e intenta de nuevo.');
+        alert('El mapa no est¨¢ listo. Espera un momento e intenta de nuevo.');
         return;
     }
     if (userLocation) {
@@ -272,5 +272,9 @@ window.addEventListener('load', () => {
 });
 
 function verifyAccountAndRedirect() {
-    window.location.href = "petList.html";
+	let accountId = localStorage.getItem("account_id");
+	if(!accountId)
+		window.location.href = "registerAccount.html";
+	else
+		window.location.href = "petList.html";
 }

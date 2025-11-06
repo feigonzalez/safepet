@@ -1,63 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iniciar sesión - SafePet</title>
-
-  <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/custom/login.css">
-  <script src="assets/app.js"></script>
-  <script src="assets/db.js"></script>
-
-  
-</head>
-
-<body class="column size-full-height">
-
-  <!-- Header -->
-  <div class="row header">
-    <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-    <h1>Iniciar sesión</h1>
-  </div>
-
-  <!-- Contenido -->
-  <div class="auth-container">
-    <img src="assets/logo.png" alt="SafePet" class="auth-logo">
-
-    <h2 class="auth-title">Bienvenido de nuevo</h2>
-
-    <form id="loginForm" class="column">
-      <label for="email" class="uber-label">Correo electrónico</label>
-      <input type="email" id="email" class="uber-input" placeholder="correo@ejemplo.com" required>
-
-      <label for="password" class="uber-label">Contraseña</label>
-      <input type="password" id="password" class="uber-input" placeholder="********" required>
-
-      <button type="submit" class="button bg-primary">Ingresar</button>
-
-      <p class="metaText">
-        ¿No tienes cuenta? <a href="registerAccount.html">Regístrate aquí</a>
-      </p>
-    </form>
-  </div>
-
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const email = e.target.email.value.trim();
-      const password = e.target.password.value.trim();
-
-      const users = await getAllFromDB('users');
-      const found = users.find(u => u.email === email && u.password === password);
-
-      if (found) {
-        localStorage.setItem('activeUser', JSON.stringify(found));
-        window.location.href = 'settings.html';
-      } else {
-        alert('Correo o contraseña incorrectos.');
-      }
-    });
-  </script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Iniciar sesión - SafePet</title>
+		<link rel="stylesheet" href="assets/style.css">
+		<link rel="stylesheet" href="assets/custom/login.css">
+		<script src="assets/app.js"></script>
+		<script src="assets/connect.js"></script>
+	</head>
+	<body class="column size-full-height">
+		<div class="row header">
+			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+			<h1>Iniciar sesión</h1>
+		</div>
+		<div class="row"><img src="assets/logo.png" alt="SafePet" class="auth-logo"></div>
+		<div class="row"><h2 class="auth-title">Bienvenido de nuevo</h2></div>
+		<div class="row">
+			<form id="loginForm" class="column ph-2">
+				<div class="row column">
+					<label for="email" class="uber-label">Correo electrónico</label>
+					<input type="email" id="email" class="uber-input" placeholder="correo@ejemplo.com" required>
+				</div>
+				<div class="row column">
+					<label for="password" class="uber-label">Contraseña</label>
+					<input type="password" id="password" class="uber-input" placeholder="********" required>
+				</div>
+				<div class="row">
+					<button type="submit" class="button bg-primary">Ingresar</button>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<p class="metaText">¿No tienes cuenta? <a class="link" href="registerAccount.html" replace>Regístrate aquí</a></p>
+		</div>
+		<script>
+			document.getElementById('loginForm').addEventListener('submit', async e => {
+				e.preventDefault();
+				const email = e.target.email.value.trim();
+				const password = e.target.password.value.trim();
+				const validLogin = await request(SERVER_URL+"validateLogin.php",{username:email,password:password});
+				if(validLogin.status=="GOOD"){
+					localStorage.setItem("account_id",validLogin.account_id);
+					window.location.replace("petList.html");
+				}else{
+					console.log(validLogin)
+				}
+			});
+		</script>
+	</body>
 </html>
