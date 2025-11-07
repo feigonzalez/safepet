@@ -8,17 +8,6 @@ async function beforeLoad() {
             return;
         }
 
-        // Si no hay usuario activo, intentar cargar desde base local (compatibilidad)
-        const db = await selectAll();
-        const account = db?.account || null;
-
-        if (account) {
-            updateProfileInfo(account);
-        } else {
-            // Si no hay datos, redirigir a pantalla de autenticación
-            window.location.href = 'requireAccount.html';
-        }
-
     } catch (error) {
         console.error('Error al cargar datos de usuario:', error);
         // Redirigir a autenticación si algo falla
