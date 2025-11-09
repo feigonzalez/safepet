@@ -26,11 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			return;
 		}
 		
-		let register = await request(SERVER_URL+"registerAccount.php",{username:email,password:password})
+		let register = await request(SERVER_URL+"registerAccount.php",{username:email,password:hash(password),name:name})
 		console.log(register)
 		if(register.status=="GOOD"){
-			localStorage.setItem("account_id",register["account_id"]);
-			localStorage.setItem("userData",JSON.stringify({name:name,email:email}));
+			localStorage.setItem("userData",JSON.stringify({
+				account_id:register.account_id,
+				name:register.name,
+				phone:register.phone,
+				email:register.username}));
 			loadModal("templates/registerAccountSuccessModal.html",()=>{
 				window.location.replace('petList.html');
 			});

@@ -3,6 +3,7 @@
 	<link rel="stylesheet" href="assets/style.css">
 	<link rel="stylesheet" href="assets/custom/notifications.css">
 	<script src="assets/app.js"></script>
+	<script src="assets/connect.js"></script>
 	<script src="assets/validation.js"></script>
 	<script src="assets/custom/notifications.js"></script>
 </head>
@@ -12,28 +13,17 @@
 		async function beforeLoad(){
 			
 			// Solicita las notificaciones a la API
-			
-			//console.log("Requesting Notifications from server...");
-			//notifications = await request(SERVER_URL+"safepet/pullNotifications.php",{"account_id":0})
-			//console.log("Received.");
-			
-			//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
-
-				//Versión insegura
-			notifications = await fetch(SERVER_URL+"pullNotifications.php",{
-				method:"POST",
-				body:new URLSearchParams({"account_id":0})
-					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
-				})
-				.then(r=>r.ok?r.json():{})
-				
-			// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
-			for(let n of notifications){
-				try{n["metaText"]=getRecency(n.timestamp)}
-				catch(e){n["metaText"]=n.timestamp}
+			notifications = await request(SERVER_URL+"pullNotifications.php",{"account_id":userData.account_id})
+			if(notifications.status=="MISS"){
+				document.querySelector("#all-notifications .card").innerHTML="No tienes notificaciones nuevas";
+			} else {
+				// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
+				for(let n of notifications){
+					try{n["metaText"]=getRecency(n.timestamp)}
+					catch(e){n["metaText"]=n.timestamp}
+				}
+				fillIterable(document.querySelector("[foreach=notifications]"),notifications)
 			}
-			
-			fillIterable(document.querySelector("[foreach=notifications]"),notifications)
 			
 		} </script>
 </head>

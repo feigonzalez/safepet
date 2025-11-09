@@ -3,7 +3,8 @@ const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
 	// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
 var userData={};
 window.addEventListener("load",()=>{
-	try{ userData = JSON.parse(localStorage.getItem("userData")) }
+	try{ userData = JSON.parse(localStorage.getItem("userData")) 
+		userData.firstName = userData.name.split(" ")[0]}
 	catch(e) {userData = {}}
 	if(typeof beforeLoad === "function")
 		beforeLoad();
@@ -98,7 +99,10 @@ async function processContents(self){
 	// Borra los campos de templating (de formato ${...}) que quedaron sin reemplazar.
 	//frame.innerHTML=frame.innerHTML.replaceAll(/\${(.*?)}/gm,"");
 	
-	
+	for(let optional of frame.querySelectorAll("[if]")){
+		console.log(`verifying [${optional.getAttribute("if")}]`)
+		if(!eval(optional.getAttribute("if"))) optional.remove()
+	}
 	
 	// Fija el [placeholder] los inputs de tipo texto a " " para las animaciones css
 	for(let input of frame.querySelectorAll("input[type=text]")){
@@ -176,6 +180,14 @@ function closeModal(el){
 	}
 }
 
+function closePopUp(){
+	let modal = document.querySelector('.popUpBackdrop');
+	if (modal){
+		if(modal.onclose) modal.onclose();
+		modal.remove();
+	}
+}
+
 // Carga el contenido de un archivo html y lo muestra en un modal
 // Si se pasa una función como closeCallback, esa función se llamará al cerrar el modal (usando closeModal())
 // Esto se usa para redigirir a otras vistas, por ejemplo
@@ -192,6 +204,31 @@ function loadModal(url,closeCallback){
 		modalContent.innerHTML=html;
 		processContents(modalContent);
 	});
+}
+
+function popUpMenu(options){
+	const modal = document.createElement('div');
+	modal.className = 'popUpBackdrop';
+	modal.addEventListener("click",closePopUp)
+	modal.innerHTML = `
+		<div class="popUpBody">
+			<div class="popUpContent">
+				<div class="row">
+					<div id="popUpOptions" class="column">
+					</div>
+				</div>
+			</div>
+		</div>
+	`;
+	document.body.appendChild(modal);
+	let optionsHolder = document.querySelector("#popUpOptions");
+	for(let o in options){
+		let oE = document.createElement("button")
+		oE.classList.add("popUpOption");
+		oE.textContent=o;
+		oE.onclick=options[o]
+		optionsHolder.appendChild(oE)
+	}
 }
 
 // Función para mostrar opciones de foto
@@ -262,10 +299,12 @@ function showVerificationModal(title, message, confirmText = 'Confirmar', cancel
             <div class="modalBody">
 				<div class="modalContent">
 					<div class="row"><h3>${title}</h3></div>
-					<div class="row"><p>${message}</p></div>
+					<div class="row ta-center"><p>${message}</p></div>
 					<div class="row">
-						<button class="button column" id="cancelVerificationBtn">${cancelText}</button>
-						<button class="button column bg-primary" id="confirmVerificationBtn">${confirmText}</button>
+						<div class="column">
+							<button class="row" id="cancelVerificationBtn">${cancelText}</button>
+							<button class="row bg-primary" id="confirmVerificationBtn">${confirmText}</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -293,7 +332,7 @@ function showVerificationModalSync(title, message, onConfirm = ()=>{}, onCancel 
 		<div class="modalBody">
 			<div class="modalContent">
 				<div class="row"><h3>${title}</h3></div>
-				<div class="row"><p>${message}</p></div>
+				<div class="row ta-center"><p>${message}</p></div>
 				<div class="row">
 					<button class="button column" id="cancelVerificationBtn">Cancelar</button>
 					<button class="button column bg-primary" id="confirmVerificationBtn">Confirmar</button>
@@ -380,3 +419,15 @@ function processQRContent(qrContent) {
         alert(`Código QR detectado: ${qrContent}\n\nPor favor, completa manualmente los datos del formulario.`);
     }
 }
+
+const hash = function(str, seed = 0) {
+	let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+	for (let i = 0, ch; i < str.length; i++) {
+		ch = str.charCodeAt(i);
+		h1 = Math.imul(h1 ^ ch, 2654435761);
+		h2 = Math.imul(h2 ^ ch, 1597334677);
+	}
+	h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
+	h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
+	return (4294967296 * (2097151 & h2) + (h1>>>0)).toString(36);
+};

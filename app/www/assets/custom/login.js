@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const email = document.getElementById("email").value.trim().toLowerCase();
 		const password = document.getElementById("password").value.trim();
 
-		const login = await request(SERVER_URL+"validateLogin.php",{username:email,password:password});
+		const login = await request(SERVER_URL+"validateLogin.php",{username:email,password:hash(password)});
 		switch(login.status){
 			case "GOOD":
 				localStorage.setItem("userData",JSON.stringify({

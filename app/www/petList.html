@@ -7,7 +7,7 @@
 	<script src="assets/urlParams.js"></script>
 	<script>
 		async function beforeLoad(){
-			document.querySelector("#accountName").textContent=userData.name;
+			document.querySelector("#accountName").textContent=userData.firstName;
 			//document.querySelector("#profileImage").dataset.imgsrc=accountData["image"];
 		
 			petData = await request(SERVER_URL+"getPetList.php",{account_id:userData.account_id});
@@ -15,6 +15,9 @@
 				document.querySelector("#petList .card").innerHTML="No tienes ninguna mascota registrada";
 			} else {
 				fillIterable(document.querySelector("[foreach=pets]"),petData)
+				for(let bI of document.querySelectorAll(".breedIndicator")){
+					if(bI.textContent=="()") bI.remove();
+				}
 			}
 		}
 	</script>
@@ -35,7 +38,7 @@
 		<div class="column list" id="petList"> <!-- Lista de mascotas -->
 	
 			<div class="card row compact" await foreach="pets">
-				<a href="petDetail.html?id=${id}" class="row">
+				<a href="petDetail.html?id=${pet_id}" class="row">
 					<div class="column compact">
 						<div class="petImageDisplay" data-img="${imageURL}"></div>
 					</div>
@@ -44,7 +47,8 @@
 						<span content="${name}"></span>
 					</div>
 						<div class="row ta-left metaText">
-							<span content="${species} (${breed})"></span>
+							<span content="${species}"></span>
+							<span class="breedIndicator" content="(${breed})"></span>
 						</div>
 					</div>
 					<div class="column compact">

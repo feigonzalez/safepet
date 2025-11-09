@@ -4,31 +4,29 @@
     <link rel="stylesheet" href="assets/custom/messages.css">
     <script src="assets/app.js"></script>
     <script src="assets/main.js"></script>
+    <script src="assets/connect.js"></script>
     <!--script src="assets/custom/messages.js"></script-->
 
     <script>
 		var messages;
 		async function beforeLoad(){
-			let response = await fetch(SERVER_URL+"getLatestChats.php",{
-				method:"POST",
-				body:new URLSearchParams({"account_id":0})
-					//El valor "account_id" debería ser la ID de la cuenta del usuario que inició sesión.
-			})
-				.then(r=>r.ok?r.json():{});
-			if(response.status=="GOOD"){
+			let response = await request(SERVER_URL+"getLatestChats.php",{"account_id":userData.account_id})
+			if(response.status=="MISS"){
+				document.querySelector("#messagesList .card").innerHTML="No tienes conversaciones activas";
+			} else {
 				messages=response.messages;
-			}
-			for(let m of messages){
-				m.recency = getRecency(m.timestamp);
-			}
-			fillIterable(document.querySelector("[foreach=messages]"),messages)
-			
-			//Actualiza la recencia (qué tan reciente es) de los mensajes de la lista
-			setInterval(()=>{
-				for(let timestamp of document.querySelectorAll(".timestamp")){
-					timestamp.textContent=getRecency(parseInt(timestamp.dataset.time));
+				for(let m of messages){
+					m.recency = getRecency(m.timestamp);
 				}
-			},15000)
+				fillIterable(document.querySelector("[foreach=messages]"),messages)
+				
+				//Actualiza la recencia (qué tan reciente es) de los mensajes de la lista
+				setInterval(()=>{
+					for(let timestamp of document.querySelectorAll(".timestamp")){
+						timestamp.textContent=getRecency(parseInt(timestamp.dataset.time));
+					}
+				},15000)
+			}
 		}
     </script>
 	
@@ -39,7 +37,7 @@
         <h1>Mensajes</h1>
     </div>
     <div class="row">
-        <div class="column list size-full-width">
+        <div id="messagesList" class="column list size-full-width">
 	
 		<!-- Debería ser un template con un atributo foreach="chats" o algo parecido -->
 			<div class="card row compact chatItem" await foreach="messages">
