@@ -4,7 +4,8 @@
     "@capacitor/android": "^7.4.3",
     "@capacitor/app": "^7.1.0",
     "@capacitor/camera": "^7.0.2",
-    "@capacitor/core": "^7.4.3"
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/device": "^7.0.2"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.3",

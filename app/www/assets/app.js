@@ -222,12 +222,15 @@ function popUpMenu(options){
 	`;
 	document.body.appendChild(modal);
 	let optionsHolder = document.querySelector("#popUpOptions");
+	let index = 0;
 	for(let o in options){
 		let oE = document.createElement("button")
+		oE.id = "popUpOption_"+index;
 		oE.classList.add("popUpOption");
 		oE.textContent=o;
-		oE.onclick=options[o]
-		optionsHolder.appendChild(oE)
+		oE.onclick=options[o];
+		optionsHolder.appendChild(oE);
+		index++;
 	}
 }
 

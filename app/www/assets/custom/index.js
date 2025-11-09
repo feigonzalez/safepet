@@ -263,12 +263,14 @@ function toggleShelters() {
 
 // EVENTOS
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => initMap(), 500);
 });
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     if (!mapInitialized) setTimeout(() => initMap(), 200);
+	let dID = await window.getDeviceId();
+	localStorage.setItem("deviceID",dID.identifier)
 });
 
 function verifyAccountAndRedirect() {
