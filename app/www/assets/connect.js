@@ -109,6 +109,7 @@ async function unsafeRequest(url,body){
 		body:new URLSearchParams(body)})
 	.then(r=>r.ok?r.text():"NULL")
 	.then((j)=>{
+		console.log("Request response:",j);
 		if(j=="NULL")
 			return {"status":"NULL"}
 		else

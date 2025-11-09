@@ -9,12 +9,14 @@
 		<script src="assets/app.js"></script>
 		<script src="assets/validation.js"></script>
 		<script src="assets/navigation.js"></script>
+		<script src="assets/custom/register.js"></script>
+		<script src="assets/connect.js"></script>
 	</head>
 	<body class="column">
 
 		<div class="row header">
 			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-			<h1>Añadir mascotas</h1>
+			<h1>Añadir mascota</h1>
 		</div>
 
 		<div class="row">
@@ -38,30 +40,30 @@
 				</div>
 				<div class="uber-field-group">
 					<label class="uber-label" for="petName">Nombre</label>
-					<input type="text" id="petName" class="uber-input" placeholder="Ingresa su nombre" required>
+					<input type="text" name="petName" class="uber-input" placeholder="Ingresa su nombre" required>
 				</div>
 				<div class="uber-field-group">
 					<label class="uber-label" for="petSpecies">Especie</label>
-					<input type="text" id="petSpecies" class="uber-input" placeholder="Ingresa la especie" required>
+					<input type="text" name="petSpecies" class="uber-input" placeholder="Ingresa la especie" required>
 				</div>
 				<div class="uber-field-group">
 					<label class="uber-label" for="petBreed">Raza</label>
-					<input type="text" id="petBreed" class="uber-input" placeholder="Ingresa la raza">
+					<input type="text" name="petBreed" class="uber-input" placeholder="Ingresa la raza">
 				</div>
 				<div class="uber-field-group">
 					<label class="uber-label" for="petColor">Color</label>
-					<input type="text" id="petColor" class="uber-input" placeholder="Ingresa el color">
+					<input type="text" name="petColor" class="uber-input" placeholder="Ingresa el color">
 				</div>
 				<div class="uber-field-group">
 					<label class="uber-label">Sexo</label>
 					<div class="uber-gender-options">
 						<label class="uber-gender-option">
-							<input type="radio" name="sex" value="macho" required>
+							<input type="radio" name="petSex" value="macho" required>
 							<span class="checkmark"></span>
 							Macho
 						</label>
 						<label class="uber-gender-option">
-							<input type="radio" name="sex" value="hembra" required>
+							<input type="radio" name="petSex" value="hembra" required>
 							<span class="checkmark"></span>
 							Hembra
 						</label>
@@ -88,11 +90,6 @@
 				};
 				reader.readAsDataURL(file);
 			}
-
-			document.getElementById('petForm').addEventListener('submit', e => {
-				e.preventDefault();
-				loadModal('templates/petAddedModal.html');
-			});
 		</script>
 	</body>
 </html>

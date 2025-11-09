@@ -1,11 +1,10 @@
-
-const account_id = 0;	//Valor de prueba. TODO: Obtener account_id desde la BD local o LocalStorage.
-
 const LOCALE = "cl-ES";		//Chile - Español
 const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
 	// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
-
+var userData={};
 window.addEventListener("load",()=>{
+	try{ userData = JSON.parse(localStorage.getItem("userData")) }
+	catch(e) {userData = {}}
 	if(typeof beforeLoad === "function")
 		beforeLoad();
 	// Repite el contenido de elementos con [foreach] pero sin [await]
@@ -17,7 +16,9 @@ window.addEventListener("load",()=>{
 	processContents();
 })
 
-function replaceContents(frame,data){
+function replaceContents(self,data){
+	let frame = self;
+	if(!self) frame = document.body;
     for(let attrName of frame.getAttributeNames()){
         for(let toReplace of [...frame.getAttribute(attrName).matchAll(/\${(.*?)}/g)]){
             let newValue = "";
@@ -164,44 +165,33 @@ function showUploadedImage(src,target){
 	}
 }
 
-/*
-    Cierra un modal.
-    - Si se entrega un elemento, cierra el modalBackdrop más cercano.
-    - Si no, cierra el modalBackdrop superior (último añadido).
-*/
+
+// Cierra el modal.
+// No hay ninguna razón para que haya más de un modal a la vez
 function closeModal(el){
-    let modal = null;
-    if (el && typeof el.closest === 'function') {
-        modal = el.closest('.modalBackdrop');
-    }
-    if (!modal) {
-        const modals = document.querySelectorAll('.modalBackdrop');
-        modal = modals.length ? modals[modals.length - 1] : null;
-    }
-    if (modal) modal.remove();
-    // Si el botón tiene data-redirect, navegar después de cerrar el modal
-    if (el && el.dataset && el.dataset.redirect) {
-        window.location.href = el.dataset.redirect;
-    }
+	let modal = document.querySelector('.modalBackdrop');
+	if (modal){
+		if(modal.onclose) modal.onclose();
+		modal.remove();
+	}
 }
 
-function loadModal(url){
-    let modal = document.createElement("div");
-    modal.className="modalBackdrop";
-    modal.innerHTML=`<div class="modalBody"><div class="modalCloseButton" onclick="closeModal()"></div><div class="modalContent" id="modalContent"></div></div>`;
-    document.body.appendChild(modal);
-    // Compatibilidad con estilos que requieren .active para mostrar el modal
-    if (modal.classList) {
-        modal.classList.add('active');
-    }
-    modal.querySelector(".modalCloseButton").addEventListener("click",()=>{
-        closeModal();
-    })
-    fetch(url).then(r=>r.text()).then(html=>{
-        let modalContent = document.getElementById("modalContent")
-        modalContent.innerHTML=html;
-        processContents(modalContent);
-    });
+// Carga el contenido de un archivo html y lo muestra en un modal
+// Si se pasa una función como closeCallback, esa función se llamará al cerrar el modal (usando closeModal())
+// Esto se usa para redigirir a otras vistas, por ejemplo
+function loadModal(url,closeCallback){
+	closeModal();
+	let modal = document.createElement("div");
+	modal.classList.add("modalBackdrop");
+	if(closeCallback) modal.onclose=closeCallback;
+	modal.innerHTML=`<div class="modalBody"><div class="modalCloseButton" onclick="closeModal()"></div><div class="modalContent" id="modalContent"></div></div>`;
+	document.body.appendChild(modal);
+	modal.querySelector(".modalCloseButton").addEventListener("click",()=>{ closeModal(); })
+	fetch(url).then(r=>r.text()).then(html=>{
+		let modalContent = document.getElementById("modalContent")
+		modalContent.innerHTML=html;
+		processContents(modalContent);
+	});
 }
 
 // Función para mostrar opciones de foto
@@ -269,15 +259,17 @@ function showVerificationModal(title, message, confirmText = 'Confirmar', cancel
         const modal = document.createElement('div');
         modal.className = 'modalBackdrop';
         modal.innerHTML = `
-            <div class="verification-modal">
-                <h3>${title}</h3>
-                <p>${message}</p>
-                <div class="button-group">
-                    <button class="button" id="cancelVerificationBtn">${cancelText}</button>
-                    <button class="button bg-primary" id="confirmVerificationBtn">${confirmText}</button>
-                </div>
-            </div>
-        `;
+            <div class="modalBody">
+				<div class="modalContent">
+					<div class="row"><h3>${title}</h3></div>
+					<div class="row"><p>${message}</p></div>
+					<div class="row">
+						<button class="button column" id="cancelVerificationBtn">${cancelText}</button>
+						<button class="button column bg-primary" id="confirmVerificationBtn">${confirmText}</button>
+					</div>
+				</div>
+			</div>
+		`;
 
         document.body.appendChild(modal);
 
@@ -291,6 +283,35 @@ function showVerificationModal(title, message, confirmText = 'Confirmar', cancel
             resolve(false);
         });
     });
+}
+
+// Función para mostrar modal de verificación, versión síncrona
+function showVerificationModalSync(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
+	const modal = document.createElement('div');
+	modal.className = 'modalBackdrop';
+	modal.innerHTML = `
+		<div class="modalBody">
+			<div class="modalContent">
+				<div class="row"><h3>${title}</h3></div>
+				<div class="row"><p>${message}</p></div>
+				<div class="row">
+					<button class="button column" id="cancelVerificationBtn">Cancelar</button>
+					<button class="button column bg-primary" id="confirmVerificationBtn">Confirmar</button>
+				</div>
+			</div>
+		</div>
+	`;
+	document.body.appendChild(modal);
+
+	modal.querySelector('#confirmVerificationBtn').addEventListener('click', () => {
+		onConfirm();
+		modal.remove();
+	});
+
+	modal.querySelector('#cancelVerificationBtn').addEventListener('click', () => {
+		onCancel();
+		modal.remove();
+	});
 }
 
 // Mejorar la función showUploadedImageAsBg para trabajar con el círculo

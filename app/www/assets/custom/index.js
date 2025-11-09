@@ -272,8 +272,8 @@ window.addEventListener('load', () => {
 });
 
 function verifyAccountAndRedirect() {
-	let accountId = localStorage.getItem("account_id");
-	if(!accountId)
+	let userData = localStorage.getItem("userData");
+	if(!userData)
 		window.location.href = "registerAccount.html";
 	else
 		window.location.href = "petList.html";

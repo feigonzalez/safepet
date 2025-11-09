@@ -5,29 +5,17 @@
 	<script src="assets/app.js"></script>
 	<script src="assets/connect.js"></script>
 	<script src="assets/urlParams.js"></script>
-	<style>
-	</style>
 	<script>
 		async function beforeLoad(){
-			let account_id = localStorage.getItem("account_id");
-			if(!account_id) window.history.back();
-			accountData = {
-				name:"Francisca",
-				lastname:"Espinosa",
-				type:"Plan Gratis",
-				image:"assets/logo.png"
-			}
-			document.querySelector("#accountName").textContent=accountData["name"];
-			document.querySelector("#profileImage").dataset.imgsrc=accountData["image"];
+			document.querySelector("#accountName").textContent=userData.name;
+			//document.querySelector("#profileImage").dataset.imgsrc=accountData["image"];
 		
-			petData = await request(SERVER_URL+"getPetList.php",{account_id:account_id});
-			pets=[]
-			for(key in petData){
-				let data = petData[key]
-					data.imageURL = data.images[0];
-				pets.push(data)
+			petData = await request(SERVER_URL+"getPetList.php",{account_id:userData.account_id});
+			if(petData.status=="MISS"){
+				document.querySelector("#petList .card").innerHTML="No tienes ninguna mascota registrada";
+			} else {
+				fillIterable(document.querySelector("[foreach=pets]"),petData)
 			}
-			fillIterable(document.querySelector("[foreach=pets]"),pets)
 		}
 	</script>
 </head>
@@ -38,13 +26,13 @@
 		<div class="column ta-left">
 			<a href="settings.html"><h1>Hola, <span id="accountName"></span></h1></a>
 		</div>
-		<div class="column ta-right ph-1">
-			<a href="settings.html"><div id="profileImage" class="icon" data-imgsrc="${accountData.image}"></div></a>
+		<div class="column compact">
+			<a class="button round" href="settings.html"><span class="icon" data-icon="person"></span></a>
 		</div>
 	</div>
 	
 	<div class="row">
-		<div class="column list"> <!-- Lista de mascotas -->
+		<div class="column list" id="petList"> <!-- Lista de mascotas -->
 	
 			<div class="card row compact" await foreach="pets">
 				<a href="petDetail.html?id=${id}" class="row">

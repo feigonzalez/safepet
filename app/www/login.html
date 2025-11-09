@@ -36,19 +36,5 @@
 		<div class="row">
 			<p class="metaText">¿No tienes cuenta? <a class="link" href="registerAccount.html" replace>Regístrate aquí</a></p>
 		</div>
-		<script>
-			document.getElementById('loginForm').addEventListener('submit', async e => {
-				e.preventDefault();
-				const email = e.target.email.value.trim();
-				const password = e.target.password.value.trim();
-				const validLogin = await request(SERVER_URL+"validateLogin.php",{username:email,password:password});
-				if(validLogin.status=="GOOD"){
-					localStorage.setItem("account_id",validLogin.account_id);
-					window.location.replace("petList.html");
-				}else{
-					console.log(validLogin)
-				}
-			});
-		</script>
 	</body>
 </html>

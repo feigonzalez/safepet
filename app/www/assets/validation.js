@@ -106,6 +106,7 @@ function validateForm(formElement, validationRules) {
 
         if (!validation.isValid) {
             isFormValid = false;
+			console.log(`Validation failed on field [${fieldName}] = [${value}]`)
             showFieldError(field, validation.errors[0]);
         } else {
             clearFieldError(field);
@@ -198,7 +199,6 @@ const SafePetValidations = {
     petRegisterForm: {
         petName: ValidationConfig.petName,
         petSpecies: ValidationConfig.petSpecies,
-        petBreed: ValidationConfig.petBreed,
         petColor: ValidationConfig.petColor,
         petSex: { required: true, message: 'Selecciona el sexo de la mascota' }
     },
@@ -206,7 +206,6 @@ const SafePetValidations = {
     // Validación para reporte de mascota
     petReportForm: {
         petSpecies: ValidationConfig.petSpecies,
-        petBreed: ValidationConfig.petBreed,
         petColor: ValidationConfig.petColor,
         petSex: { required: true, message: 'Selecciona el sexo de la mascota' }
     },

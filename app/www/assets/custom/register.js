@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Manejar envío del formulario
-	form.addEventListener('submit', async function(e) {
+	form.addEventListener('submit',function(e) {
 		e.preventDefault();
 		
 		// Validar campos de texto
@@ -28,30 +28,25 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		if (validation.isValid && sexValid) {
 			// Mostrar modal de confirmación antes de registrar
-			const confirmed = await showVerificationModal(
+			showVerificationModalSync(
 				'Confirmar Registro',
 				'¿Estás seguro de que quieres registrar esta mascota con la información proporcionada?',
-				'Registrar Mascota',
-				'Revisar Datos'
+				async ()=>{
+					reqBody = {account_id:userData.account_id}
+					new FormData(form).entries().forEach(e=>{
+						reqBody[e[0]]=e[1]
+					})
+					console.log(reqBody);
+					let register = await request(SERVER_URL+"registerPet.php",reqBody)
+					if(register.status=="GOOD"){
+						loadModal('templates/petAddedModal.html',()=>{
+							window.location=document.referrer
+						});
+					} else {
+						console.log("Couldn't register pet:",register)
+					}
+				}
 			);
-			
-			if (confirmed) {
-				// Simular proceso de registro
-				const submitButton = form.querySelector('input[type="submit"]');
-				const originalValue = submitButton.value;
-				
-				submitButton.disabled = true;
-				submitButton.value = 'Registrando...';
-				
-				setTimeout(() => {
-					ValidationUtils.showSuccessMessage('Mascota registrada exitosamente');
-					
-					// Redirigir después del éxito
-					setTimeout(() => {
-						window.location.href = 'alertList.html';
-					}, 1500);
-				}, 1500);
-			}
 		} else {
 			ValidationUtils.showErrorMessage('Por favor corrige los errores en el formulario');
 		}

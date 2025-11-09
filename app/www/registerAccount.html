@@ -4,10 +4,10 @@
   <title>Crear cuenta - SafePet</title>
 
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/custom/register.css">
   <link rel="stylesheet" href="assets/custom/registerAccount.css">
 
   <script src="assets/app.js"></script>
+  <script src="assets/connect.js"></script>
   <script src="assets/custom/registerAccount.js" defer></script>
 </head>
 
@@ -40,26 +40,5 @@
 		<div class="row">
 			<p class="metaText">¿Ya tienes una cuenta? <a class="link" href="login.html" replace>Inicia sesión</a></p>
 		</div>
-		<script>
-			document.getElementById('registerForm').addEventListener('submit', async e => {
-				e.preventDefault();
-				const name = e.target.name.value.trim();
-				const email = e.target.email.value.trim();
-				const password = e.target.password.value.trim();
-				let register = await request(SERVER_URL+"registerAccount.php",{username:email,password:password})
-				if(register.status=="GOOD"){
-					console.log(register)
-					localStorage.setItem("account_id",register["account_id"]);
-				}
-				window.location.replace = 'petList.html';
-			});
-
-			window.addEventListener("load",()=>{
-				if(!localStorage.getItem("shownAccountTutorial")){
-					loadModal("templates/accountBenefitsModal.html");
-					localStorage.setItem("shownAccountTutorial",true)
-				}
-			});
-		</script>
 	</body>
 </html>
