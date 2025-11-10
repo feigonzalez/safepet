@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					account_id:login.account_id,
 					name:login.name,
 					phone:login.phone,
-					email:login.username}));
+					email:login.email}));
 				window.location.replace("petList.html");
 				break;
 			case "MISS":

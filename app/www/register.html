@@ -7,21 +7,21 @@
 		<link rel="stylesheet" href="assets/style.css">
 		<link rel="stylesheet" href="assets/custom/register.css">
 		<script src="assets/app.js"></script>
+		<script src="assets/connect.js"></script>
 		<script src="assets/validation.js"></script>
 		<script src="assets/navigation.js"></script>
 		<script src="assets/custom/register.js"></script>
-		<script src="assets/connect.js"></script>
 	</head>
 	<body class="column">
 
 		<div class="row header">
 			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-			<h1>Añadir mascota</h1>
+			<div class="column ta-left"><h1>Añadir mascota</h1></div>
 		</div>
 
 		<div class="row">
-			<form id="petForm" class="column form ph-1">
-				<div class="row center ph-1">
+			<form id="petForm" class="column ph-2">
+				<div class="row ph-1">
 					<div class="uber-photo-upload-container" onclick="document.getElementById('reg_petImage').click()">
 						<div class="uber-photo-circle">
 							<div class="uber-photo-placeholder" id="photoPlaceholder">
@@ -38,33 +38,31 @@
 					<input type="file" id="reg_petImage" accept="image/*" style="display:none;"
 						onchange="showUploadedImage(this,'petImageDisplay')">
 				</div>
-				<div class="uber-field-group">
-					<label class="uber-label" for="petName">Nombre</label>
-					<input type="text" name="petName" class="uber-input" placeholder="Ingresa su nombre" required>
+				<div class="row column">
+					<label for="petName">Nombre</label>
+					<input type="text" id="petName" name="petName" placeholder="Ingresa su nombre" required>
 				</div>
-				<div class="uber-field-group">
-					<label class="uber-label" for="petSpecies">Especie</label>
-					<input type="text" name="petSpecies" class="uber-input" placeholder="Ingresa la especie" required>
+				<div class="row column">
+					<label for="petSpecies">Especie</label>
+					<input type="text" id="petSpecies" name="petSpecies" placeholder="Ingresa la especie" required>
 				</div>
-				<div class="uber-field-group">
-					<label class="uber-label" for="petBreed">Raza</label>
-					<input type="text" name="petBreed" class="uber-input" placeholder="Ingresa la raza">
+				<div class="row column">
+					<label for="petBreed">Raza</label>
+					<input type="text" id="petBreed" name="petBreed" placeholder="Ingresa la raza">
 				</div>
-				<div class="uber-field-group">
-					<label class="uber-label" for="petColor">Color</label>
-					<input type="text" name="petColor" class="uber-input" placeholder="Ingresa el color">
+				<div class="row column">
+					<label for="petColor">Color</label>
+					<input type="text" id="petColor" name="petColor" placeholder="Ingresa el color">
 				</div>
-				<div class="uber-field-group">
-					<label class="uber-label">Sexo</label>
-					<div class="uber-gender-options">
-						<label class="uber-gender-option">
+				<div class="row column">
+					<span class="label">Sexo</span>
+					<div class="row">
+						<label class="column">
 							<input type="radio" name="petSex" value="macho" required>
-							<span class="checkmark"></span>
 							Macho
 						</label>
-						<label class="uber-gender-option">
+						<label class="column">
 							<input type="radio" name="petSex" value="hembra" required>
-							<span class="checkmark"></span>
 							Hembra
 						</label>
 					</div>
@@ -74,22 +72,5 @@
 				</div>
 			</form>
 		</div>
-
-		<script>
-			function showUploadedImage(input, imgId) {
-				const file = input.files && input.files[0];
-				if (!file) return;
-				const reader = new FileReader();
-				reader.onload = () => {
-					const img = document.getElementById(imgId);
-					const placeholder = document.getElementById('photoPlaceholder');
-					img.src = reader.result;
-					img.style.display = 'block';
-					img.style.objectFit = 'cover';
-					placeholder.style.display = 'none';
-				};
-				reader.readAsDataURL(file);
-			}
-		</script>
 	</body>
 </html>

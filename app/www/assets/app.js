@@ -169,7 +169,6 @@ function showUploadedImage(src,target){
 	}
 }
 
-
 // Cierra el modal.
 // No hay ninguna razón para que haya más de un modal a la vez
 function closeModal(el){
@@ -181,10 +180,10 @@ function closeModal(el){
 }
 
 function closePopUp(){
-	let modal = document.querySelector('.popUpBackdrop');
-	if (modal){
-		if(modal.onclose) modal.onclose();
-		modal.remove();
+	let popUp = document.querySelector('.popUpBackdrop');
+	if (popUp){
+		if(popUp.onclose) popUp.onclose();
+		popUp.remove();
 	}
 }
 
@@ -328,13 +327,31 @@ function showVerificationModal(title, message, confirmText = 'Confirmar', cancel
 }
 
 // Función para mostrar modal de verificación, versión síncrona
-function showVerificationModalSync(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
+function showAlertModal(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
 	const modal = document.createElement('div');
 	modal.className = 'modalBackdrop';
 	modal.innerHTML = `
 		<div class="modalBody">
 			<div class="modalContent">
 				<div class="row"><h3>${title}</h3></div>
+				<div class="row ta-center"><p>${message}</p></div>
+				<div class="row">
+					<button class="button column bg-primary" onclick="closeModal()">Entendido</button>
+				</div>
+			</div>
+		</div>
+	`;
+	document.body.appendChild(modal);
+}
+
+// Función para mostrar modal de confirmación. Parecido al de verificación, pero usa funciones de callback en vez de promesas
+function showConfirmModal(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
+	const modal = document.createElement('div');
+	modal.className = 'modalBackdrop';
+	modal.innerHTML = `
+		<div class="modalBody">
+			<div class="modalContent">
+				<div class="row ta-center"><h3>${title}</h3></div>
 				<div class="row ta-center"><p>${message}</p></div>
 				<div class="row">
 					<button class="button column" id="cancelVerificationBtn">Cancelar</button>

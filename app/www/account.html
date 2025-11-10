@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="assets/style.css">
+		<script src="assets/app.js"></script>
+		<link rel="stylesheet" href="assets/custom/account.css">
+		<script src="assets/custom/account.js"></script>
+	</head>
+	<body class="column">
+		<div class="row header">
+			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+			<div class="column ta-left"><h1>Tus datos</h1></div>
+			<div class="column compact">
+				<button class="round bg-default" onclick="popUpMenu(accountMenu)">
+					<span class="icon" data-icon="more-horizontal"></span>
+				</button>
+			</div>
+		</div>
+		<div class="row compact">
+			<div class="column">
+				<div class="row compact"> <div id="profileImageDisplay"></div> </div>
+				<div class="row compact"> <h2 id="profileName" class="row ta-center"></h2> </div>
+				<div class="row compact">
+					<div class="column size-full-width ph-1">
+						<div class="detailItem row">
+							<div class="column detailLabel">Correo</div>
+							<div id="profileEmail" class="column detailValue"></div>
+						</div>
+						<div class="detailItem row">
+							<div class="column detailLabel">Teléfono</div>
+							<div id="profilePhone" class="column detailValue"></div>
+						</div>
+						<div class="detailItem row">
+							<div class="column detailLabel">Suscripción</div>
+							<div id="profileSubStatus" class="column detailValue"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row compact footer"><!-- Vacío. Se incluye un footer para empujar el resto del contenido hacia arriba --></div>
+	</body>
+</html>

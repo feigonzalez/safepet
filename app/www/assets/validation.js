@@ -1,6 +1,3 @@
-// SafePet - Sistema de Validaciones
-// Funciones centralizadas para validar formularios y datos de entrada
-
 // Configuración de validaciones
 const ValidationConfig = {
     email: {
@@ -54,37 +51,37 @@ const ValidationConfig = {
 };
 
 // Función principal de validación
-function validateField(fieldName, value, customConfig = {}) {
+function validateField(field, customConfig = {}) {
+	let fieldName = field.getAttribute("name");
+	let value = field.value;
+	const trimmedValue = value.trim();
+	let result = {isValid:true, errors:[], value:trimmedValue}
+	
+	// console.log(`Validating ${fieldName} ${field.hasAttribute("required")?"(Req)":""}: [${trimmedValue}]`)
+	
+	if(trimmedValue==="" && !field.hasAttribute("required")){
+		// console.log(`\tSkipped: empty and not required`);
+		return result;
+	}
+	
     const config = { ...ValidationConfig[fieldName], ...customConfig };
-    const errors = [];
-
-    if (!value || value.trim() === '') {
-        errors.push('Este campo es obligatorio');
-        return { isValid: false, errors };
-    }
-
-    const trimmedValue = value.trim();
 
     // Validar longitud mínima
     if (config.minLength && trimmedValue.length < config.minLength) {
-        errors.push(`Mínimo ${config.minLength} caracteres`);
+        result.errors.push(`Mínimo ${config.minLength} caracteres`);
     }
 
     // Validar longitud máxima
     if (config.maxLength && trimmedValue.length > config.maxLength) {
-        errors.push(`Máximo ${config.maxLength} caracteres`);
+        result.errors.push(`Máximo ${config.maxLength} caracteres`);
     }
 
     // Validar patrón
     if (config.pattern && !config.pattern.test(trimmedValue)) {
-        errors.push(config.message || 'Formato inválido');
+        result.errors.push(config.message || 'Formato inválido');
     }
-
-    return {
-        isValid: errors.length === 0,
-        errors: errors,
-        value: trimmedValue
-    };
+	result.isValid = result.errors.length === 0;
+    return result;
 }
 
 // Validar formulario completo
@@ -98,15 +95,13 @@ function validateForm(formElement, validationRules) {
     Object.keys(validationRules).forEach(fieldName => {
         const field = formElement.querySelector(`[name="${fieldName}"]`);
         if (!field) return;
-
-        const value = field.value;
-        const validation = validateField(fieldName, value, validationRules[fieldName]);
+        const validation = validateField(field, validationRules[fieldName]);
         
         results[fieldName] = validation;
 
         if (!validation.isValid) {
             isFormValid = false;
-			console.log(`Validation failed on field [${fieldName}] = [${value}]`)
+			console.log(`Validation failed on field [${fieldName}] = [${field.value}]`)
             showFieldError(field, validation.errors[0]);
         } else {
             clearFieldError(field);
@@ -162,7 +157,7 @@ function setupRealTimeValidation(formElement, validationRules) {
 
         // Validar al perder el foco
         field.addEventListener('blur', function() {
-            const validation = validateField(fieldName, this.value, validationRules[fieldName]);
+            const validation = validateField(this, validationRules[fieldName]);
             if (!validation.isValid) {
                 showFieldError(this, validation.errors[0]);
             } else {
@@ -211,12 +206,7 @@ const SafePetValidations = {
     },
 
     // Validación para perfil de usuario
-    profileForm: {
-        name: ValidationConfig.name,
-        email: ValidationConfig.email,
-        phone: ValidationConfig.phone,
-        address: ValidationConfig.address
-    }
+	// Movido a editProfile.js
 };
 
 // Validar radio buttons y checkboxes

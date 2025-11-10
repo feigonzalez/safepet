@@ -1,104 +1,90 @@
-
 async function beforeLoad() {
-            try {
-                // Cargar información del usuario
-                let db = await selectAll();
-                let account = db ? db.account : null;
-                
-                // Datos de prueba si no hay cuenta configurada (mismos que en settings)
-                if (!account) {
-                    account = {
-                        name: "Francisca Espinosa",
-                        email: "fran@example.com",
-                        phone: "+56 9 8765 4321",
-                        address: "Valparaíso, Chile"
-                    };
-                }
-                
-                // Llenar el formulario con los datos actuales
-                fillForm(account);
-            } catch (error) {
-                console.log('Error loading data, using default values:', error);
-                // Usar los mismos datos por defecto que en settings
-                const defaultAccount = {
-                    name: "Francisca Espinosa",
-                    email: "fran@example.com",
-                    phone: "+56 9 8765 4321",
-                    address: "Valparaíso, Chile"
-                };
-                fillForm(defaultAccount);
-            }
-        }
-        
-        function fillForm(account) {
-            // Llenar campos del formulario
-            document.getElementById('fullName').value = account.name || '';
-            document.getElementById('email').value = account.email || '';
-            document.getElementById('phone').value = account.phone || '';
-            document.getElementById('address').value = account.address || '';
-            
-            // Actualizar iniciales en la foto
-            if (account.name) {
-                const initials = account.name
-                    .split(' ')
-                    .filter(Boolean)
-                    .map(n => n[0])
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase();
-                const initialsEl = document.getElementById('profileInitials');
-                if (initialsEl) {
-                    initialsEl.textContent = initials || 'U';
-                }
-            }
-        }
+	if(!localStorage.getItem("shownPersonalDataDisclaimer")){
+		loadModal("templates/accountDataDisclaimerModal.html");
+		localStorage.setItem("shownPersonalDataDisclaimer",true)
+	}
+	// Llenar campos del formulario
+	document.getElementById('fullName').value = userData.name || '';
+	document.getElementById('email').value = userData.email || '';
+	document.getElementById('phone').value = userData.phone || '';
+	document.getElementById('address').value = userData.address || '';
+	
+	// Actualizar iniciales en la foto
+	if (userData.name) {
+		const initials = userData.name
+			.split(' ')
+			.filter(Boolean)
+			.map(n => n[0])
+			.slice(0, 2)
+			.join('')
+			.toUpperCase();
+		const initialsEl = document.getElementById('profileInitials');
+		if (initialsEl) {
+			initialsEl.textContent = initials || 'U';
+		}
+	}
+}
 
-        function changePhoto() {
-            alert('Funcionalidad de cambio de foto próximamente disponible');
-        }
+function previewProfileImage(event) {
+	const file = event.target.files[0];
+	const imageDisplay = document.getElementById('profileImageDisplay');
+	const placeholder = document.getElementById('profilePhotoPlaceholder');
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = function(e) {
+			imageDisplay.src = e.target.result;
+			imageDisplay.style.display = 'block';
+			placeholder.style.display = 'none';
+		};
+	reader.readAsDataURL(file);
+	}
+}
 
-        // Cargar datos al inicializar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            beforeLoad();
-            
-            // Preparar referencias a formulario y reglas de validación
-            const form = document.getElementById('profileForm');
-            const validationRules = ValidationUtils.SafePetValidations.profileForm;
+function changePhoto() {
+	alert('Funcionalidad de cambio de foto próximamente disponible');
+}
 
-            // Configurar validaciones en tiempo real
-            ValidationUtils.setupRealTimeValidation(form, validationRules);
+// Cargar datos al inicializar la página
+document.addEventListener('DOMContentLoaded', function() {
+	
+	// Preparar referencias a formulario y reglas de validación
+	const form = document.getElementById('profileForm');
+	const validationRules = {
+		fullName: ValidationConfig.name,
+		phone: ValidationConfig.phone,
+		address: ValidationConfig.address
+	}
 
-            // Configurar manejo del formulario
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                // Validar formulario
-                const validation = ValidationUtils.validateForm(form, validationRules);
-                
-                if (validation.isValid) {
-                    // Obtener datos del formulario
-                    const formData = {
-                        name: document.getElementById('fullName').value,
-                        email: document.getElementById('email').value,
-                        phone: document.getElementById('phone').value,
-                        address: document.getElementById('address').value
-                    };
-                    
-                    // Simular guardado (aquí se conectaría con la base de datos)
-                    console.log('Guardando perfil:', formData);
-                    
-                    // Mostrar modal de éxito
-                    loadModal('templates/profileUpdatedModal.html');
-                } else {
-                    ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');
-                }
-            });
-            
-            // Configurar botón de cancelar
-            const cancelButton = document.querySelector('.cancel-button');
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    NavigationUtils.goBack();
-                });
-            }
-        });
+	// Configurar validaciones en tiempo real
+	ValidationUtils.setupRealTimeValidation(form, validationRules);
+
+	// Configurar manejo del formulario
+	form.addEventListener('submit', function(ev) {
+		ev.preventDefault();
+		const validation = ValidationUtils.validateForm(form, validationRules);
+		if (validation.isValid) {
+			const formData = {
+				fullName: document.getElementById('fullName').value,
+				email: document.getElementById('email').value,
+				phone: document.getElementById('phone').value,
+				address: document.getElementById('address').value
+			};
+			showConfirmModal(
+				"Actualizar Datos",
+				"¿Deseas actualizar tus datos?",
+				async ()=>{
+					let update = await request(SERVER_URL+"updateAccount.php",{account_id:userData.account_id,...formData})
+					if(update.status == "GOOD"){
+						showAlertModal("Datos actualizados","Tus datos fueron actualizados correctamente")
+						userData.name = update.fullName;
+						userData.phone = update.phone;
+						localStorage.setItem("userData",JSON.stringify(userData))
+					} else{
+						showAlertModal("Error","Hubo un error al actualizar tus datos :c")
+					}
+				})
+		} else {
+			ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');
+		}
+	});
+});

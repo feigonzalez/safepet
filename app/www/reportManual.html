@@ -20,13 +20,12 @@
 		</div>
 
 	  <div class="row">
-		<form id="reportForm" class="column form center ph-1">
-			<div class="uber-photo-section">
+		<form id="petForm" class="column ph-2">
+			<div class="row ph-1">
 				<div class="uber-photo-upload-container" onclick="document.getElementById('reg_petImage').click()">
 					<div class="uber-photo-circle">
 						<div class="uber-photo-placeholder" id="photoPlaceholder">
-							<svg width="38" height="38" viewBox="0 0 24 24" fill="none"
-								xmlns="http://www.w3.org/2000/svg">
+							<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
 									stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 								<circle cx="12" cy="13" r="4"
@@ -36,43 +35,37 @@
 						<img id="petImageDisplay" alt="Vista previa" style="display:none;">
 					</div>
 				</div>
-				<input type="file" id="reg_petImage" accept="image/*" capture="environment" style="display:none;"
-					 onchange="showUploadedImage(this,'petImageDisplay')">
+				<input type="file" id="reg_petImage" accept="image/*" style="display:none;"
+					onchange="showUploadedImage(this,'petImageDisplay')">
 			</div>
-
-			<div class="uber-field-group">
-				<label class="uber-label" for="petSpecies">Especie</label>
-				<input type="text" id="petSpecies" class="uber-input" placeholder="Ej: Perro, Gato, Ave" required>
+			<div class="row column">
+				<label for="petSpecies">Especie</label>
+				<input type="text" id="petSpecies" name="petSpecies" placeholder="Ingresa la especie" required>
 			</div>
-
-			<div class="uber-field-group">
-				<label class="uber-label" for="petBreed">Raza</label>
-				<input type="text" id="petBreed" class="uber-input" placeholder="Ej: Labrador, Siamés">
+			<div class="row column">
+				<label for="petBreed">Raza</label>
+				<input type="text" id="petBreed" name="petBreed" placeholder="Ingresa la raza">
 			</div>
-
-			<div class="uber-field-group">
-				<label class="uber-label" for="petColor">Color</label>
-				<input type="text" id="petColor" class="uber-input" placeholder="Ej: Marrón, Negro con blanco" required>
+			<div class="row column">
+				<label for="petColor">Color</label>
+				<input type="text" id="petColor" name="petColor" placeholder="Ingresa el color">
 			</div>
-
-			<div class="uber-field-group">
-				<label class="uber-label">Sexo</label>
-				<div class="uber-gender-options">
-					<label class="uber-gender-option">
-					<input type="radio" name="petSex" value="M" required>
-					Macho
+			<div class="row column">
+				<span class="label">Sexo</span>
+				<div class="row">
+					<label class="column">
+						<input type="radio" name="petSex" value="macho" required>
+						Macho
 					</label>
-					<label class="uber-gender-option">
-					<input type="radio" name="petSex" value="F" required>
-					Hembra
+					<label class="column">
+						<input type="radio" name="petSex" value="hembra" required>
+						Hembra
 					</label>
 				</div>
 			</div>
-
-			
-				<div class="column size-full-width ph-1">
-					<a class="button bg-primary" href="alertList.html">Reportar Hallazgo</a>
-				</div>
+			<div class="row center pv-1">
+				<button type="submit" class="button bg-primary rounded submit-btn">Reportar Hallazgo</button>
+			</div>
 		</form>
 	</div>
 

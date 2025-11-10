@@ -1,44 +1,44 @@
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crear cuenta - SafePet</title>
+<!DOCTYPE html>
+<html lang="es">
 
-  <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/custom/registerAccount.css">
-
-  <script src="assets/app.js"></script>
-  <script src="assets/connect.js"></script>
-  <script src="assets/custom/registerAccount.js" defer></script>
-</head>
-
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="assets/style.css">
+		<link rel="stylesheet" href="assets/custom/registerAccount.css">
+		<script src="assets/app.js"></script>
+		<script src="assets/connect.js"></script>
+		<script src="assets/custom/registerAccount.js" defer></script>
+	</head>
+	
 	<body class="column size-full-height">
 		<div class="row header">
 			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-			<h1>Crear cuenta</h1>
+			<div class="column ta-left"><h1>Regístrate en SafePet</h1></div>
 		</div>
 		<div class="row"><img src="assets/logo.png" alt="SafePet" class="auth-logo"></div>
-		<div class="row"><h2 class="auth-title">Regístrate en SafePet</h2></div>
-		<div class="row">
+		<div class="row footer compact">
 			<form id="registerForm" class="column ph-2">
-				<div class="row"><div class="column">
+				<div class="row column">
 					<label for="name" class="uber-label">Nombre completo</label>
 					<input type="text" id="name" class="uber-input" placeholder="Juan Pérez" required>
-				</div></div>
-				<div class="row"><div class="column">
+				</div>
+				<div class="row column">
 					<label for="email" class="uber-label">Correo electrónico</label>
 					<input type="email" id="email" class="uber-input" placeholder="correo@ejemplo.com" required>
-				</div></div>
-				<div class="row"><div class="column">
+				</div>
+				<div class="row column">
 					<label for="password" class="uber-label">Contraseña</label>
 					<input type="password" id="password" class="uber-input" placeholder="********" required>
-				</div></div>
-				<div class="row"><div class="column">
+				</div>
+				<div class="row">
 					<button type="submit" class="button bg-primary">Crear cuenta</button>
-				</div></div>
+				</div>
 			</form>
 		</div>
-		<div class="row">
+		<div class="row compact">
 			<p class="metaText">¿Ya tienes una cuenta? <a class="link" href="login.html" replace>Inicia sesión</a></p>
 		</div>
 	</body>
+	
 </html>

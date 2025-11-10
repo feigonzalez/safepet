@@ -275,8 +275,12 @@ window.addEventListener('load', async () => {
 
 function verifyAccountAndRedirect() {
 	let userData = localStorage.getItem("userData");
-	if(!userData)
-		window.location.href = "registerAccount.html";
+	if(!userData){
+		if(!localStorage.getItem("shownAccountTutorial")){
+			window.location.href = "registerAccount.html";
+		} else 
+			window.location.href = "login.html";
+	}
 	else
 		window.location.href = "petList.html";
 }

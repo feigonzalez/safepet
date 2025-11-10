@@ -3,8 +3,8 @@ let currentContactName = '';
 let messages = [];
 
 async function beforeLoad(){
-	let account_id = 0;		//TODO: Debe ser la id del usuario logeado.
-	messages = await unsafeRequest(SERVER_URL+`getChat.php`,{account_id:account_id,pair_code:getUrlParams()["id"]})
+	let account_id = userData.account_id;		//TODO: Debe ser la id del usuario logeado.
+	messages = await request(SERVER_URL+`getChat.php`,{account_id:account_id,pair_code:getUrlParams()["id"]})
 	fillIterable(document.querySelector(`[foreach="messages"]`),messages)
 }
 

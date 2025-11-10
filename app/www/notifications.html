@@ -7,29 +7,6 @@
 	<script src="assets/validation.js"></script>
 	<script src="assets/custom/notifications.js"></script>
 </head>
-<body>
-	<script>
-		var notifications;
-		async function beforeLoad(){
-			if(!userData.account_id){
-				document.querySelector("#all-notifications .card").remove()
-			} else {
-				// Solicita las notificaciones a la API
-				notifications = await request(SERVER_URL+"pullNotifications.php",{"account_id":userData.account_id})
-				if(notifications.status=="MISS"){
-					document.querySelector("#all-notifications .card").innerHTML="No tienes notificaciones nuevas";
-				} else {
-					// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
-					for(let n of notifications){
-						try{n["metaText"]=getRecency(n.timestamp)}
-						catch(e){n["metaText"]=n.timestamp}
-					}
-					fillIterable(document.querySelector("[foreach=notifications]"),notifications)
-				}
-			}
-		}
-	</script>
-</head>
 <body class="column">
 	<div class="row header">
 		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
@@ -37,32 +14,37 @@
 	</div>
 	<div class="row">
 		<div class="column list size-full-width">
-		
-			<!-- Contenedor para todas las notificaciones -->
-			<div id="all-notifications" style="width: 100%; padding: 10px;">
-				
-				<!-- Notificaciones estáticas -->
-				<div class="row compact card" await foreach="notifications">
-					<div class="column notifItem ta-left">
-						<div class="row ta-left bold">
-							<span class="icon notifIcon" data-icon="${type}"></span>
-							<span class="notifTitle" content="${title}"></span>
-						</div>
-						<div class="column ta-left">
-							<div class="row ta-left metaText" content="${metaText}"></div>
-							<div class="row ta-left" content="${description}"></div>
-						</div>
+			
+			<!-- Notificaciones de SafePet -->
+			<div class="row compact card" await foreach="notifications">
+				<div class="column notifItem ta-left">
+					<div class="row ta-left bold">
+						<span class="icon notifIcon" data-icon="${type}"></span>
+						<span class="notifTitle" content="${title}"></span>
+					</div>
+					<div class="column ta-left">
+						<div class="row ta-left metaText" content="${metaText}"></div>
+						<div class="row ta-left" content="${description}"></div>
 					</div>
 				</div>
-				
-				<!-- Contenedor para noticias RSS -->
-				<div id="noticias-feed">
-					<!-- Las noticias se cargarán aquí dinámicamente -->
+			</div>
+			
+		<h1>Noticias</h1>
+			
+			<!-- Noticias de RSS -->
+			<div class="row compact card" await foreach="news">
+				<div class="column notifItem ta-left">
+					<div class="row ta-left bold">
+						<span class="icon notifIcon" data-icon="${icon}"></span>
+						<span class="notifTitle" content="${title}"></span>
+					</div>
+					<div class="column ta-left">
+						<div class="row ta-left metaText" content="${meta}"></div>
+						<div class="row ta-left newsContent" content="${description}"></div>
+					</div>
 				</div>
-				
 			</div>
 			
 		</div>
 	</div>
-
 </body>

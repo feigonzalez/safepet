@@ -21,11 +21,13 @@
         <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
         <div class="column ta-left"><h1>Detalles Mascota</h1></div>
 		<div class="column compact">
-			<button class="round bg-default" onclick="popUpMenu(petDetailMenu)"><span class="icon" data-icon="more-horizontal"></span></button>
+			<button class="round bg-default" onclick="popUpMenu(petDetailMenu)">
+				<span class="icon" data-icon="more-horizontal"></span>
+			</button>
 		</div>
     </div>
     
-    <div class="row flex-grow">
+    <div class="row compact">
         <div class="column">
             <div class="row compact">
                 <div id="petImageDisplay"></div>
@@ -51,10 +53,10 @@
 					</div>
                 </div>
             </div>
+        </div>
+    </div>
             
             <div class="row compact footer">
                 <button id="reportLossBtn" class="bg-primary" onclick="reportLoss()">Reportar Pérdida</button>
             </div>
-        </div>
-    </div>
 </body>

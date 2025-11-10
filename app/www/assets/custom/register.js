@@ -1,3 +1,18 @@
+function showUploadedImage(input, imgId) {
+	const file = input.files && input.files[0];
+	if (!file) return;
+	const reader = new FileReader();
+	reader.onload = () => {
+		const img = document.getElementById(imgId);
+		const placeholder = document.getElementById('photoPlaceholder');
+		img.src = reader.result;
+		img.style.display = 'block';
+		img.style.objectFit = 'cover';
+		placeholder.style.display = 'none';
+	};
+	reader.readAsDataURL(file);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	const form = document.querySelector('form');
 	const validationRules = ValidationUtils.SafePetValidations.petReportForm;
@@ -28,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		if (validation.isValid && sexValid) {
 			// Mostrar modal de confirmación antes de registrar
-			showVerificationModalSync(
+			showConfirmModal(
 				'Confirmar Registro',
 				'¿Estás seguro de que quieres registrar esta mascota con la información proporcionada?',
 				async ()=>{
