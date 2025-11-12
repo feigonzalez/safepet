@@ -16,7 +16,7 @@
 			} else {
 				fillIterable(document.querySelector("[foreach=pets]"),petData)
 				for(let bI of document.querySelectorAll(".breedIndicator")){
-					if(bI.textContent=="()") bI.remove();
+					if(bI.textContent.trim()=="()") bI.remove();
 				}
 			}
 		}
@@ -47,8 +47,8 @@
 						<span content="${name}"></span>
 					</div>
 						<div class="row ta-left metaText">
-							<span content="${species}"></span>
-							<span class="breedIndicator" content="(${breed})"></span>
+							<span content="${species} "></span>
+							<span class="breedIndicator" content=" (${breed})"></span>
 						</div>
 					</div>
 					<div class="column compact">

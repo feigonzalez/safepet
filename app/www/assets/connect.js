@@ -104,6 +104,7 @@ async function request(url,body){
 }
 
 async function unsafeRequest(url,body){
+	try{
 	return await fetch(url,{
 		method:"POST",
 		body:new URLSearchParams(body)})
@@ -116,4 +117,7 @@ async function unsafeRequest(url,body){
 			try{ return JSON.parse(j) }
 			catch(e){ return {"status":"TEXT","json":j} }
 	})
+	} catch (e){
+		return {status:"NULL"}
+	}
 }

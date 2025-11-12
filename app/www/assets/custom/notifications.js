@@ -4,7 +4,7 @@ var notifications;
 
 async function beforeLoad(){
 	if(!userData.account_id){
-		document.querySelector("#all-notifications .card").remove()
+		document.querySelector("[foreach=notifications]").remove()
 	} else {
 		// Solicita las notificaciones a la API
 		request(SERVER_URL+"pullNotifications.php",{"account_id":userData.account_id}).then(n=>{
@@ -20,8 +20,8 @@ async function beforeLoad(){
 				fillIterable(document.querySelector("[foreach=notifications]"),notifications)
 			}
 		})
-		loadNotifications();
 	}
+	loadNotifications();
 }
 
 

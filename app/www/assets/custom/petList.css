@@ -21,3 +21,4 @@
 #profileImage{
 	width:2rem;height:2rem;border:solid 0.1rem var(--color-primary);border-radius:50%;
 }
+.breedIndicator{white-space:break-spaces}

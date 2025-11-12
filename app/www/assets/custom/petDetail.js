@@ -32,12 +32,27 @@ function reportLoss() {
 		alert('Error: No se pudo identificar la mascota');
 		return;
 	}
-	
-	showConfirmModal(
-		'Alertar Pérdida',
-		'¿Estás seguro de que quieres generar una alerta por la pérdida de esta mascota? Se notificará a la comunidad.',
-		()=>{
-			showAlertModal("Alerta exitosa","Los datos de tu mascota podrán ser vistos cuando alguien encuentre un animal perdido")
-		}
-	);
+	locate(async (pos)=>{
+		showConfirmModal(
+			'Alertar Pérdida',
+			'¿Estás seguro de que quieres generar una alerta por la pérdida de esta mascota? Se notificará a la comunidad.',
+			async ()=>{
+				alertData = await request(SERVER_URL+"postAlert.php",{
+					account_id:userData.account_id,
+					pet_id:petData.pet_id,
+					timestamp:Math.floor(new Date().getTime()/1000),
+					latitude:pos.coords.latitude,
+					longitude:pos.coords.longitude
+				})
+				if(alertData.status=="GOOD")
+					showAlertModal("Se ha creado la alerta","Los datos de tu mascota podrán ser vistos cuando alguien encuentre un animal perdido")
+				else{
+					showAlertModal("Hubo un problema","No se pudo generar la alerta")
+				}
+			}
+		)
+	},
+	(error)=>{
+		showAlertModal("No se pudo obtener tu ubicación","No se puede generar una alerta sin la ubicación de tu dispositivo.")
+	})
 }

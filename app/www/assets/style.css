@@ -22,8 +22,13 @@
 @keyframes formLabel{
 	from{font-size:1em;bottom:0.1em;color:#111;left:0.1em}
 	to{font-size:0.75em;bottom:100%;color:#777;left:0}
-	
 }
+
+@keyframes loading-content {
+	0%{background-position:0% 0%}
+	100%{background-position:200% 0}
+}
+
 html{height:100%;user-select:none;-webkit-tap-highlight-color: transparent;}
 body{display:flex;flex-direction:column;margin:0;min-height:100%;color:var(--text-color);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Ubuntu,Arial,sans-serif;background:#fff;justify-content:start !important;line-height:1.4}
 a{text-decoration:none;color:inherit}
@@ -96,13 +101,14 @@ button:active, .button:active, input[type=button]:active, input[type=submit]:act
 .ph-1{padding-left:1rem;padding-right:1rem}
 .ph-2{padding-left:2rem;padding-right:2rem}
 .ph-05{padding-left:0.5rem;padding-right:0.5rem}
+.pv-1{padding-top:1rem;padding-bottom:1rem}
 .mh-1{margin-left:1rem;margin-right:1rem}
 .mv-1{margin-top:1rem;margin-bottom:1rem}
 
 .bold{font-weight:bold}
 .flex-grow{flex-grow:1}
 
-.icon{background-size:contain;background-repeat:no-repeat;background-position:center;display:inline-block}
+.icon{background-size:contain;background-position:center;display:inline-block}
 button.icon, a.button.icon, input[type=button].icon, input[type=submit].icon{
 	height:2rem;width:2rem;margin:0.5rem;
 }
@@ -128,7 +134,9 @@ input[type=file]{display:none}
 
 #backButton{filter:none;box-shadow:none;background:none}
 
-[content]{height:1.2em;margin-top:0.2em;width:100%;background:#DDD8;border-radius:1em;}
+/* [content]{height:1.2em;margin-top:0.2em;width:100%;background:#DDD8;border-radius:1em;} */
+[content]{height:1.2em;margin-top:0.2em;width:100%;border-radius:1em;background-image:linear-gradient(90deg, #eee 20%, #ccc, #eee 80%) !important;background-size:200%;
+	animation: loading-content 1.5s linear infinite}
 
 /* --- UI utilities for consistent aesthetics across pages --- */
 .sectionTitle{font-size:1rem;color:#666;margin:0.5rem 1rem}
@@ -261,4 +269,5 @@ form{
 	label, span.label{font-weight:600;font-size:0.95rem;margin-bottom:0.3rem;text-align:left;width:100%;}
 	.field-error{color:var(--color-error);font-size:0.8rem;margin-top:-0.75rem;display:block;margin-bottom:1rem;}
 }
+p.error{border:solid 1px var(--color-error);padding:1rem;border-radius:1rem;color:var(--color-error)}
 

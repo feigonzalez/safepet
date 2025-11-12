@@ -1,7 +1,11 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
+	<link rel="stylesheet" href="assets/custom/alertList.css">
 	<script src="assets/app.js"></script>
+	<script src="assets/connect.js"></script>
+	<script src="assets/urlParams.js"></script>
+	<script src="assets/custom/alertList.js"></script>
     <style>
         .petImageDisplay{height:4rem;width:4rem;background-size:cover;
             background-position:50%;border-radius:50%;border:solid 1px #888}
@@ -9,23 +13,41 @@
     </style>
 </head>
 <body class="column size-full-height">
+
     <div class="row header">
         <button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
         <h1>Alertas</h1>
     </div>
-    <div class="row flex-grow">
-        <div class="column ta-center">
-			<!-- Los elementos de la lista deberían ser templates -->
-			<!-- Debería repetirse por cada alerta relevante al reporte previo -->
-            <a class="row compact listCard" href="alertDetail.html?id=florencia&view=public">
-                <div class="column compact"><div class="petImageDisplay" data-imgsrc="../media/florencia.jpg"></div></div>
-                <div class="column ph-1 ta-left size-full-width">
-                    <div class="row ta-left bold">Florencia ♀️</div>
-                    <div class="row ta-left metaText">Perro (Caniche)</div>
-                    <div class="row ta-left metaText">7Km, hace 5 min</div>
-                </div>
-                <div class="column compact"><span class="icon cardChevron" data-icon="chevron-right"></span></div>
-            </a>
+    <div class="row header pv-1 ph-1" id="searchParams">
+        <span class="icon" data-icon="search"></span>
+    </div>
+	
+    <div class="row">
+        <div id="alertsList" class="column list">
+		
+			<div class="card row compact" await foreach="alerts">
+				<a href="alertDetail.html" class="row">
+					<div class="column compact">
+						<div class="petImageDisplay" data-imgsrc="${image}"></div>
+					</div>
+					<div class="column ph-1 ta-left size-full-width">
+						<div class="row ta-left bold">
+							<span content="${petName}"></span>
+							<span class="icon" content data-icon="${sexIndicator}"></span>
+						</div>
+						<div class="row compact ta-left metaText">
+							<span content="${petSpecies}"></span>
+							<span class="breedIndicator" content=" (${petBreed})"></span>
+						</div>
+						<div class="row compact ta-left metaText">
+							<span content="A ${distance}"></span>
+							<span content=", ${recency}"></span>
+						</div>
+					</div>
+					<!--div class="column compact"><span class="icon cardChevron" data-icon="chevron-right"></span></div-->
+				</a>
+			</div>
+			
         </div>
     </div>
 </body>

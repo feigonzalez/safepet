@@ -333,7 +333,7 @@ function showAlertModal(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
 	modal.innerHTML = `
 		<div class="modalBody">
 			<div class="modalContent">
-				<div class="row"><h3>${title}</h3></div>
+				<div class="row ta-center"><h3>${title}</h3></div>
 				<div class="row ta-center"><p>${message}</p></div>
 				<div class="row">
 					<button class="button column bg-primary" onclick="closeModal()">Entendido</button>
@@ -451,3 +451,36 @@ const hash = function(str, seed = 0) {
 	h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
 	return (4294967296 * (2097151 & h2) + (h1>>>0)).toString(36);
 };
+
+function locate(callbackSuccess, callbackError){
+	if(!navigator.geolocation){
+		console.warn("Este navegador no permite geolocalización")
+		callbackError();
+	}
+	navigator.geolocation.getCurrentPosition(
+		(pos)=>{	//On Success
+			callbackSuccess(pos);
+		},
+		(e)=>{	//On Error
+			console.warn("No se pudo obtener geolocalización")
+			callbackError(e);
+		}
+	)
+}
+
+// Formula de Haversine, o del semiverseno: https://www.movable-type.co.uk/scripts/latlong.html
+// Entrega la distancia, en metros, entre dos puntos de la Tierra, dados por sus latitudes y longitudes
+function distanceGeo(lat1, lon1, lat2, lon2){
+	const R = 6371e3; // Radius of Earth, in meters
+	const d1 = lat1 * Math.PI/180; // φ, λ in radians
+	const d2 = lat2 * Math.PI/180;
+	const Dd = (lat2-lat1) * Math.PI/180;
+	const Dl = (lon2-lon1) * Math.PI/180;
+
+	const a = Math.sin(Dd/2) * Math.sin(Dd/2) +
+			Math.cos(d1) * Math.cos(d2) *
+			Math.sin(Dl/2) * Math.sin(Dl/2);
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	const d = R * c; // in metres
+	return d;
+}
