@@ -43,10 +43,19 @@ async function beforeLoad(){
 	document.querySelector('#detailBreed').textContent = petData.breed || 'No especificado';
 	document.querySelector('#detailColor').textContent = petData.color || 'No especificado';
 	document.querySelector('#detailStatus').textContent = statusDict[petData.petStatus] || 'No especificado';
+	
+	let statusButtonText="";
+	switch(petData.petStatus){
+		case "HOME": statusButtonText="Mi mascota se perdió"; break;
+		case "LOST": statusButtonText="Encontré mi mascota"; break;
+		default: break;
+	}
+	
+	document.querySelector("#changeStatusBtn").textContent=statusButtonText;
 }
 
 function updateStatus(){
-	switch(petData.status){
+	switch(petData.petStatus){
 		case "HOME": reportLoss(); break;
 		case "LOST": alert("Se debe registrar que la mascota fue hallada"); break;
 		default: alert("Estado de mascota no especificado."); break;
