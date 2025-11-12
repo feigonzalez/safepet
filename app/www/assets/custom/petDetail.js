@@ -1,3 +1,7 @@
+const statusDict={
+	"HOME": "En casa",
+	"LOST": "Extraviada"
+}
 const petDetailMenu = {
 	"Ver Código QR":()=>{
 		showAlertModal("QR de tu mascota",
@@ -38,6 +42,15 @@ async function beforeLoad(){
 	document.querySelector('#detailSpecies').textContent = petData.species || 'No especificado';
 	document.querySelector('#detailBreed').textContent = petData.breed || 'No especificado';
 	document.querySelector('#detailColor').textContent = petData.color || 'No especificado';
+	document.querySelector('#detailStatus').textContent = statusDict[petData.petStatus] || 'No especificado';
+}
+
+function updateStatus(){
+	switch(petData.status){
+		case "HOME": reportLoss(); break;
+		case "LOST": alert("Se debe registrar que la mascota fue hallada"); break;
+		default: alert("Estado de mascota no especificado."); break;
+	}
 }
 
 function reportLoss() {
