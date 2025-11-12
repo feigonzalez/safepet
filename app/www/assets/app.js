@@ -484,3 +484,8 @@ function distanceGeo(lat1, lon1, lat2, lon2){
 	const d = R * c; // in metres
 	return d;
 }
+
+// Uses a QRServer API to generate a qr code.
+function getQR(data){
+	return "https://api.qrserver.com/v1/create-qr-code/?data="+data;
+}

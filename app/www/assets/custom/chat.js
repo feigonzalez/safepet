@@ -113,7 +113,7 @@ async function sendMessage() {
 		messages.push(newMessage);
 		input.value = '';
 		updateSendButton();
-		sendRequest = await unsafeRequest(SERVER_URL+`postChat.php`,
+		sendRequest = await request(SERVER_URL+`postChat.php`,
 			{...{account_id:account_id,pair_code:getUrlParams()["id"]},
 			 ...newMessage})
 		if(sendRequest.status=="GOOD"){	//Mostrar mensaje sólo si se pudo enviar correctamente

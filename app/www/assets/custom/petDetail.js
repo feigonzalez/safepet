@@ -1,5 +1,20 @@
 const petDetailMenu = {
-	"Editar Datos":()=>{console.log("editar datos")},
+	"Ver Código QR":()=>{
+		showAlertModal("QR de tu mascota",
+			`<div class="column">
+				<div class="row">
+					<a id="qrDownload" download href="${getQR(SERVER_URL+"?petID="+URLparams["id"])}">
+						<img id="qrCode" class="loading" src="${getQR(SERVER_URL+"?petID="+URLparams["id"])}">
+					</a>
+				</div>
+				<div class="row"><p>Cuando alguien escanee este código, se te alertará dónde ocurrió.</p></div>
+				<div class="row"><button class="bg-primary">Descargar Código</button></div>
+			</div>`
+		);
+	},
+	"Editar Datos":()=>{
+		navigateWithParams("updatePet.html",{id:URLparams["id"]})
+	},
 	"Añadir Dueño":()=>{console.log("añadir dueño")},
 	"Eliminar Mascota":()=>{console.log("eliminar mascota")}
 }

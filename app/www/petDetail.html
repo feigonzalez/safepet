@@ -5,15 +5,17 @@
     <script src="assets/connect.js"></script>
     <script src="assets/urlParams.js"></script>
     <script src="assets/validation.js"></script>
+    <script src="assets/navigation.js"></script>
     <script src="assets/custom/petDetail.js"></script>
     <style>
-        #petImageDisplay{width:60vw;height:60vw;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:1rem auto}
+        #petImageDisplay{width:12rem;height:12rem;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:1rem auto}
         .petSummary{margin-top:0.5rem;color:#555}
         .detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0}
         .detailItem{padding:0.5rem;background:#f8f9fa;border-radius:0.5rem}
         .detailLabel{font-weight:bold;color:#666;font-size:0.9rem}
         .detailValue{color:#333;margin-top:0.25rem}
 		#popUpOption_2{color:var(--color-primary);font-weight:bold}
+		#qrCode{width:12rem;height:12rem;border-radius:0;}
     </style>
 </head>
 <body class="column">
@@ -55,8 +57,8 @@
             </div>
         </div>
     </div>
-            
-            <div class="row compact footer">
-                <button id="reportLossBtn" class="bg-primary" onclick="reportLoss()">Reportar Pérdida</button>
-            </div>
+	
+	<div class="row compact footer">
+		<button id="reportLossBtn" class="bg-primary" onclick="reportLoss()">Reportar Pérdida</button>
+	</div>
 </body>

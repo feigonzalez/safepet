@@ -87,6 +87,11 @@ function setupNavigationButtons() {
 
 // Configurar navegación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
+	var url = new URL(window.location.href);
+	var URLparams={};
+	for([key,val] of url.searchParams){
+		URLparams[key]=val;
+	}
     setupNavigationButtons();
 });
 
