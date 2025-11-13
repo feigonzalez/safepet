@@ -4,5 +4,8 @@
 .detailItem{padding:0.5rem;background:#f8f9fa;border-radius:0.5rem}
 .detailLabel{font-weight:bold;color:#666;font-size:0.9rem}
 .detailValue{color:#333;margin-top:0.25rem}
-#popUpOption_2{color:var(--color-primary);font-weight:bold}
+.detailValue:empty{color:#0004;}
+.detailValue:empty::before{content:"No definido"}
+
+#popUpOption_3{color:var(--color-primary);font-weight:bold}
 #qrCode{width:12rem;height:12rem;border-radius:0;}

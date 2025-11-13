@@ -1,2 +1,5 @@
 node_modules*
 voicenotes*
+sql.php
+crypto.php
+response.txt

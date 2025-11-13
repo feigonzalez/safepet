@@ -50,14 +50,14 @@ async function beforeLoad(){
 	*/
 	
 	// Actualizar información básica
-	const sexSymbol = petData.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
-	document.querySelector('#petName').textContent = `${petData.name} ${sexSymbol}`;
+	const sexSymbol = petData.sex?.toLowerCase().startsWith('h') ? 'female' : 'male';
+	document.querySelector('#petName').textContent = petData.name;
+	document.querySelector('#detailSpecies').textContent = petData.species;
+	document.querySelector('#detailBreed').textContent = petData.breed;
+	document.querySelector('#detailColor').textContent = petData.color;
+	document.querySelector('#detailStatus').textContent = statusDict[petData.petStatus];
+	setIcon(document.querySelector('#sexIndicator'),sexSymbol);
 	
-	// Actualizar detalles
-	document.querySelector('#detailSpecies').textContent = petData.species || 'No especificado';
-	document.querySelector('#detailBreed').textContent = petData.breed || 'No especificado';
-	document.querySelector('#detailColor').textContent = petData.color || 'No especificado';
-	document.querySelector('#detailStatus').textContent = statusDict[petData.petStatus] || 'No especificado';
 	
 	let statusButtonText="";
 	switch(petData.petStatus){

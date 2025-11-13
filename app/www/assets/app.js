@@ -92,6 +92,14 @@ function getDateOrTimeString(timestamp){
 	}
 }
 
+function setIcon(element, icon){
+	element.dataset.icon = icon;
+	updateIcon(element)
+}
+function updateIcon(icon){
+	icon.style.backgroundImage="url(\"icons/"+icon.dataset.icon+".svg\")";
+}
+
 async function processContents(self){
 	let frame = self;
 	if(!self) frame = document.body;
@@ -118,7 +126,7 @@ async function processContents(self){
 	
 	// Fija la imagen de fondo para los elementos con [data-icon]
 	for(let icon of frame.querySelectorAll("[data-icon]")){
-		icon.style.backgroundImage="url(\"icons/"+icon.dataset.icon+".svg\")";
+		updateIcon(icon);
 	}
 	
 	// Maneja los elementos de grilla:
