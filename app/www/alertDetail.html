@@ -1,40 +1,11 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="css/alertDetail.css">
     <script src="assets/app.js"></script>
     <script src="assets/connect.js"></script>
-    <script src="assets/urlParams.js"></script>
     <script src="assets/navigation.js"></script>
-    <style>
-        #petImageDisplay{width:12rem;height:12rem;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:1rem auto}
-        .petSummary{margin-top:0.5rem;color:#555}
-        .detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0}
-        .detailItem{padding:0.5rem;background:#f8f9fa;border-radius:0.5rem}
-        .detailLabel{font-weight:bold;color:#666;font-size:0.9rem}
-        .detailValue{color:#333;margin-top:0.25rem}
-    </style>
-	<script>
-		async function beforeLoad(){
-			petData = await request(SERVER_URL+"getPet.php",{account_id:userData.account_id,pet_id:URLparams.id})
-			
-			/*
-			// Actualizar imagen
-			const petImage = document.querySelector('#petImageDisplay');
-			if(pet.images && pet.images[0]){
-				petImage.style.backgroundImage = `url(media/${pet.images[0]})`;
-			}
-			*/
-			
-			// Actualizar información básica
-			const sexSymbol = petData.sex?.toLowerCase().startsWith('h') ? '♀️' : '♂️';
-			document.querySelector('#petName').textContent = `${petData.name} ${sexSymbol}`;
-			
-			// Actualizar detalles
-			document.querySelector('#detailSpecies').textContent = petData.species || 'No especificado';
-			document.querySelector('#detailBreed').textContent = petData.breed || 'No especificado';
-			document.querySelector('#detailColor').textContent = petData.color || 'No especificado';
-		}
-	</script>
+    <script src="js/alertDetail.js"></script>
 </head>
 <body class="column">
     <div class="row header">
@@ -72,6 +43,6 @@
     </div>
 	
 	<div class="row compact footer">
-		<button id="reportLossBtn" class="bg-primary">Confirmar Reporte</button>
+		<button id="reportFindingBtn" class="bg-primary" onclick="reportFinding()">Confirmar Reporte</button>
 	</div>
 </body>

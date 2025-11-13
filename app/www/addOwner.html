@@ -1,21 +1,10 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="css/addOwner.css">
     <script src="assets/app.js"></script>
     <script src="assets/urlParams.js"></script>
-    <style></style>
-    <script>
-        window.addEventListener('load', ()=>{
-            const btn = document.querySelector('#saveOwnerBtn');
-            if(btn){
-                btn.addEventListener('click', (e)=>{
-                    e.preventDefault();
-                    const id = (params && params.id) ? ('?id='+encodeURIComponent(params.id)) : '';
-                    window.location.href = 'addOwnerSuccess.html'+id;
-                });
-            }
-        });
-    </script>
+    <script src="js/addOwner.js"></script>
 </head>
 <body class="column">
     <div class="row header">

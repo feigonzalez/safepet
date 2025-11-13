@@ -1,0 +1,5 @@
+.badge{padding:0.2rem 0.5rem;background:#eee;margin:0 0.1rem;border-radius:1rem}
+.card span{white-space:break-spaces}
+.petImageDisplay{height:4rem;width:4rem;background-size:cover;
+	background-position:50%;border-radius:50%;border:solid 1px #888}
+.cardChevron{height:1.25rem;width:1.25rem}

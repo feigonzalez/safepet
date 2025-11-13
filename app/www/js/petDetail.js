@@ -7,12 +7,12 @@ const petDetailMenu = {
 		showAlertModal("QR de tu mascota",
 			`<div class="column">
 				<div class="row">
-					<a id="qrDownload" download href="${getQR(SERVER_URL+"?petID="+URLparams["id"])}">
-						<img id="qrCode" class="loading" src="${getQR(SERVER_URL+"?petID="+URLparams["id"])}">
+					<a id="qrDownload" download>
+						<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(SERVER_URL+"?petID="+URLparams["id"])}">
 					</a>
 				</div>
 				<div class="row"><p>Cuando alguien escanee este código, se te alertará dónde ocurrió.</p></div>
-				<div class="row"><button class="bg-primary">Descargar Código</button></div>
+				<div class="row"><button class="bg-primary" onclick="downloadQR()">Descargar Código</button></div>
 			</div>`
 		);
 	},
@@ -23,8 +23,23 @@ const petDetailMenu = {
 	"Eliminar Mascota":()=>{console.log("eliminar mascota")}
 }
 
+async function downloadQR(){
+	let dataBlob = await fetch(getQR(SERVER_URL+"?petID="+URLparams["id"]))
+		.then(r=>r.ok?r.blob():null);
+	let qrFile = new FileReader();
+		qrFile.readAsDataURL(dataBlob);
+	qrFile.addEventListener("loadend",()=>{
+		let petQRURL = qrFile.result;
+		dLink = document.querySelector("#qrDownload");
+		dLink.setAttribute("href",petQRURL);
+		dLink.setAttribute("download",petData.name+"_QR.png")
+		dLink.click();
+	})
+}
+
 async function beforeLoad(){
 	petData = await request(SERVER_URL+"getPet.php",{account_id:userData.account_id,pet_id:URLparams.id})
+	
 	
 	/*
 	// Actualizar imagen

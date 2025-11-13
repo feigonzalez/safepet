@@ -35,7 +35,8 @@ function handleQR(qrContent, html5QrCode) {
 
   html5QrCode.stop().then(() => {
     if (qrContent.includes("safepet") || qrContent.includes("pet-id")) {
-      window.location.href = `alertDetail.html?qr=${encodeURIComponent(qrContent)}`;
+      //window.location.href = `alertDetail.html?qr=${encodeURIComponent(qrContent)}`;
+	  console.log(encoreURIComponent(qrContent))
     } else {
       alert(`Código QR detectado: ${qrContent}`);
       //window.location.href = "reportManual.html";

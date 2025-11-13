@@ -1,26 +1,11 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/style.css">
-	<link rel="stylesheet" href="assets/custom/petList.css">
+	<link rel="stylesheet" href="css/petList.css">
 	<script src="assets/app.js"></script>
 	<script src="assets/connect.js"></script>
 	<script src="assets/urlParams.js"></script>
-	<script>
-		async function beforeLoad(){
-			document.querySelector("#accountName").textContent=userData.firstName;
-			//document.querySelector("#profileImage").dataset.imgsrc=accountData["image"];
-		
-			petData = await request(SERVER_URL+"getPetList.php",{account_id:userData.account_id});
-			if(petData.status=="MISS"){
-				document.querySelector("#petList .card").innerHTML="No tienes ninguna mascota registrada";
-			} else {
-				fillIterable(document.querySelector("[foreach=pets]"),petData)
-				for(let bI of document.querySelectorAll(".breedIndicator")){
-					if(bI.textContent.trim()=="()") bI.remove();
-				}
-			}
-		}
-	</script>
+	<script src="js/petList.js"></script>
 </head>
 <body class="column">
 
@@ -45,6 +30,7 @@
 					<div class="column ph-1 size-full-width ta-left">
 					<div class="cardTitle row ta-left bold">
 						<span content="${name}"></span>
+						<span class="icon" data-icon="${sexIndicator}"></span>
 					</div>
 						<div class="row ta-left metaText">
 							<span content="${species} "></span>
