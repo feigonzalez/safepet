@@ -30,3 +30,7 @@
 
 .dateHeader {text-align: center;color: #666;font-size: 0.8rem;margin: 1rem 0 0.5rem 0;
 	padding: 0.25rem 0.5rem;background-color: rgba(255, 255, 255, 0.8);border-radius: 12px;align-self: center;}
+	
+.message.init{width:100%;align-self:center;text-align:center;font-size:0.75rem;background:var(--color-default);color:var(--text-color)}
+	.message.init.sent:before{content:"Has iniciado la conversación"}
+	.message.init.received:before{content:"Se han puesto en contacto contigo"}

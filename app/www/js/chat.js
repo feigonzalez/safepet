@@ -1,99 +1,42 @@
 let currentChatId = '';
 let currentContactName = '';
 let messages = [];
+let lastTimestamp = 0;
+let refreshInterval = 0;
 
 async function beforeLoad(){
+	getNewerMessages();
+	refreshInterval = setInterval(getNewerMessages,15000);
+}
+
+async function getNewerMessages(){
 	let account_id = userData.account_id;		//TODO: Debe ser la id del usuario logeado.
-	messages = await request(SERVER_URL+`getChat.php`,{account_id:account_id,pair_code:getUrlParams()["id"]})
-	fillIterable(document.querySelector(`[foreach="messages"]`),messages)
-}
-
-/*
-// Datos de ejemplo para diferentes chats
-const chatData = {
-	'dueno-dargon': {
-		name: 'Dueño de Dargón',
-		avatar: 'media/dargon.jpg',
-		status: 'En línea',
-		messages: [
-			{
-				id: 1,
-				text: 'Hola, vi a tu mascota cerca del parque central',
-				sent: false,
-				time: '14:30',
-				status: 'read'
-			},
-			...
-		]
-	},
-};
-*/
-
-// Inicializar chat
-function initializeChat() {
-	/*
-	const params = getUrlParams();
-	currentChatId = params.chatId || 'dueno-dargon';
-	currentContactName = params.contactName || 'Contacto';
-	
-	const chatInfo = chatData[currentChatId];
-	if (chatInfo) {
-		document.getElementById('contactName').textContent = chatInfo.name;
-		//document.getElementById('contactStatus').textContent = chatInfo.status;
-		document.getElementById('contactAvatar').style.backgroundImage = `url('${chatInfo.avatar}')`;
-		messages = [...chatInfo.messages];
-	}
-	*/
-	//renderMessages();
-}
-
-// Renderizar mensajes
-function renderMessages() {
-	const messagesArea = document.getElementById('messagesArea');
-	const dateHeader = messagesArea.querySelector('.dateHeader');
-	
-	// Limpiar mensajes anteriores pero mantener el header de fecha
-	const existingMessages = messagesArea.querySelectorAll('.message');
-	existingMessages.forEach(msg => msg.remove());
-	
-	messages.forEach(message => {
-		const messageElement = createMessageElement(message);
-		messagesArea.appendChild(messageElement);
-	});
-	
-	// Scroll al final
-	messagesArea.scrollTop = messagesArea.scrollHeight;
-}
-
-// Crear elemento de mensaje
-function createMessageElement(message) {
-	const messageDiv = document.createElement('div');
-	messageDiv.className = `message ${message.sent ? 'sent' : 'received'}`;
-	
-	let statusHtml = '';
-	if (message.sent) {
-		let statusIcon = '';
-		switch (message.status) {
-			case 'sent':
-				statusIcon = '✓';
-				break;
-			case 'delivered':
-				statusIcon = '✓✓';
-				break;
-			case 'read':
-				statusIcon = '✓✓';
-				break;
+	let messagesContainer = document.querySelector("#messagesArea");
+	let newMessages = await request(SERVER_URL+`getChat.php`,{account_id:account_id, pair_code:getUrlParams()["id"], timestamp:lastTimestamp})
+	if(newMessages.status=="GOOD"){
+		for(let message of newMessages.messages){
+			let newMessage = newMessageElement(message)
+			messagesContainer.appendChild(newMessage);
+			messages.push(message)
 		}
-		statusHtml = `<div class="messageStatus">${statusIcon}</div>`;
+		lastTimestamp = messages[messages.length-1].timestamp;
 	}
-	
-	messageDiv.innerHTML = `
-		<div>${message.text}</div>
-		<div class="messageTime">${message.time}</div>
-		${statusHtml}
-	`;
-	
-	return messageDiv;
+}
+
+function newMessageElement(data){
+	console.log("send:",data)
+	let msg = document.createElement("div");
+		msg.classList.add("message");
+		msg.classList.add(data.type)
+		msg.classList.add(data.inbound?"received":"sent")
+	let content = document.createElement("div")
+		msg.appendChild(content)
+		content.textContent=data.content
+	let messageTime = document.createElement("div")
+		msg.appendChild(messageTime)
+		messageTime.classList.add("messageTime")
+		messageTime.textContent=getDateOrTimeString(data.timestamp)
+	return msg;
 }
 
 // Enviar mensaje
@@ -114,11 +57,9 @@ async function sendMessage() {
 		input.value = '';
 		updateSendButton();
 		sendRequest = await request(SERVER_URL+`postChat.php`,
-			{...{account_id:account_id,pair_code:getUrlParams()["id"]},
-			 ...newMessage})
-		if(sendRequest.status=="GOOD"){	//Mostrar mensaje sólo si se pudo enviar correctamente
-			document.getElementById("messagesArea").appendChild(newMessageElement(newMessage))
-		}
+			{account_id:userData.account_id,pair_code:getUrlParams()["id"],...newMessage})
+		// Solicita los mensajes nuevos. Si el mensaje se envió correctamente, se debería mostrar como el último de la conversación
+		getNewerMessages();
 	}
 }
 
@@ -137,7 +78,6 @@ function autoResize(textarea) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-	initializeChat();
 
 	const messageInput = document.getElementById('messageInput');
 	const sendButton = document.getElementById('sendButton');
@@ -151,18 +91,3 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Botón enviar
 	sendButton.addEventListener('click', sendMessage);
 });
-
-function newMessageElement(data){
-	console.log("send:",data)
-	let msg = document.createElement("div");
-		msg.classList.add("message");
-		msg.classList.add(data.inbound?"received":"sent")
-	let content = document.createElement("div")
-		msg.appendChild(content)
-		content.textContent=data.content
-	let messageTime = document.createElement("div")
-		msg.appendChild(messageTime)
-		messageTime.classList.add("messageTime")
-		messageTime.textContent=getDateOrTimeString(data.timestamp)
-	return msg;
-}
