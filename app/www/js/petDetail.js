@@ -19,7 +19,25 @@ const petDetailMenu = {
 	"Editar Datos":()=>{
 		navigateWithParams("updatePet.html",{id:URLparams["id"]})
 	},
-	"Añadir Dueño":()=>{console.log("añadir dueño")},
+	"Añadir Dueño":()=>{
+		showAlertModal("Añadir Dueño",
+			`<div class="column">
+				<div class="row">Para añadir a otra persona como dueña de esta mascota, debe:</div>
+				<div class="row"><ol class="column">
+					<li>Abrir el menú de mascotas en su aplicación</li>
+					<li>Presionar "Añadir Mascota"</li>
+					<li>Presionar <span class="icon" data-icon="qr-code"></span> en la esquina superior derecha.</li>
+					<li>Escanear este código QR:</li>
+				</ol></div>
+				<div class="row">
+					<a id="qrDownload" download>
+						<img id="qrCode" class="loading" src="${getQR("registerowner{account_id:"+userData.account_id+";pet_id:"+URLparams["id"]+"}")}">
+					</a>
+				</div>
+			</div>`
+		);
+		
+	},
 	"Eliminar Mascota":()=>{console.log("eliminar mascota")}
 }
 

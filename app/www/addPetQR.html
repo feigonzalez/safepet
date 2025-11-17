@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Escanear código QR - SafePet</title>
+		<link rel="stylesheet" href="assets/style.css">
+		<link rel="stylesheet" href="css/addPetQR.css">
+		<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+		<script src="assets/app.js"></script>
+		<script src="assets/connect.js"></script>
+		<script src="assets/navigation.js"></script>
+		<script src="js/addPetQR.js" defer></script>
+	</head>
+	<body class="column">
+		<div class="row header">
+			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
+			<h1>Añadir mascota</h1>
+		</div>
+		<div class="row">
+			<div class="column center-content">
+				<div class="scan-frame">
+					<div id="reader"></div>
+					<div class="scan-line"></div>
+				</div>
+				<p id="statusText" class="scan-status">Apunta la cámara al código QR</p>
+			</div>
+		</div>
+	</body>
+</html>

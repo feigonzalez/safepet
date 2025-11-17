@@ -112,7 +112,7 @@ button:active, .button:active, input[type=button]:active, input[type=submit]:act
 button.icon, a.button.icon, input[type=button].icon, input[type=submit].icon{
 	height:2rem;width:2rem;margin:0.5rem;
 }
-span.icon{height:1.5em;width:1.5em;}
+span.icon{height:1.5em;width:1.5em;vertical-align:middle}
 .icon.green-text{filter:invert(1) brightness(0.6) sepia() hue-rotate(60deg) saturate(2)}
 
 input[type=file]{display:none}
@@ -271,3 +271,10 @@ form{
 }
 p.error{border:solid 1px var(--color-error);padding:1rem;border-radius:1rem;color:var(--color-error)}
 
+
+@keyframes spinThrobber{
+	0%{transform:rotate(0deg)}
+	100%{transfor:rotate(180deg)}
+}
+span.throbber{height:3rem;width:3rem;filter:invert(1) brightness(0.75);transform:rotate(360deg);
+	animation: spinThrobber 1.5s linear infinite}}

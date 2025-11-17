@@ -243,6 +243,7 @@ function popUpMenu(options){
 
 // Función para mostrar opciones de foto
 function showPhotoOptions() {
+	closeModal();
     return new Promise((resolve, reject) => {
         const modal = document.createElement('div');
         modal.className = 'modalBackdrop';
@@ -302,6 +303,7 @@ function showPhotoOptions() {
 
 // Función para mostrar modal de verificación
 function showVerificationModal(title, message, confirmText = 'Confirmar', cancelText = 'Cancelar') {
+	closeModal();
     return new Promise((resolve) => {
         const modal = document.createElement('div');
         modal.className = 'modalBackdrop';
@@ -333,27 +335,49 @@ function showVerificationModal(title, message, confirmText = 'Confirmar', cancel
         });
     });
 }
-
-// Función para mostrar modal de verificación, versión síncrona
-function showAlertModal(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
+// Función para mostrar modal de espera. 
+async function showAwaitModal(title, message, awaiting = async ()=>{}, onResolve = ()=>{}) {
+	closeModal();
 	const modal = document.createElement('div');
 	modal.className = 'modalBackdrop';
 	modal.innerHTML = `
 		<div class="modalBody">
 			<div class="modalContent">
 				<div class="row ta-center"><h3>${title}</h3></div>
-				<div class="row ta-center"><p>${message}</p></div>
+				<div class="row ta-center">${message}</div>
+				<div class="row"><span class="icon throbber" data-icon="progress-activity"></div>
+			</div>
+		</div>
+	`;
+	processContents(modal)
+	document.body.appendChild(modal);
+	await awaiting().then(onResolve)
+}
+
+// Función para mostrar modal de verificación, versión síncrona
+function showAlertModal(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
+	closeModal();
+	const modal = document.createElement('div');
+	modal.className = 'modalBackdrop';
+	modal.innerHTML = `
+		<div class="modalBody">
+			<div class="modalContent">
+				<div class="row ta-center"><h3>${title}</h3></div>
+				<div class="row ta-center">${message}</div>
 				<div class="row">
-					<button class="button column bg-primary" onclick="closeModal()">Entendido</button>
+					<button id="confirmAlertBtn" class="button column bg-primary" onclick="closeModal()">Entendido</button>
 				</div>
 			</div>
 		</div>
 	`;
+	processContents(modal)
 	document.body.appendChild(modal);
+	modal.querySelector("#confirmAlertBtn").addEventListener("click",onConfirm);
 }
 
 // Función para mostrar modal de confirmación. Parecido al de verificación, pero usa funciones de callback en vez de promesas
 function showConfirmModal(title, message, onConfirm = ()=>{}, onCancel = ()=>{}) {
+	closeModal();
 	const modal = document.createElement('div');
 	modal.className = 'modalBackdrop';
 	modal.innerHTML = `
