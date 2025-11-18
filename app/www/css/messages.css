@@ -40,7 +40,9 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	width:100%;
 }
+.lastMessage .icon{ width:1rem;height:1rem;vertical-align:text-top;opacity:75%;}
 .timestamp {
 	color: #999;
 	font-size: 0.8rem;

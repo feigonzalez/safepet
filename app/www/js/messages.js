@@ -13,6 +13,13 @@ async function beforeLoad(){
 			messages=response.messages;
 			for(let m of messages){
 				m.recency = getRecency(m.timestamp);
+				switch(m.type){
+					case "geo": m.content="<span class='icon' data-icon='location'></span> Ubicación"; break;
+					case "init":
+					case "text":
+					default:
+						break;
+				}
 			}
 			fillIterable(document.querySelector("[foreach=messages]"),messages)
 			

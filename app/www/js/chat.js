@@ -31,7 +31,27 @@ function newMessageElement(data){
 		msg.classList.add(data.inbound?"received":"sent")
 	let content = document.createElement("div")
 		msg.appendChild(content)
-		content.textContent=data.content
+	switch(data.type){
+		case "init":
+			break;
+		case "geo":
+			content.innerHTML=`<span class="icon" data-icon="location"></span> <small>Toca para ver en el mapa</small>`
+			content.addEventListener("click",()=>{
+				const loc = data.content.split(";");
+				console.log(loc)
+				navigateTo(`index.html?marker=report;${loc[0]};${loc[1]}`);
+			})
+			break;
+		case "text":
+			content.textContent=data.content
+			break;
+		default:
+			console.log("unknown message type:",data.type)
+			msg.appendChild(content)
+			content.textContent=data.content
+			break;
+	}
+	processContents(content)
 	let messageTime = document.createElement("div")
 		msg.appendChild(messageTime)
 		messageTime.classList.add("messageTime")

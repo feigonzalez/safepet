@@ -75,7 +75,9 @@ function initMap() {
                 const userLat = position.coords.latitude;
                 const userLng = position.coords.longitude;
                 userLocation = { lat: userLat, lng: userLng };
-                map.setView([userLat, userLng], 15);
+				// Si se abri®Æ index con un parametro URL "marker", se centra en el marker en vez del usuario
+                if(!("marker" in URLparams))
+					map.setView([userLat, userLng], 15);
 
                 // A√±adir marcador del usuario
                 if (userMarker) map.removeLayer(userMarker);
@@ -88,7 +90,7 @@ function initMap() {
                         iconAnchor: [13, 13]
                     })
                 }).addTo(map);
-
+/*
                 getAddressFromCoordinates(userLat, userLng, address => {
                     userMarker.bindPopup(`
                         <div class="popup-content">
@@ -96,7 +98,7 @@ function initMap() {
                             <div class="popup-description">${address}</div>
                         </div>
                     `).openPopup();
-                });
+                });*/
             },
             function (error) {
                 console.warn('Error obteniendo geolocalizaci√≥n:', error.message);
@@ -104,6 +106,20 @@ function initMap() {
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
         );
     }
+	
+	if("marker" in URLparams){
+		let markData = URLparams["marker"].split(";")
+		console.log(markData)
+		let marker = L.marker([parseFloat(markData[1]),parseFloat(markData[2])], {
+			icon: L.divIcon({
+				className: 'marker-'+markData[0],
+				html: '<div class="marker-content"></div>',
+				iconSize: [26, 26],
+				iconAnchor: [13, 13]
+			})
+		}).addTo(map);
+		map.setView([parseFloat(markData[1]), parseFloat(markData[2])], 15);
+	}
 }
 
 // ======================

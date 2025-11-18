@@ -8,7 +8,7 @@ const petDetailMenu = {
 			`<div class="column">
 				<div class="row">
 					<a id="qrDownload" download>
-						<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(SERVER_URL+"?petID="+URLparams["id"])}">
+						<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(SERVER_URL+"report.php?petID="+URLparams["id"])}">
 					</a>
 				</div>
 				<div class="row"><p>Cuando alguien escanee este código, se te alertará dónde ocurrió.</p></div>
@@ -38,7 +38,7 @@ const petDetailMenu = {
 		);
 		
 	},
-	"Eliminar Mascota":()=>{console.log("eliminar mascota")}
+	"Eliminar Mascota":()=>{console.log("eliminar mascota")}	// TODO
 }
 
 async function downloadQR(){

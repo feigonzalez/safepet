@@ -8,6 +8,8 @@
 		<link rel="stylesheet" href="css/reportQR.css">
 		<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 		<script src="assets/app.js"></script>
+		<script src="assets/navigation.js"></script>
+		<script src="assets/connect.js"></script>
 		<script src="js/reportQR.js" defer></script>
 	</head>
 
@@ -18,21 +20,13 @@
 		</div>
 
 		<div class="row">
-			<div class="column list center-content">
-			
+			<div class="column">
 				<div class="scan-frame">
 					<div id="reader"></div>
 					<div class="scan-line"></div>
 				</div>
-				
-				<p id="statusText" class="scan-status">Apunta la cámara al código QR</p>
-				
-				<div class="row compact">
-					<div class="column ph-1">
-						<a class="button bg-primary" href="reportManual.html"> Realizar reporte manual</a>
-					</div>
-				</div>
-
+				<p id="statusText" class="scan-status">Apunta la cámara al código QR.</p>
+				<p class="ph-2 ta-center">Se le avisará al dueño que encontraste su mascota, y podrá ponerse en contacto contigo mediante la aplicación.</p>
 			</div>
 		</div>
 	</body>

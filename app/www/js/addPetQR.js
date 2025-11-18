@@ -1,5 +1,3 @@
-var scanned;
-
 document.addEventListener("DOMContentLoaded", async function() {
 	const reader = document.getElementById("reader");
 	const statusText = document.getElementById("statusText");
@@ -40,31 +38,32 @@ function handleQR(qrContent, html5QrCode) {
 	if(frame.classList.contains("detected")) return;
 	frame.classList.add("detected")
 	
-	let scanned = qrContent;
 	let qrParams = qrContent.match(/^registerowner{account_id:(\d+);pet_id:(\d+)}$/);
 	if(qrParams.length == 3){
 		console.log(`Register user [${qrParams[1]}] as owner of pet [${qrParams[2]}]`)
-	}
-	showAwaitModal("Añadiendo dueño","",
-		async()=>{
-			let req = await request(SERVER_URL+"addOwner.php",{account_id:userData.account_id,owner_id:qrParams[1],pet_id:qrParams[2]})
-			return req;
-		},
-		(req)=>{
-			switch(req.status){
-				case "GOOD":
-					showAlertModal("Dueño registrado",`Te has registado como dueño de esta mascota`, ()=>{goBack();goBack()});
-					break;
-				case "MISS":
-					showAlertModal("Mascota ya registrada",`Ya tenías a esta mascota registrada`, ()=>{goBack();goBack()});
-					break;
-				case "FAIL":
-				default:
-					showAlertModal("Hubo un error","No pudimos registrarte como dueño de esta mascota", ()=>{frame.classList.remove("detected");});
-					break;
+		showAwaitModal("Añadiendo dueño","",
+			async()=>{
+				let req = await request(SERVER_URL+"addOwner.php",{account_id:userData.account_id,owner_id:qrParams[1],pet_id:qrParams[2]})
+				return req;
+			},
+			(req)=>{
+				switch(req.status){
+					case "GOOD":
+						showAlertModal("Dueño registrado",`Te has registado como dueño de esta mascota`, ()=>{goBack();goBack()});
+						break;
+					case "MISS":
+						showAlertModal("Mascota ya registrada",`Ya tenías a esta mascota registrada`, ()=>{goBack();goBack()});
+						break;
+					case "FAIL":
+					default:
+						showAlertModal("Hubo un error","No pudimos registrarte como dueño de esta mascota", ()=>{frame.classList.remove("detected");});
+						break;
+				}
 			}
-		}
-	)
+		)
+	} else {
+		showAlertModal("Código QR inválido",`El código QR escaneado no es para registrar una mascota nueva.`, ()=>{frame.classList.remove("detected");});
+	}
 }
 
 function showCameraError() {
