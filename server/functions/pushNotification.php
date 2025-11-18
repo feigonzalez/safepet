@@ -1,5 +1,5 @@
 <?php
-	require "sql.php";
+	require_once "sql.php";
 	function pushNotification($account_id, $title, $description, $type){
 		global $sqlConn;
 		$timestamp = strtotime(date("Y-m-d H:i:s"));

@@ -1,5 +1,5 @@
 <?php
-	require "sql.php";
+	require_once "sql.php";
 	
 	function postChat($pairCode, $accountId, $type, $content, $timestamp){
 		global $sqlConn;
