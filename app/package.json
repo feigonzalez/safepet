@@ -5,7 +5,8 @@
     "@capacitor/app": "^7.1.0",
     "@capacitor/camera": "^7.0.2",
     "@capacitor/core": "^7.4.3",
-    "@capacitor/device": "^7.0.2"
+    "@capacitor/device": "^7.0.2",
+    "@capacitor/local-notifications": "^7.0.3"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.3",
