@@ -3,6 +3,10 @@ const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
 	// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
 var userData={};
 window.addEventListener("load",()=>{
+	locate((pos)=>{
+		localStorage.setItem("latitude",pos.coords.latitude)
+		localStorage.setItem("longitude",pos.coords.longitude)
+	})
 	try{ userData = JSON.parse(localStorage.getItem("userData")) 
 		userData.firstName = userData.name.split(" ")[0]}
 	catch(e) {userData = {}}
@@ -343,7 +347,7 @@ async function showAwaitModal(title, message, awaiting = async ()=>{}, onResolve
 	modal.innerHTML = `
 		<div class="modalBody">
 			<div class="modalContent">
-				<div class="row ta-center"><h3>${title}</h3></div>
+				<div class="row ta-center"><h3 id="modalTitle">${title}</h3></div>
 				<div class="row ta-center">${message}</div>
 				<div class="row"><span class="icon throbber" data-icon="progress-activity"></div>
 			</div>
@@ -491,6 +495,8 @@ function locate(callbackSuccess, callbackError){
 	}
 	navigator.geolocation.getCurrentPosition(
 		(pos)=>{	//On Success
+			localStorage.setItem("latitude",pos.coords.latitude)
+			localStorage.setItem("longitude",pos.coords.longitude)
 			callbackSuccess(pos);
 		},
 		(e)=>{	//On Error

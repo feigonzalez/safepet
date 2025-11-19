@@ -3,12 +3,14 @@
 	header('Content-type: application/json');
 	header('Access-Control-Allow-Origin: *');
 	$response=array();
+	/*
     if(!isset($_POST["account_id"])){
         $response["status"]="FAIL";
         $response["message"]="There was no account_id to validate pet ownership.";
         echo json_encode($response);
         return;
     }
+	*/
     if(!isset($_POST["pet_id"])){
         $response["status"]="FAIL";
         $response["message"]="There was no pet_id to fetch data for.";

@@ -75,6 +75,8 @@ function initMap() {
                 const userLat = position.coords.latitude;
                 const userLng = position.coords.longitude;
                 userLocation = { lat: userLat, lng: userLng };
+				localStorage.setItem("latitude":userLat)
+				localStorage.setItem("longitude":userLng)
 				// Si se abri¨® index con un parametro URL "marker", se centra en el marker en vez del usuario
                 if(!("marker" in URLparams))
 					map.setView([userLat, userLng], 15);
