@@ -75,9 +75,9 @@ function initMap() {
                 const userLat = position.coords.latitude;
                 const userLng = position.coords.longitude;
                 userLocation = { lat: userLat, lng: userLng };
-				localStorage.setItem("latitude":userLat)
-				localStorage.setItem("longitude":userLng)
-				// Si se abri¨® index con un parametro URL "marker", se centra en el marker en vez del usuario
+				localStorage.setItem("latitude",userLat)
+				localStorage.setItem("longitude",userLng)
+				// Si se abriï¿½ï¿½ index con un parametro URL "marker", se centra en el marker en vez del usuario
                 if(!("marker" in URLparams))
 					map.setView([userLat, userLng], 15);
 
@@ -254,13 +254,13 @@ function addRealSheltersAndServices() {
         shelterMarkers.push(marker);
     });
 
-    console.log(`âœ?Refugios y servicios cargados: ${places.length}`);
+    console.log(`ï¿½?Refugios y servicios cargados: ${places.length}`);
 }
 // FUNCIONES DE INTERFAZ
 
 function centerOnUser() {
     if (!map) {
-        alert('El mapa no est¨¢ listo. Espera un momento e intenta de nuevo.');
+        alert('El mapa no estï¿½ï¿½ listo. Espera un momento e intenta de nuevo.');
         return;
     }
     if (userLocation) {

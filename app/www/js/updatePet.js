@@ -1,92 +1,75 @@
 async function beforeLoad() {
-    const pet = JSON.parse(localStorage.getItem("selectedPet"));
+    const stored = JSON.parse(localStorage.getItem("selectedPet"));
 
-    if (!pet) {
-        showAlertModal("Error", "No se pudo cargar la mascota.");
+    if (!stored) {
+        showAlertModal("Error", "No se encontró la mascota seleccionada.");
         return;
     }
 
-    // Llenar campos
-    document.getElementById("update_petName").value = pet.name || "";
-    document.getElementById("update_petSpecies").value = pet.species || "";
-    document.getElementById("update_petBreed").value = pet.breed || "";
-    document.getElementById("update_petColor").value = pet.color || "";
-    document.getElementById("update_petSex").value = pet.sex || "";
+    // === OBTENER DATOS REALES DESDE EL SERVIDOR ===
+    const formData = new FormData();
+    formData.append("pet_id", stored.pet_id);
 
-    // Foto
-    const img = document.getElementById("update_petImageDisplay");
-    if (pet.photo_url) {
-        img.src = pet.photo_url;
-        img.style.display = "block";
-        document.getElementById("update_photoPlaceholder").style.display = "none";
+    const response = await fetch(SERVER + "getPet.php", {
+        method: "POST",
+        body: formData
+    });
+
+    const pet = await response.json();
+
+    if (pet.status !== "GOOD") {
+        showAlertModal("Error", "No se pudieron obtener los datos de la mascota.");
+        return;
     }
-}
 
-function previewPetImage(event) {
-    const file = event.target.files[0];
-    const display = document.getElementById("update_petImageDisplay");
-    const placeholder = document.getElementById("update_photoPlaceholder");
+    // === CARGAR DATOS EN EL FORMULARIO ===
+    document.getElementById("update_petName").value = pet.name;
+    document.getElementById("update_petSpecies").value = pet.species;
+    document.getElementById("update_petBreed").value = pet.breed;
+    document.getElementById("update_petColor").value = pet.color;
+    document.getElementById("update_petSex").value = pet.sex;
 
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            display.src = e.target.result;
-            display.style.display = "block";
-            placeholder.style.display = "none";
-        };
-        reader.readAsDataURL(file);
-    }
+    // Guardar datos actualizados en localStorage
+    localStorage.setItem("selectedPet", JSON.stringify(pet));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const form = document.getElementById("updatePetForm");
+    document.getElementById("updatePetForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const validationRules = {
-        update_petName: ValidationConfig.name,
-        update_petBreed: ValidationConfig.name,
-        update_petColor: ValidationConfig.name
-    };
-
-    ValidationUtils.setupRealTimeValidation(form, validationRules);
-
-    form.addEventListener("submit", ev => {
-        ev.preventDefault();
-
-        const validation = ValidationUtils.validateForm(form, validationRules);
-        if (!validation.isValid) {
-            ValidationUtils.showErrorMessage("Corrige los errores en el formulario.");
+        const pet = JSON.parse(localStorage.getItem("selectedPet"));
+        if (!pet) {
+            showAlertModal("Error", "No se pudo obtener la mascota.");
             return;
         }
 
-        const pet = JSON.parse(localStorage.getItem("selectedPet"));
-        const payload = {
-            pet_id: pet.id,
-            name: document.getElementById("update_petName").value,
-            breed: document.getElementById("update_petBreed").value,
-            color: document.getElementById("update_petColor").value
-        };
+        const formData = new FormData();
+        formData.append("pet_id", pet.pet_id);
+        formData.append("petName", document.getElementById("update_petName").value);
+        formData.append("petBreed", document.getElementById("update_petBreed").value);
+        formData.append("petColor", document.getElementById("update_petColor").value);
 
-        showConfirmModal(
-            "Actualizar Mascota",
-            "¿Deseas guardar los cambios?",
-            async () => {
+        fetch(SERVER + "updatePet.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(payload => {
 
-                let response = await request(SERVER_URL + "updatePet.php", payload);
+            if (payload.status === "GOOD") {
+                showAlertModal("Éxito", "Mascota actualizada.");
 
-                if (response.status === "GOOD") {
-                    showAlertModal("Mascota Actualizada", "Los datos fueron guardados correctamente.");
+                // Actualizar localStorage
+                pet.name = payload.name;
+                pet.breed = payload.breed;
+                pet.color = payload.color;
+                localStorage.setItem("selectedPet", JSON.stringify(pet));
 
-                    // Actualizar localStorage
-                    pet.name = payload.name;
-                    pet.breed = payload.breed;
-                    pet.color = payload.color;
-                    localStorage.setItem("selectedPet", JSON.stringify(pet));
-                } else {
-                    showAlertModal("Error", "No se pudo actualizar la mascota.");
-                }
+            } else {
+                showAlertModal("Error", "No se pudo actualizar la mascota.");
             }
-        );
+        });
     });
 
 });
