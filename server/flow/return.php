@@ -1,5 +1,5 @@
 <?php
-echo "<h2>Pago verificado. Actualizando suscripción...</h2>";
+echo "<h2>Pago verificado, volviendo a la app...</h2>";
 
 echo "<script>
 setTimeout(function(){

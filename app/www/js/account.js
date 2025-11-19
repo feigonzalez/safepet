@@ -1,6 +1,6 @@
 const accountMenu = {
 	"Editar Datos":()=>{window.location.href="editProfile.html"},
-	"Gestionar Suscripción":()=>{showAlertModal("Función no Implementada","La aplicación aún no permite gestionar suscripciones")},	// TODO
+	"Gestionar Suscripción":()=>{window.location.href="subscription.html"},
 	"Cerrar Sesión":confirmLogout,
 	"Eliminar Cuenta":()=>{showAlertModal("Función no Implementada","La aplicación aún no permite eliminar una cuenta")},	// TODO
 }

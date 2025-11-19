@@ -1,21 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Editar Mascota</title>
-		<link rel="stylesheet" href="assets/style.css">
-		<link rel="stylesheet" href="updatePet/style.css">
-		<script src="assets/app.js"></script>
-		<script src="assets/validation.js"></script>
-		<script src="assets/navigation.js"></script>
-		<script src="js/updatePet.js"></script>
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Mascota</title>
 
-	<body class="column">
-		<div class="row header">
-			<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-			<h1>Editar Mascota</h1>
-		</div>
-	</body>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="css/register.css">
+
+    <script src="assets/app.js"></script>
+    <script src="assets/connect.js"></script>
+    <script src="assets/validation.js"></script>
+    <script src="assets/navigation.js"></script>
+    <script src="js/updatePet.js"></script>
+</head>
+
+<body class="column">
+
+    <div class="row header">
+        <button id="backButton" class="column compact">
+            <span class="icon" data-icon="chevron-left"></span>
+        </button>
+        <div class="column ta-left"><h1>Editar Mascota</h1></div>
+    </div>
+
+    <div class="row">
+        <form id="updatePetForm" class="column ph-2">
+
+            <!-- FOTO -->
+            <div class="row ph-1">
+                <div class="uber-photo-upload-container" onclick="document.getElementById('update_petImage').click()">
+                    <div class="uber-photo-circle">
+                        <img id="update_petImageDisplay" style="display:none;">
+                        <div class="uber-photo-placeholder" id="update_photoPlaceholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                                    stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="13" r="4"
+                                    stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="file" id="update_petImage" accept="image/*" style="display:none;"
+                    onchange="previewPetImage(event)">
+            </div>
+
+            <!-- NOMBRE -->
+            <div class="row column">
+                <label for="update_petName">Nombre</label>
+                <input type="text" id="update_petName" placeholder="Ingresa el nombre">
+            </div>
+
+            <!-- ESPECIE (bloqueado) -->
+            <div class="row column">
+                <label for="update_petSpecies">Especie</label>
+                <input type="text" id="update_petSpecies" disabled>
+                <span class="metaText">La especie no se puede modificar.</span>
+            </div>
+
+            <!-- RAZA -->
+            <div class="row column">
+                <label for="update_petBreed">Raza</label>
+                <input type="text" id="update_petBreed" placeholder="Ingresa la raza">
+            </div>
+
+            <!-- COLOR -->
+            <div class="row column">
+                <label for="update_petColor">Color</label>
+                <input type="text" id="update_petColor" placeholder="Ingresa el color">
+            </div>
+
+            <!-- SEXO (bloqueado) -->
+            <div class="row column">
+                <label>Sexo</label>
+                <input type="text" id="update_petSex" disabled>
+                <span class="metaText">El sexo no se puede modificar.</span>
+            </div>
+
+            <div class="row center pv-1">
+                <button type="submit" class="button bg-primary rounded submit-btn">
+                    Guardar Cambios
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
 </html>

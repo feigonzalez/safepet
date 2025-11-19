@@ -1,99 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suscripción - SafePet</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes de Suscripción - SafePet</title>
 
-  <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="css/subscription.css">
-  <script src="assets/app.js"></script>
-  <script src="js/suscriptionn.js"></script>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="css/subscription.css">
+
+    <script src="assets/app.js"></script>
+    <script src="assets/connect.js"></script>
+    <script src="assets/validation.js"></script>
+    <script src="assets/navigation.js"></script>
+
+    <style>
+        .modalOverlay {
+            position: fixed;
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            background: rgba(0,0,0,0.45);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 9999;
+        }
+
+        .modalSheet {
+            background: #fff;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 22px 22px 0 0;
+            padding: 1.8rem;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+            animation: slideUp .3s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to   { transform: translateY(0); }
+        }
+
+        .handle {
+            width: 50px;
+            height: 6px;
+            background: #ccc;
+            border-radius: 10px;
+            margin: 0 auto 1rem auto;
+        }
+
+        .chip {
+            background: #f4f4f4;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
 </head>
 
 <body class="column">
 
-  <!-- Header -->
-  <div class="row header">
+<div class="row header">
     <button id="backButton" class="column compact">
-      <span class="icon" data-icon="chevron-left"></span>
+        <span class="icon" data-icon="chevron-left"></span>
     </button>
-    <h1>Suscripción</h1>
-  </div>
+    <div class="column ta-left"><h1>Planes de Suscripción</h1></div>
+</div>
 
-  <!-- Contenido -->
-  <div class="column list ph-1 mv-1">
+<div class="content">
 
-            <!-- PLAN GRATIS -->
-            <div class="planCard">
-            <div class="planTitle">Plan Gratis</div>
-            <div class="planPrice">$0 <span style="font-size: 0.9rem; color: #777;">/mes</span></div>
+    <!-- PLAN GRATIS (SOLO INFORMATIVO) -->
+    <div class="planCard">
+        <div class="planTitle">Plan Gratis 🐾</div>
+        <div class="price">$0 / mes</div>
 
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Registrar 1 mascota
-            </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Acceso básico a alertas
-            </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="x-circle" style="opacity: 0.3;"></span>
-                Sin collar QR
-            </div>
+        <ul class="features">
+            <li>✔ 1 Mascota</li>
+            <li>✖ Código QR</li>
+            <li>✖ Geolocalización</li>
+            <li>✖ Múltiples Dueños</li>
+        </ul>
 
-            <button class="button bg-default" onclick="selectPlan('Gratis')">Usar este plan</button>
-            </div>
+        <div class="row ta-center">
+            <span class="button disabled" style="opacity:0.6; cursor:default;">Plan por defecto</span>
+        </div>
+    </div>
 
-            <!-- PLAN BÁSICO -->
-            <div class="planCard featured">
-            <div class="planTitle">Plan Básico</div>
-            <div class="planPrice">$5.990 <span style="font-size: 0.9rem; color: #777;">/mes</span></div>
+    <!-- PLAN BASICO -->
+    <div class="planCard">
+        <div class="planTitle">Plan Básico ⭐</div>
+        <div class="price">$5.990 / mes</div>
 
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Registrar de 2 a 4 mascotas
-            </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Collar QR incluido
-            </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Soporte por correo
-            </div>
+        <ul class="features">
+            <li>✔ Mascotas ilimitadas</li>
+            <li>✔ Código QR para Mascotas</li>
+            <li>✖ Geolocalización</li>
+            <li>✖ Múltiples Dueños</li>
+        </ul>
 
-            <button class="button bg-primary" onclick="selectPlan('Básico')">Suscribirse Ahora</button>
-            </div>
+        <div class="row ta-center">
+            <a href="#" class="button bg-primary" onclick="selectPlan('basico'); return false;">Suscribirse</a>
+        </div>
+    </div>
 
-            <!-- PLAN PREMIUM -->
-            <div class="planCard">
-            <div class="planTitle">Plan Premium</div>
-            <div class="planPrice">$9.990 <span style="font-size: 0.9rem; color: #777;">/mes</span></div>
+    <!-- PLAN PREMIUM -->
+    <div class="planCard">
+        <div class="planTitle">Plan Premium 💎</div>
+        <div class="price">$9.990 / mes</div>
 
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Mascotas ilimitadas
-            </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Collar QR + GPS y geocerca
-            </div>
-            <div class="planFeature">
-                <span class="icon" data-icon="check-circle" style="filter: hue-rotate(90deg);"></span>
-                Soporte prioritario 24/7
-            </div>
+        <ul class="features">
+            <li>✔ Mascotas ilimitadas</li>
+            <li>✔ Código QR</li>
+            <li>✔ Geolocalización 24/7</li>
+            <li>✔ Múltiples Dueños</li>
+        </ul>
 
-            <button class="button bg-primary" onclick="selectPlan('Premium')">Suscribirse Ahora</button>
-            </div>
+        <div class="row ta-center">
+            <a href="#" class="button bg-primary" onclick="selectPlan('premium'); return false;">Suscribirse</a>
+        </div>
+    </div>
 
-  </div>
+</div>
 
-  <script>
-    function selectPlan(plan) {
-      alert(`Has seleccionado el plan ${plan}. (Funcionalidad de pago próximamente)`);
-      // En el futuro: guardar selección o redirigir a checkout.html
+<!-- MODAL SOLO PARA PLANES DE PAGO -->
+<div id="subscriptionModal" class="modalOverlay" onclick="closeSubscriptionModal()">
+    <div class="modalSheet" onclick="event.stopPropagation()">
+
+        <div class="handle"></div>
+
+        <h2 id="modalPlanName" class="bold ta-center"></h2>
+
+        <div class="row middle ta-center mb-1" style="justify-content:center; margin-top:1rem;">
+            <span class="chip" id="modalPlanPrice"></span>
+            <span class="metaText">Suscripción mensual</span>
+        </div>
+
+        <p class="metaText ta-center mb-2" style="margin-top:1rem;">
+            Verifica el plan seleccionado y continúa con el pago.
+        </p>
+
+        <a href="#" class="button bg-primary"
+           style="margin-top:1.5rem; width:100%;"
+           onclick="processPayment(); return false;">
+            Pagar con Flow
+        </a>
+
+    </div>
+</div>
+
+<script>
+function selectPlan(plan) {
+    localStorage.setItem("selectedPlan", plan);
+
+    const planName = document.getElementById("modalPlanName");
+    const planPrice = document.getElementById("modalPlanPrice");
+
+    if (plan === "basico") {
+        planName.textContent = "Plan Básico";
+        planPrice.textContent = "$5.990 / mes";
     }
-  </script>
+    if (plan === "premium") {
+        planName.textContent = "Plan Premium";
+        planPrice.textContent = "$9.990 / mes";
+    }
+
+    document.getElementById("subscriptionModal").style.display = "flex";
+}
+
+function closeSubscriptionModal() {
+    document.getElementById("subscriptionModal").style.display = "none";
+}
+
+function processPayment() {
+    const plan = localStorage.getItem("selectedPlan");
+    window.location.href = "server/flow/init.php?plan=" + plan;
+}
+</script>
+
 </body>
 </html>
