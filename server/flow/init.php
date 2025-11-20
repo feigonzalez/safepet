@@ -12,8 +12,8 @@ $monto      = $_POST["monto"];
 $nombrePlan = $_POST["nombrePlan"];
 
 // URLS DEL SERVIDOR
-$returnUrl        = "https://dintdt.c1.biz/safepet/server/flow/return.php";
-$confirmationUrl  = "https://dintdt.c1.biz/safepet/server/flow/confirm.php";
+$returnUrl        = "http://dintdt.c1.biz/safepet/flow/return.php";
+$confirmationUrl  = "http://dintdt.c1.biz/safepet/flow/confirm.php";
 
 // Orden única
 $commerceOrder = "SP-" . $userId . "-" . strtoupper($plan) . "-" . time();
