@@ -1,14 +1,17 @@
 async function beforeLoad() {
-    const stored = JSON.parse(localStorage.getItem("selectedPet"));
+    // Intentar obtener la mascota desde localStorage o desde la URL (?id=...)
+    let stored = null;
+    try { stored = JSON.parse(localStorage.getItem("selectedPet")); } catch(e) {}
+    const petId = (stored && stored.pet_id) || (typeof URLparams !== "undefined" ? URLparams.id : (getUrlParams ? getUrlParams().id : null));
 
-    if (!stored || !stored.pet_id) {
+    if (!petId) {
         showAlertModal("Error", "No se encontró la mascota seleccionada.");
         return;
     }
 
     // === OBTENER DATOS REALES DESDE EL SERVIDOR ===
     const formData = new FormData();
-    formData.append("pet_id", stored.pet_id);
+    formData.append("pet_id", petId);
 
     const response = await fetch(SERVER_URL + "getPet.php", {
         method: "POST",
@@ -30,6 +33,7 @@ async function beforeLoad() {
     document.getElementById("update_petColor").value = pet.color;
     document.getElementById("update_petSex").value = pet.sex;
 
+    // Persistir para el submit
     localStorage.setItem("selectedPet", JSON.stringify(pet));
 }
 
