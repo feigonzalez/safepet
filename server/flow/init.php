@@ -12,8 +12,8 @@ $monto      = $_POST["monto"];
 $nombrePlan = $_POST["nombrePlan"];
 
 // URLS DEL SERVIDOR
-$returnUrl        = "https://dintdt.c1.biz/safepet/server/flow/return.php";
-$confirmationUrl  = "https://dintdt.c1.biz/safepet/server/flow/confirm.php";
+$returnUrl        = "http://dintdt.c1.biz/safepet/flow/return.php";
+$confirmationUrl  = "http://dintdt.c1.biz/safepet/flow/confirm.php";
 
 // Orden única
 $commerceOrder = "SP-" . $userId . "-" . strtoupper($plan) . "-" . time();
@@ -39,13 +39,16 @@ $signature = hash_hmac("sha256", $stringToSign, $secretKey);
 $data["s"] = $signature;
 
 // Enviar a Flow
-$curl = curl_init("https://www.flow.cl/api/payment/create");
+$curl = curl_init("https://sandbox.flow.cl/api/payment/create");
 curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);	// Retorna el resultado en vez de imprimirlo directamente
 
 $response = curl_exec($curl);
+if($response === false){
+    $error = curl_error($curl);
+    throw new Exception($error, 1);
+}
+else echo $response;
 curl_close($curl);
-
-echo $response;
 ?>

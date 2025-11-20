@@ -22,7 +22,7 @@ foreach ($data as $k => $v) {
 $data["s"] = hash_hmac("sha256", $stringToSign, $secretKey);
 
 // Obtener estado
-$curl = curl_init("https://www.flow.cl/api/payment/getStatus");
+$curl = curl_init("https://sandbox.flow.cl/api/payment/getStatus");
 curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
