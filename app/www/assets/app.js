@@ -527,3 +527,15 @@ function distanceGeo(lat1, lon1, lat2, lon2){
 function getQR(data){
 	return "https://api.qrserver.com/v1/create-qr-code/?data="+data;
 }
+
+function getAnimalClass(s){
+	switch(s.trim().toLowerCase()){
+		case "perro": return "dog";
+		case "gato":  return "cat";
+		case "loro":
+		case "cata":
+		case "gorrion":
+		case "cuervo": return "bird";
+		default: return "pet";
+	}
+}

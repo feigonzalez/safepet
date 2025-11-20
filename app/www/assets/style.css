@@ -271,6 +271,12 @@ form{
 }
 p.error{border:solid 1px var(--color-error);padding:1rem;border-radius:1rem;color:var(--color-error)}
 
+.profileImageDisplay{background-image:url("../media/user.jpg")}
+
+.petImageDisplay{background-image:url("../media/pet.jpg")}
+.petImageDisplay.cat{background-image:url("../media/cat.jpg")}
+.petImageDisplay.dog{background-image:url("../media/dog.jpg")}
+.petImageDisplay.bird{background-image:url("../media/bird.jpg")}
 
 @keyframes spinThrobber{
 	0%{transform:rotate(0deg)}

@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json");
 
-require_once("../functions/sql.php");  // ← ruta correcta
+require_once("../sql.php");  // ← ruta correcta
 
 $apiKey    = "6663F0F9-539D-4487-A4CA-2FL416B20197";
 $secretKey = "a5481b790444ca0ab25beb4d0d978cbbb3316a87";

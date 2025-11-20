@@ -1,4 +1,4 @@
-#petImageDisplay{width:12rem;height:12rem;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:1rem auto}
+.petImageDisplay{width:8rem;height:8rem;border:solid 1px #888;border-radius:50%;background-size:cover;background-position:50%;margin:1rem auto}
 .petSummary{margin-top:0.5rem;color:#555}
 .detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0}
 .detailItem{padding:0.5rem;background:#f8f9fa;border-radius:0.5rem}

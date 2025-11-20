@@ -62,7 +62,7 @@
 		while($row = $resPet->fetch_array()){
 			pushNotification($row["user_id"],
 				"Han hallado a tu mascota, ".$row["name"],
-				"[El usuario X | Un usuario] encontró a ".$row["name"].". Mira tus mensajes para ver dónde está.",
+				"Un usuario encontró a ".$row["name"].". Mira tus mensajes para ver dónde está.",
 				"warning");
 			postChat(intval($row["user_id"]) + intval($_POST["account_id"]), $_POST["account_id"], "geo", $_POST["latitude"].";".$_POST["longitude"], $_POST["timestamp"]);
 		}

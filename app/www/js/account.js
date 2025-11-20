@@ -10,6 +10,7 @@ function beforeLoad(){
 	document.querySelector("#profileEmail").textContent=userData.email
 	document.querySelector("#profilePhone").textContent=userData.phone
 	document.querySelector("#profileSubStatus").textContent=userData.subStatus
+	document.querySelector(".profileImageDisplay").style.filter="hue-rotate("+(-10*(parseInt(hash(userData.name),36)%12))+"deg)";
 }
 
 async function confirmLogout() {

@@ -13,5 +13,8 @@ async function beforeLoad(){
 		for(let bI of document.querySelectorAll(".breedIndicator")){
 			if(bI.textContent.trim()=="()") bI.remove();
 		}
+		for(let pI of document.querySelectorAll(".petImageDisplay")){
+			pI.style.filter="hue-rotate("+(-10*(parseInt(hash(pI.dataset.petname),36)%12))+"deg)";
+		}
 	}
 }

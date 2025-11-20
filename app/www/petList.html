@@ -25,7 +25,7 @@
 			<div class="card row compact" await foreach="pets">
 				<a href="petDetail.html?id=${pet_id}" class="row">
 					<div class="column compact">
-						<div class="petImageDisplay" data-img="${imageURL}"></div>
+						<div class="petImageDisplay ${getAnimalClass('${species}')}" data-petName="${name}"></div>
 					</div>
 					<div class="column ph-1 size-full-width ta-left">
 					<div class="cardTitle row ta-left bold">

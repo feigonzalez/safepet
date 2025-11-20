@@ -74,6 +74,8 @@ async function beforeLoad(){
 	document.querySelector('#detailBreed').textContent = petData.breed;
 	document.querySelector('#detailColor').textContent = petData.color;
 	document.querySelector('#detailStatus').textContent = statusDict[petData.petStatus];
+	document.querySelector(".petImageDisplay").classList.add(getAnimalClass(petData.species))
+	document.querySelector(".petImageDisplay").style.filter="hue-rotate("+(-10*(parseInt(hash(petData.name),36)%12))+"deg)";
 	setIcon(document.querySelector('#sexIndicator'),sexSymbol);
 	
 	
