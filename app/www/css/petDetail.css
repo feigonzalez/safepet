@@ -2,10 +2,10 @@
 .petSummary{margin-top:0.5rem;color:#555}
 .detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0}
 .detailItem{padding:0.5rem;background:#f8f9fa;border-radius:0.5rem}
-.detailLabel{font-weight:bold;color:#666;font-size:0.9rem}
+.detailLabel{font-weight:bold;color:#666;font-size:0.9rem;text-align:center}
 .detailValue{color:#333;margin-top:0.25rem}
 .detailValue:empty{color:#0004;}
 .detailValue:empty::before{content:"No definido"}
 
-#popUpOption_3{color:var(--color-primary);font-weight:bold}
+#popUpOptions :last-child{color:var(--color-primary);font-weight:bold}
 #qrCode{width:12rem;height:12rem;border-radius:0;}

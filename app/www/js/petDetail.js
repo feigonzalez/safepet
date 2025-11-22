@@ -1,8 +1,12 @@
 const statusDict={
 	"HOME": "En casa",
-	"LOST": "Extraviada"
+	"LOST": "Extraviada",
+	"AWAY": "Fuera de la zona segura",
 }
-const petDetailMenu = {
+var petDetailMenu = {
+	"Editar Datos":()=>{
+		navigateWithParams("updatePet.html",{id:URLparams["id"]})
+	},
 	"Ver Código QR":()=>{
 		showAlertModal("QR de tu mascota",
 			`<div class="column">
@@ -15,9 +19,6 @@ const petDetailMenu = {
 				<div class="row"><button class="bg-primary" onclick="downloadQR()">Descargar Código</button></div>
 			</div>`
 		);
-	},
-	"Editar Datos":()=>{
-		navigateWithParams("updatePet.html",{id:URLparams["id"]})
 	},
 	"Añadir Dueño":()=>{
 		showAlertModal("Añadir Dueño",
@@ -38,6 +39,8 @@ const petDetailMenu = {
 		);
 		
 	},
+	"Añadir Rastreador":null,
+	"Quitar Rastreador":null,
 	"Eliminar Mascota":()=>{console.log("eliminar mascota")}	// TODO
 }
 
@@ -57,7 +60,29 @@ async function downloadQR(){
 
 async function beforeLoad(){
 	petData = await request(SERVER_URL+"getPet.php",{account_id:userData.account_id,pet_id:URLparams.id})
-	
+	trackerData = await request(SERVER_URL+"getTrackerInfo.php",{pet_id:URLparams.id})
+	if(userData.plan == "premium"){
+		document.querySelector("#trackerInfo").classList.remove("hidden");
+		switch(trackerData.status){
+			case "MISS":	// Pet has no tracker. Allow user to add one
+				petDetailMenu["Añadir Rastreador"]=()=>{
+					navigateTo("addTracker.html?pet_id="+URLparams.id);
+				}
+				break;
+			case "GOOD":	// Pet has a tracker. Allow user to remove it
+				petDetailMenu["Quitar Rastreador"]=()=>{
+					showAlertModal("Función no implementada","En progreso")	//TODO
+				};
+				let unit = "m";
+				let distance = Math.round(distanceGeo(
+					parseFloat(localStorage.latitude), parseFloat(localStorage.longitude),
+					parseFloat(trackerData.latitude), parseFloat(trackerData.longitude)));
+				if(distance > 1000){ distance = Math.round(distance/100)/10; unit="Km";}
+				document.querySelector('#trackerDistance').textContent = distance + unit;
+				document.querySelector('#trackerBattery').textContent = trackerData.battery;
+				break;
+		}
+	}
 	
 	/*
 	// Actualizar imagen

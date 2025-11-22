@@ -235,6 +235,7 @@ function popUpMenu(options){
 	let optionsHolder = document.querySelector("#popUpOptions");
 	let index = 0;
 	for(let o in options){
+		if(options[o]==null)continue;
 		let oE = document.createElement("button")
 		oE.id = "popUpOption_"+index;
 		oE.classList.add("popUpOption");

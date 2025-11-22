@@ -83,7 +83,7 @@ button:active, .button:active, input[type=button]:active, input[type=submit]:act
 .size-full-width{width:100%}
 
 .no-wrap{white-space:nowrap}
-
+.hidden{display:none}
 .invisible{visibility:hidden}
 
 .pos-fixed{position:fixed}

@@ -4,6 +4,7 @@ import { Device } from '@capacitor/device';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 App.addListener("backButton",(ev)=>{
+	console.log("backButtonPressed");
 	let modal = document.querySelector(".modalBackdrop") || document.querySelector(".popUpBackdrop");
 	if(modal) modal.remove()
 	else if(window.history.length > 1){
