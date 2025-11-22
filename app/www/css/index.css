@@ -11,17 +11,23 @@
 .popup-description {font-size: 0.9rem;color: #666;}
 
 /* Estilos específicos para popups de refugios */
-.shelter-popup {min-width: 280px;}
-.shelter-details {margin-top: 12px;}
+.shelter-popup, .alert-popup {min-width: 280px;}
+.shelter-details{margin-top: 12px;}
 .shelter-info {margin-bottom: 8px;padding: 6px 0;border-bottom: 1px solid #eee;}
 .shelter-info:last-child {border-bottom: none;}
 .shelter-info strong {color: #28a745;}
 .shelter-info a {color: #007bff;text-decoration: none;}
 .shelter-info a:hover {text-decoration: underline;}
 
+
 /* Gira el texto de atribuciones 90° y lo alinea al borde derecho del mapa */
 .leaflet-control-attribution{transform: translateX(100%) translateY(50%) rotate(-90deg) translateY(-50%); transform-origin: left;}
 
-.marker-report .marker-content{background-color:var(--color-primary);color:white;
-	border-radius:50%;width:2rem;height:2rem;display:flex;align-items:center;
-	justify-content:center;font-size:14px;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+.marker-content{border-radius:50%;width:34px;height:34px;display:flex;align-items:center;
+	justify-content:center;font-size:18px;border:3px solid white;box-shadow:0 3px 6px rgba(0,0,0,0.4)}
+.marker-content .icon{filter:invert(1) brightness(2)}
+
+.alert-marker .marker-content{background-color:var(--color-primary)}
+.user-location-marker .marker-content{background-color:#007bff;}
+.shelter-marker .marker-content{background-color:var(--color-success)}
+.marker-report .marker-content{background-color:var(--color-primary)}

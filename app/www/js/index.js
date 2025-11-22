@@ -6,8 +6,8 @@
 let map = null;
 let userMarker = null;
 let mapInitialized = false;
-let shelterMarkers = [];
-let showShelters = true;
+let shelterMarkers = [];	let showShelters = true;
+let alertMarkers = [];		let showAlerts = true;
 let userLocation = null;
 
 // ======================
@@ -87,11 +87,12 @@ function initMap() {
                 userMarker = L.marker([userLat, userLng], {
                     icon: L.divIcon({
                         className: 'user-location-marker',
-                        html: '<div style="background-color:#007bff;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);">📍</div>',
+                        html: '<div class="marker-content"><span class="icon" data-icon="location"></span></div>',
                         iconSize: [26, 26],
                         iconAnchor: [13, 13]
                     })
                 }).addTo(map);
+				processContents(userMarker._icon)
 /*
                 getAddressFromCoordinates(userLat, userLng, address => {
                     userMarker.bindPopup(`
@@ -235,7 +236,7 @@ function addRealSheltersAndServices() {
 
     const icon = L.divIcon({
         className: 'custom-div-icon shelter-marker',
-        html: '<div style="background-color:#28a745;color:white;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid white;box-shadow:0 3px 6px rgba(0,0,0,0.4);">🏠</div>',
+        html: '<div class="marker-content"><span class="icon" data-icon="home"></span></div>',
         iconSize: [34, 34],
         iconAnchor: [17, 17]
     });
@@ -251,10 +252,11 @@ function addRealSheltersAndServices() {
                     ${webLink}
                 </div>
             `);
+			processContents(marker._icon)
         shelterMarkers.push(marker);
     });
 
-    console.log(`�?Refugios y servicios cargados: ${places.length}`);
+    console.log(`�?Refugios y servicios cargados: ${places.length}`);
 }
 // FUNCIONES DE INTERFAZ
 
@@ -274,8 +276,16 @@ function centerOnUser() {
 function toggleShelters() {
     showShelters = !showShelters;
     shelterMarkers.forEach(marker => {
-        if (showShelters) map.addLayer(marker);
-        else map.removeLayer(marker);
+        if (showShelters) marker._icon.classList.remove("invisible")
+        else marker._icon.classList.add("invisible")
+    });
+}
+
+function toggleAlerts() {
+    showAlerts = !showAlerts;
+    alertMarkers.forEach(marker => {
+        if (showAlerts) marker._icon.classList.remove("invisible")
+        else marker._icon.classList.add("invisible")
     });
 }
 
@@ -289,6 +299,27 @@ window.addEventListener('load', async () => {
     if (!mapInitialized) setTimeout(() => initMap(), 200);
 	let dID = await window.getDeviceId();
 	localStorage.setItem("deviceID",dID.identifier)
+	
+	request(SERVER_URL+"getAlerts.php",{latitude:localStorage.latitude, longitude:localStorage.longitude}).then(r=>{
+		r.forEach(item => {
+		const icon = L.divIcon({
+			className: 'custom-div-icon alert-marker',
+			html: '<div class="marker-content"><span class="icon" data-icon="warning"></span></div>',
+			iconSize: [34, 34],
+			iconAnchor: [17, 17]
+		});
+		const marker = L.marker([item.latitude, item.longitude], {icon })
+			.addTo(map)
+			.bindPopup(`
+				<div class="popup-content alert-popup">
+					<div class="popup-title">${item.petName}</div>
+					<div>${getRecency(item.timestamp)}</div>
+				</div>
+			`);
+			processContents(marker._icon);
+		alertMarkers.push(marker);
+		});
+	})
 });
 
 function verifyAccountAndRedirect() {

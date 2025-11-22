@@ -84,6 +84,8 @@ button:active, .button:active, input[type=button]:active, input[type=submit]:act
 
 .no-wrap{white-space:nowrap}
 
+.invisible{visibility:hidden}
+
 .pos-fixed{position:fixed}
 .pos-top{top:0.5rem}
 .pos-right{right:0.5rem}
