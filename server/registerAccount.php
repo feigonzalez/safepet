@@ -28,7 +28,7 @@
 		echo json_encode($response);
 	} else {
 		$passHash = password_hash($_POST["password"],PASSWORD_BCRYPT);
-		$ins = $sqlConn->prepare("INSERT INTO `spet_users` (`username`,`password`, `name`) VALUES (?, ?, ?)");
+		$ins = $sqlConn->prepare("INSERT INTO `spet_users` (`username`,`password`, `name`, `plan`) VALUES (?, ?, ?, 'free')");
 		$ins->bind_param("sss",$_POST["username"],$passHash,$_POST["name"]);
 		$ins->execute();
 		$insID=$sqlConn->insert_id;

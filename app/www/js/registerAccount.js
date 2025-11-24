@@ -26,19 +26,23 @@ document.addEventListener("DOMContentLoaded", () => {
 			return;
 		}
 		
-		let register = await request(SERVER_URL+"registerAccount.php",{username:email,password:hash(password),name:name})
-		console.log(register)
-		if(register.status=="GOOD"){
-			localStorage.setItem("userData",JSON.stringify({
-				account_id:register.account_id,
-				name:register.name,
-				phone:register.phone,
-				email:register.username}));
-			loadModal("templates/registerAccountSuccessModal.html",()=>{
-				window.location.replace('petList.html');
-			});
-		} else if(register.status=="MISS"){
-			loadModal("templates/accountExistsModal.html");
-		}
+		await showAwaitModal("Registrando","",
+			async ()=>{
+				return await request(SERVER_URL+"registerAccount.php",{username:email,password:hash(password),name:name})
+			},
+			(register)=>{
+				console.log(register)
+				if(register.status=="GOOD"){
+					localStorage.setItem("userData",JSON.stringify({
+						account_id:register.account_id,
+						name:register.name,
+						phone:register.phone,
+						email:register.username}));
+					window.location.replace('petList.html');
+				} else if(register.status=="MISS"){
+					showAlertModal("Cuenta ya existe","Este correo ya está asociado a una cuenta existente");
+				}
+			}
+		)
 	})
 });

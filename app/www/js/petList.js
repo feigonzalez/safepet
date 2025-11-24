@@ -18,3 +18,11 @@ async function beforeLoad(){
 		}
 	}
 }
+
+function goToAddPet(){
+	if(userData.plan=="free" && petData.length>0){
+		showAlertModal("Límite de Mascotas","Con una cuenta gratuita, sólo puedes tener una mascota registrada.<br>Puedes suscribirte a un plan distinto desde los detalles de tu cuenta.")
+	} else {
+		navigateTo("register.html");
+	}
+}

@@ -83,15 +83,25 @@ function initMap() {
 
                 // Añadir marcador del usuario
                 if (userMarker) map.removeLayer(userMarker);
+				
+				let popup = L.popup({interactive: true, bubblingMouseEvents: true})
+					.setContent(`<div class="popup-content">
+									<div class="popup-title">Tu ubicación</div>
+								</div>`)
+					.on("click",()=>{console.log("clicked")})	// No funciona :c
 
                 userMarker = L.marker([userLat, userLng], {
-                    icon: L.divIcon({
-                        className: 'user-location-marker',
-                        html: '<div class="marker-content"><span class="icon" data-icon="location"></span></div>',
-                        iconSize: [26, 26],
-                        iconAnchor: [13, 13]
-                    })
-                }).addTo(map);
+						icon: L.divIcon({
+							className: 'user-location-marker',
+							html: '<div class="marker-content"><span class="icon" data-icon="location"></span></div>',
+							iconSize: [26, 26],
+							iconAnchor: [13, 13]
+						}),
+						zIndexOffset:100
+					})
+					.addTo(map)
+					.bindPopup(popup)
+					.on("click",()=>{map.setView([userLat, userLng])})
 				processContents(userMarker._icon)
 /*
                 getAddressFromCoordinates(userLat, userLng, address => {
@@ -251,9 +261,10 @@ function addRealSheltersAndServices() {
                     <div><strong>Dirección:</strong> ${item.direccion}</div>
                     ${webLink}
                 </div>
-            `);
-			processContents(marker._icon)
-        shelterMarkers.push(marker);
+            `)
+			.on("click",()=>{map.setView([item.lat, item.lon])});
+			processContents(marker._icon);
+			shelterMarkers.push(marker);
     });
 
     console.log(`�?Refugios y servicios cargados: ${places.length}`);
@@ -266,8 +277,8 @@ function centerOnUser() {
         return;
     }
     if (userLocation) {
-        map.setView([userLocation.lat, userLocation.lng], 15);
         if (userMarker) userMarker.openPopup();
+        map.setView([userLocation.lat, userLocation.lng], 15);
     } else {
         alert('Ubicación no disponible todavía.');
     }
@@ -315,7 +326,8 @@ window.addEventListener('load', async () => {
 					<div class="popup-title">${item.petName}</div>
 					<div>${getRecency(item.timestamp)}</div>
 				</div>
-			`);
+			`)
+			.on("click",()=>{map.setView([item.latitude, item.longitude])});
 			processContents(marker._icon);
 		alertMarkers.push(marker);
 		});

@@ -1,3 +1,9 @@
+const planDict = {
+	"free": "Gratuito",
+	"basic": "Básico",
+	"premium": "Premium"
+}
+
 const accountMenu = {
 	"Editar Datos":()=>{window.location.href="editProfile.html"},
 	"Gestionar Suscripción":()=>{window.location.href="subscription.html"},
@@ -9,7 +15,7 @@ function beforeLoad(){
 	document.querySelector("#profileName").textContent=userData.name
 	document.querySelector("#profileEmail").textContent=userData.email
 	document.querySelector("#profilePhone").textContent=userData.phone
-	document.querySelector("#profileSubStatus").textContent=userData.subStatus
+	document.querySelector("#profileSubStatus").textContent=planDict[userData.plan]
 	document.querySelector(".profileImageDisplay").style.filter="hue-rotate("+(-10*(parseInt(hash(userData.name),36)%12))+"deg)";
 }
 

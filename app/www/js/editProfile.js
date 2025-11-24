@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						userData.name = update.fullName;
 						userData.phone = update.phone;
 						localStorage.setItem("userData",JSON.stringify(userData))
+						goBack();reloadPage();
 					} else{
 						showAlertModal("Error","Hubo un error al actualizar tus datos :c")
 					}

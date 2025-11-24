@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/register.css">
 
     <script src="assets/app.js"></script>
+	<script src="assets/mobile.js"></script>
     <script src="assets/connect.js"></script>
     <script src="assets/validation.js"></script>
     <script src="assets/navigation.js"></script>
@@ -49,33 +50,33 @@
 
             <!-- NOMBRE -->
             <div class="row column">
-                <label for="update_petName">Nombre</label>
-                <input type="text" id="update_petName" placeholder="Ingresa el nombre">
+                <label for="petName">Nombre</label>
+                <input type="text" id="petName" name="petName" placeholder="Ingresa el nombre" required>
             </div>
 
             <!-- ESPECIE (bloqueado) -->
             <div class="row column">
-                <label for="update_petSpecies">Especie</label>
-                <input type="text" id="update_petSpecies" disabled>
+                <label for="petSpecies">Especie</label>
+                <input type="text" id="petSpecies" name="petSpecies" disabled>
                 <span class="metaText">La especie no se puede modificar.</span>
             </div>
 
             <!-- RAZA -->
             <div class="row column">
-                <label for="update_petBreed">Raza</label>
-                <input type="text" id="update_petBreed" placeholder="Ingresa la raza">
+                <label for="petBreed">Raza</label>
+                <input type="text" id="petBreed" name="petBreed" placeholder="Ingresa la raza">
             </div>
 
             <!-- COLOR -->
             <div class="row column">
-                <label for="update_petColor">Color</label>
-                <input type="text" id="update_petColor" placeholder="Ingresa el color">
+                <label for="petColor">Color</label>
+                <input type="text" id="petColor" name="petColor" placeholder="Ingresa el color">
             </div>
 
             <!-- SEXO (bloqueado) -->
             <div class="row column">
                 <label>Sexo</label>
-                <input type="text" id="update_petSex" disabled>
+                <input type="text" id="petSex" name="petSex" disabled>
                 <span class="metaText">El sexo no se puede modificar.</span>
             </div>
 

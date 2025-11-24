@@ -1,78 +1,48 @@
 async function beforeLoad() {
-    // Intentar obtener la mascota desde localStorage o desde la URL (?id=...)
-    let stored = null;
-    try { stored = JSON.parse(localStorage.getItem("selectedPet")); } catch(e) {}
-    const petId = (stored && stored.pet_id) || (typeof URLparams !== "undefined" ? URLparams.id : (getUrlParams ? getUrlParams().id : null));
-
-    if (!petId) {
-        showAlertModal("Error", "No se encontró la mascota seleccionada.");
-        return;
-    }
-
-    // === OBTENER DATOS REALES DESDE EL SERVIDOR ===
-    const formData = new FormData();
-    formData.append("pet_id", petId);
-
-    const response = await fetch(SERVER_URL + "getPet.php", {
-        method: "POST",
-        body: formData
-    });
-
-    const pet = await response.json();
-    console.log("PET DATA:", pet);
-
+    let pet = await request(SERVER_URL + "getPet.php", {pet_id:URLparams["id"]});
     if (pet.status !== "GOOD") {
         showAlertModal("Error", "No se pudieron obtener los datos de la mascota.");
         return;
     }
-
     // === CARGAR DATOS EN EL FORMULARIO ===
-    document.getElementById("update_petName").value = pet.name;
-    document.getElementById("update_petSpecies").value = pet.species;
-    document.getElementById("update_petBreed").value = pet.breed;
-    document.getElementById("update_petColor").value = pet.color;
-    document.getElementById("update_petSex").value = pet.sex;
-
-    // Persistir para el submit
-    localStorage.setItem("selectedPet", JSON.stringify(pet));
+    document.getElementById("petName").value = pet.name;
+    document.getElementById("petSpecies").value = pet.species;
+    document.getElementById("petBreed").value = pet.breed;
+    document.getElementById("petColor").value = pet.color;
+    document.getElementById("petSex").value = pet.sex;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    beforeLoad(); // <<-- IMPORTANTE
-
     document.getElementById("updatePetForm").addEventListener("submit", async (e) => {
         e.preventDefault();
+		
+		// Preparar referencias a formulario y reglas de validación
+		const form = document.getElementById('updatePetForm');
+		const validationRules = {
+			petName: ValidationConfig.name,
+			petBreed: ValidationConfig.name,
+			petColor: ValidationConfig.name
+		}
 
-        const pet = JSON.parse(localStorage.getItem("selectedPet"));
+		const validation = ValidationUtils.validateForm(form, validationRules);
+		if (validation.isValid) {
+			const formData = {
+				"pet_id": URLparams.id,
+				"petName": document.getElementById("petName").value,
+				"petBreed": document.getElementById("petBreed").value,
+				"petColor": document.getElementById("petColor").value
+			}
 
-        const formData = new FormData();
-        formData.append("pet_id", pet.pet_id);
-        formData.append("petName", document.getElementById("update_petName").value);
-        formData.append("petBreed", document.getElementById("update_petBreed").value);
-        formData.append("petColor", document.getElementById("update_petColor").value);
-
-        const resp = await fetch(SERVER_URL + "updatePet.php", {
-            method: "POST",
-            body: formData
-        });
-
-        const payload = await resp.json();
-        console.log("UPDATE RESPONSE:", payload);
-
-        if (payload.status === "GOOD") {
-            showAlertModal("Éxito", "Mascota actualizada.");
-
-            // Actualizar localStorage
-            pet.name = payload.name;
-            pet.breed = payload.breed;
-            pet.color = payload.color;
-
-            localStorage.setItem("selectedPet", JSON.stringify(pet));
-
-        } else {
-            showAlertModal("Error", "No se pudo actualizar la mascota.");
-        }
+			const payload = await request(SERVER_URL + "updatePet.php", {account_id:userData.account_id, ...formData});
+			if (payload.status === "GOOD") {
+				showAlertModal("Éxito", "Mascota actualizada.",()=>{goBack()});
+			} else {
+				showAlertModal("Error", "No se pudo actualizar la mascota.");
+			}
+		} else {
+			ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');
+		}
     });
 
 });
