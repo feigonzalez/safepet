@@ -4,44 +4,12 @@ const statusDict={
 	"AWAY": "Fuera de la zona segura",
 }
 var petDetailMenu = {
-	"Editar Datos":()=>{
-		navigateWithParams("updatePet.html",{id:URLparams["id"]})
-	},
-	"Ver Código QR":()=>{
-		showAlertModal("QR de tu mascota",
-			`<div class="column">
-				<div class="row">
-					<a id="qrDownload" download>
-						<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(SERVER_URL+"report.php?petID="+URLparams["id"])}">
-					</a>
-				</div>
-				<div class="row"><p>Cuando alguien escanee este código, se te alertará dónde ocurrió.</p></div>
-				<div class="row"><button class="bg-primary" onclick="downloadQR()">Descargar Código</button></div>
-			</div>`
-		);
-	},
-	"Añadir Dueño":()=>{
-		showAlertModal("Añadir Dueño",
-			`<div class="column">
-				<div class="row">Para añadir a otra persona como dueña de esta mascota, debe:</div>
-				<div class="row"><ol class="column">
-					<li>Abrir el menú de mascotas en su aplicación</li>
-					<li>Presionar "Añadir Mascota"</li>
-					<li>Presionar <span class="icon" data-icon="qr-code"></span> en la esquina superior derecha.</li>
-					<li>Escanear este código QR:</li>
-				</ol></div>
-				<div class="row">
-					<a id="qrDownload" download>
-						<img id="qrCode" class="loading" src="${getQR("registerowner{account_id:"+userData.account_id+";pet_id:"+URLparams["id"]+"}")}">
-					</a>
-				</div>
-			</div>`
-		);
-		
-	},
+	"Editar Datos":()=>{ navigateWithParams("updatePet.html",{id:URLparams["id"]}) },
+	"Ver Código QR":showPetQR,
+	"Añadir Dueño":addOwner,
 	"Añadir Rastreador":null,
 	"Quitar Rastreador":null,
-	"Eliminar Mascota":()=>{console.log("eliminar mascota")}	// TODO
+	"Eliminar Mascota":confirmDeletePet
 }
 
 async function downloadQR(){
@@ -51,10 +19,11 @@ async function downloadQR(){
 		qrFile.readAsDataURL(dataBlob);
 	qrFile.addEventListener("loadend",()=>{
 		let petQRURL = qrFile.result;
-		dLink = document.querySelector("#qrDownload");
+		downloadFile(petData.name+"_QR.png", petQRURL.substring(petQRURL.indexOf(",")+1))
+		/*dLink = document.querySelector("#qrDownload");
 		dLink.setAttribute("href",petQRURL);
 		dLink.setAttribute("download",petData.name+"_QR.png")
-		dLink.click();
+		dLink.click();*/
 	})
 }
 
@@ -114,15 +83,76 @@ async function beforeLoad(){
 	document.querySelector("#changeStatusBtn").textContent=statusButtonText;
 }
 
+function addOwner(){
+	showAlertModal(
+		"Añadir Dueño",
+		`<div class="column">
+			<div class="row">Para añadir a otra persona como dueña de esta mascota, debe:</div>
+			<div class="row"><ol class="column">
+				<li>Abrir el menú de mascotas en su aplicación</li>
+				<li>Presionar "Añadir Mascota"</li>
+				<li>Presionar <span class="icon" data-icon="qr-code"></span> en la esquina superior derecha.</li>
+				<li>Escanear este código QR:</li>
+			</ol></div>
+			<div class="row">
+				<a id="qrDownload" download>
+					<img id="qrCode" class="loading" src="${getQR("registerowner{account_id:"+userData.account_id+";pet_id:"+URLparams["id"]+"}")}">
+				</a>
+			</div>
+		</div>`
+	);
+}
+
+function showPetQR(){
+	showAlertModal(
+		"QR de tu mascota",
+		`<div class="column">
+			<div class="row">
+				<a id="qrDownload" download>
+					<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(SERVER_URL+"report.php?petID="+URLparams["id"])}">
+				</a>
+			</div>
+			<div class="row"><p>Cuando alguien escanee este código, se te alertará dónde ocurrió.</p></div>
+			<div class="row"><button class="bg-primary" onclick="downloadQR()">Descargar Código</button></div>
+		</div>`
+	);
+}
+
+function confirmDeletePet(){
+	showConfirmModal(
+		"¿Eliminar Mascota?",
+		"Ya no serás su dueño, pero otras personas que sean dueños de ella aún la tendrán registrada.",
+		()=>{
+			deletePet();
+		}
+	)
+}
+
+async function deletePet(){
+	showAwaitModal(
+		"Eliminando Mascota", "",
+		()=>{
+			return request(SERVER_URL+"deletePet.php",{account_id:userData.account_id,pet_id:URLparams["id"]})
+		},
+		async (req)=>{
+			showAlertModal(
+				"Mascota Eliminada",
+				"",
+				goBack
+			)
+		}
+	)
+}
+
 function updateStatus(){
 	switch(petData.petStatus){
-		case "HOME": reportLoss(); break;
+		case "HOME": confirmAlert(); break;
 		case "LOST": alert("Se debe registrar que la mascota fue hallada"); break;
 		default: alert("Estado de mascota no especificado."); break;
 	}
 }
 
-function reportLoss() {
+function confirmAlert() {
 	const petId = URLparams.id;
 	
 	if(!petId) {
@@ -132,27 +162,36 @@ function reportLoss() {
 	showConfirmModal(
 		'Alertar Pérdida',
 		'¿Estás seguro de que quieres generar una alerta por la pérdida de esta mascota? Se notificará a la comunidad.',
+		alertMissingPet
+	)
+}
+
+async function alertMissingPet(){
+	showAwaitModal(
+		"Generando Alerta", "",
 		async ()=>{
-			showAwaitModal("Obteniendo posición","",()=>{
-				locate(async (pos)=>{
-					document.querySelector("#modalTitle").textContent="Generando alerta";
-					alertData = await request(SERVER_URL+"postAlert.php",{
-						account_id:userData.account_id,
-						pet_id:petData.pet_id,
-						timestamp:Math.floor(new Date().getTime()/1000),
-						latitude:pos.coords.latitude,
-						longitude:pos.coords.longitude
-					})
-					if(alertData.status=="GOOD")
-						showAlertModal("Se ha creado la alerta","Los datos de tu mascota podrán ser vistos cuando alguien encuentre un animal perdido")
-					else{
-						showAlertModal("Hubo un problema","No se pudo generar la alerta")
-					}
-				},
-				(error)=>{
-					showAlertModal("No se pudo obtener tu ubicación","No se puede generar una alerta sin la ubicación de tu dispositivo.")
-				})
+			return request(SERVER_URL+"postAlert.php",{
+				account_id:userData.account_id,
+				pet_id:petData.pet_id,
+				timestamp:Math.floor(new Date().getTime()/1000),
+				latitude:localStorage.latitude,
+				longitude:localStorage.longitude
 			})
+		},
+		(req)=>{
+			if(req.status=="GOOD")
+				showAlertModal(
+					"Se ha creado la alerta",
+					"Los datos de tu mascota podrán ser vistos cuando alguien encuentre un animal perdido",
+					goBack
+				)
+			else{
+				showAlertModal(
+					"Hubo un problema",
+					"No se pudo generar la alerta"
+				)
+			}
+			
 		}
 	)
 }

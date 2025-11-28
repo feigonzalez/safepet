@@ -8,7 +8,7 @@ const accountMenu = {
 	"Editar Datos":()=>{window.location.href="editProfile.html"},
 	"Gestionar Suscripción":()=>{window.location.href="subscription.html"},
 	"Cerrar Sesión":confirmLogout,
-	"Eliminar Cuenta":()=>{showAlertModal("Función no Implementada","La aplicación aún no permite eliminar una cuenta")},	// TODO
+	"Eliminar Cuenta":confirmDelete
 }
 	
 function beforeLoad(){
@@ -27,7 +27,36 @@ async function confirmLogout() {
 	);
 }
 
+async function confirmDelete(){
+	showConfirmModal(
+		"¿Eliminar Cuenta?",
+		`<li>Se borrarán todos tus datos</li>
+		<li>Se borrarán los datos de tus mascotas, a menos que tengan otro dueño registrado.</li>
+		<li>Perderás todos los beneficios de tu suscripción</li>`,
+		()=>{	// On confirm
+			deleteAccount
+		}
+	)
+}
+
 function logout() {
 	localStorage.removeItem('userData');
-	window.location.href = 'index.html';
+	NavigationUtils.restart();
+}
+
+async function deleteAcount(){
+	showAwaitModal(
+		"Eliminando Cuenta",
+		"",
+		async ()=>{
+			return request(SERVER_URL+"deleteAccount.php",{account_id:userData.account_id})
+		},
+		(req)=>{
+			showAlertModal(
+				"Cuenta Eliminada",
+				"Esperamos que te vaya bien ",
+				NavigationUtils.restart
+			)
+		}
+	)
 }

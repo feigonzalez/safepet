@@ -87,6 +87,13 @@ function setupNavigationButtons() {
     });
 }
 
+// Regresa a la primera página de la historia de navegación
+function restart(){
+	for(let i=0; i < window.history.length; i++){
+		window.history.back();
+	}
+}
+
 // Configurar navegación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
 	URLparams=getUrlParams();
@@ -102,7 +109,8 @@ window.NavigationUtils = {
     replacePage,
     reloadPage,
     isCurrentPage,
-    setupNavigationButtons
+    setupNavigationButtons,
+	restart
 };
 
 // También exportar funciones individuales para compatibilidad

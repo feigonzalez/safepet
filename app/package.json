@@ -6,6 +6,7 @@
     "@capacitor/camera": "^7.0.2",
     "@capacitor/core": "^7.4.3",
     "@capacitor/device": "^7.0.2",
+    "@capacitor/filesystem": "^7.1.4",
     "@capacitor/local-notifications": "^7.0.3"
   },
   "devDependencies": {

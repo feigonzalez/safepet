@@ -1,5 +1,7 @@
+var selectedPlan
+
 function selectPlan(plan) {
-    localStorage.setItem("selectedPlan", plan);
+    selectedPlan = plan;
 
     const planName = document.getElementById("modalPlanName");
     const planPrice = document.getElementById("modalPlanPrice");
@@ -26,9 +28,7 @@ function closeSubscriptionModal() {
 }
 
 // INICIA EL PROCESO DE FLOW
-function processPayment() {
-    const plan = localStorage.getItem("selectedPlan");
-
+async function processPayment() {
     // Redirige al backend
-    window.location.href = "server/flow/init.php?plan=" + plan;
+    await request(SERVER_URL+"flow/init.php",{plan:selectedPlan});
 }

@@ -1,6 +1,7 @@
 import '@capacitor/core';
 import { App } from '@capacitor/app';
 import { Device } from '@capacitor/device';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 App.addListener("backButton",(ev)=>{
@@ -14,6 +15,8 @@ App.addListener("backButton",(ev)=>{
 })
 
 window.addEventListener("load",(ev)=>{
+	// Solicita la ID del dispositivo. Es un número de 64 bits.
+	// En Android debería ser un número único para el par dispositivo / app (o dispositivo / usuario?). En browser, entrega una ID al azar
 	window.getDeviceId = async () => {
 		const id = await Device.getId();
 		return id;
@@ -32,6 +35,15 @@ window.addEventListener("load",(ev)=>{
 				schedule: { at: date },
 				sound: null
 			}]
+		});
+	}
+	
+	window.downloadFile = async (filename, data)=>{
+		await Filesystem.writeFile({
+			path: "downloads/"+filename,
+			data: data,
+			//directory: Directory.Documents,
+			//encoding: Encoding.UTF8,
 		});
 	}
 })
