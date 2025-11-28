@@ -38,7 +38,7 @@
 	$data["s"] = $signature;
 
 	// Enviar a Flow
-	$curl = curl_init("https://sandbox.flow.cl/api/payment/create");
+	$curl = curl_init("http://sandbox.flow.cl:443/api/payment/create");
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($curl, CURLOPT_POST, true);
@@ -52,7 +52,4 @@
 	}
 	else echo $response;
 	curl_close($curl);
-	echo "\n";
-	echo http_build_query($data);
-	echo "\nuID[${idUsuario}] plan[${plan}] monto[${monto}] nP[${nombrePlan}]";
 ?>
