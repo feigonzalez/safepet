@@ -1,6 +1,13 @@
 // URL específica del feed de tenencia responsable
 const RSS_URL = 'https://tenenciaresponsablemascotas.cl/feed/';
+
 var notifications;
+// Indica sobre cual notificacion actuar al usar el menu popup
+var openNotification=null;
+
+const notificationMenu = {
+	"Eliminar Notificación":deleteNotification
+}
 
 async function beforeLoad(){
 	if(!userData.account_id){
@@ -18,10 +25,24 @@ async function beforeLoad(){
 					catch(e){n["metaText"]=n.timestamp}
 				}
 				fillIterable(document.querySelector("[foreach=notifications]"),notifications)
+				for(let n of document.querySelectorAll(".notification")){
+					n.addEventListener("click",(ev)=>{
+						openNotification=n;
+						popUpMenu(notificationMenu);
+					})
+				}
 			}
 		})
 	}
-	loadNotifications();
+	loadNews();
+}
+
+function deleteNotification(){
+	if(openNotification && openNotification.hasAttribute("data-id")){
+		request(SERVER_URL+"deleteNotification.php",{notification_id:openNotification.dataset.id})
+		openNotification.remove();
+		openNotification=null;
+	}
 }
 
 
@@ -124,7 +145,7 @@ function openOriginalLink() {
 }
 
 // Función principal para cargar noticias
-async function loadNotifications() {
+async function loadNews() {
 	const container = document.querySelector('[foreach=news]');
 	
 	try {

@@ -29,11 +29,12 @@
 		$timestamp = intval($_POST["timestamp"]);
 	}
 	
-	$stmt = $sqlConn->prepare("SELECT * FROM `spet_messages` WHERE `sender_id` + `receiver_id`= ? AND `timestamp` > ?");
+	$stmt = $sqlConn->prepare("SELECT m.*, u.name FROM `spet_messages` m
+		JOIN `spet_users` u ON `user_id` = (? - ?) WHERE `sender_id` + `receiver_id`= ? AND `timestamp` > ?;");
 
 	$pairCode = intval($_POST["pair_code"]);
 
-	$stmt->bind_param("ii",$pairCode,$timestamp);
+	$stmt->bind_param("iiii",$pairCode,$_POST["account_id"],$pairCode,$timestamp);
 	$stmt->execute();
 	
 	$res=$stmt->get_result();
@@ -42,6 +43,8 @@
 		$response["status"]="GOOD";
 		$response["messages"]=Array();
 		while($row = $res->fetch_array()){
+			//$row["name"] is the name of chat partner. It gets overwritten for each mesasge which isn't ideal but it works :/
+			$response["pairName"]=$row["name"];
 			//$row["notification_id"] is the ID of the notification. Use it to delete it from the table after pulling
 			$response["messages"][$index]["type"]=$row["type"];
 			$response["messages"][$index]["content"]=$row["content"];

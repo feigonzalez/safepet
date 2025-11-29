@@ -72,17 +72,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			showConfirmModal(
 				"Actualizar Datos",
 				"¿Deseas actualizar tus datos?",
-				async ()=>{
-					let update = await request(SERVER_URL+"updateAccount.php",{account_id:userData.account_id,...formData})
-					if(update.status == "GOOD"){
-						showAlertModal("Datos actualizados","Tus datos fueron actualizados correctamente")
-						userData.name = update.fullName;
-						userData.phone = update.phone;
-						localStorage.setItem("userData",JSON.stringify(userData))
-						goBack();reloadPage();
-					} else{
-						showAlertModal("Error","Hubo un error al actualizar tus datos :c")
-					}
+				()=>{
+					showAwaitModal("Actualizando Datos","",
+					async ()=>{ return request(SERVER_URL+"updateAccount.php",{account_id:userData.account_id,...formData})}
+					(update)=>{
+						if(update.status == "GOOD"){
+							userData.name = update.fullName;
+							userData.phone = update.phone;
+							localStorage.setItem("userData",JSON.stringify(userData))
+							showAlertModal("Datos actualizados","Tus datos fueron actualizados correctamente",goBack)
+						} else{
+							showAlertModal("Error","Hubo un error al actualizar tus datos :c")
+						}
+					})
 				})
 		} else {
 			ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');

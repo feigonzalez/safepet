@@ -30,9 +30,9 @@ async function confirmLogout() {
 async function confirmDelete(){
 	showConfirmModal(
 		"¿Eliminar Cuenta?",
-		`<li>Se borrarán todos tus datos</li>
-		<li>Se borrarán los datos de tus mascotas, a menos que tengan otro dueño registrado.</li>
-		<li>Perderás todos los beneficios de tu suscripción</li>`,
+		`<div><p>• Se borrarán todos tus datos</p>
+		<p>• Se borrarán los datos de tus mascotas, a menos que tengan otro dueño registrado.</p>
+		<p>• Perderás todos los beneficios de tu suscripción</p></div>`,
 		()=>{	// On confirm
 			deleteAccount
 		}

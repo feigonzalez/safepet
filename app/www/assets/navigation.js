@@ -7,6 +7,7 @@ var URLparams;
 function goBack() {
     // Verificar si hay historial disponible
     if (window.history.length > 1) {
+		localStorage.setItem("navigationAction","reload");
         window.history.back();
     } else {
         // Si no hay historial, ir a la página principal
@@ -117,3 +118,12 @@ window.NavigationUtils = {
 window.goBack = goBack;
 window.navigateTo = navigateTo;
 window.getUrlParams = getUrlParams;
+
+window.addEventListener("load",()=>{
+	let navAction = localStorage.getItem("navigationAction");
+	localStorage.removeItem("navigationAction");
+	switch(navAction){
+		case "reload": reloadPage(); break;
+		default: break;
+	}
+})

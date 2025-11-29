@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin: *');
 echo "<h2>Pago verificado, volviendo a la app...</h2>";
 
 echo "<script>

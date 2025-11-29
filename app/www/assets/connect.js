@@ -1,5 +1,6 @@
 // const SERVER_URL="http://dintdt.c1.biz/safepet/"
-const SERVER_URL="http://localhost:8080/safepet/github/server/";
+// const SERVER_URL="http://localhost:8080/safepet/github/server/";
+const SERVER_URL="https://safepet.rf.gd/SafePet/server/";
 
 // La llave pública del servidor web donde están los endpoints de la API
 const serverPublicJWK = {"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":"xwCjMDAPoO3wAqh982Fqklx0XC_yw8cpwAihn28KUEMma5GgZZ0duNZ8yu-NwgfYHS3y8i4kuIcEfbZbooawbWqhOWJFDxrsCWfKfGSFlO98dL0ondxkeD6q-xF8S5-o6b6pgX5RM9d2_a1YML_qS9kEm39hMa3rSIFY0GMrSWpG-Ox3653jvomn8Vt8oSQIT4Mf3R-tke-7Kw1U5plTcqKHb15FZ1SACw2G8ZDBc_uukWIp2oAeykLrej9DgGk6f87-fj2GPNkmADeCT6q0tLxHWdM_qh20fRbPWdpfcHnZ2ctYDWzgZPzNHJ2j4bhbytwXakT2BtepCDxMf2EDQQ"}
@@ -101,6 +102,30 @@ async function request(url,body){
 	}
 	*/
 	return unsafeRequest(url,body)
+}
+
+async function formRequest(url, data){
+	/*let iframe = document.createElement("iframe");
+		iframe.id="formRequest_target";
+		iframe.setAttribute("name","formRequest_target");*/
+	let form = document.createElement("form");
+		form.id="formRequest_form";
+		/*form.setAttribute("target","formRequest_target");*/
+		form.setAttribute("action",url);
+		form.setAttribute("method","post");
+	for(let dp in data){
+		let input = document.createElement("input");
+		input.setAttribute("name",dp);
+		input.setAttribute("value",data[dp]);
+		form.appendChild(input);
+	}
+	document.body.appendChild(form);/*
+	document.body.appendChild(iframe);
+	iframe.addEventListener("load",(ev)=>{
+		console.log("loaded: >this >iframe >ev");
+		console.log(iframe);
+	})*/
+	form.submit();
 }
 
 async function unsafeRequest(url,body){

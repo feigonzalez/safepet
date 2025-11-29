@@ -5,19 +5,20 @@
 	<script src="assets/app.js"></script>
 	<script src="assets/mobile.js"></script>
 	<script src="assets/connect.js"></script>
+	<script src="assets/navigation.js"></script>
 	<script src="assets/validation.js"></script>
 	<script src="js/notifications.js"></script>
 </head>
 <body class="column">
 	<div class="row header">
 		<button id="backButton" class="column compact"><span class="icon" data-icon="chevron-left"></span></button>
-		<h1>Notificaciones</h1>
+		<div class="column ta-left"><h1>Notificaciones</h1></div>
 	</div>
 	<div class="row">
 		<div class="column list size-full-width">
 			
 			<!-- Notificaciones de SafePet -->
-			<div class="row compact card" await foreach="notifications">
+			<div class="row compact card notification" data-id="${id}" await foreach="notifications">
 				<div class="column notifItem ta-left">
 					<div class="row ta-left bold">
 						<span class="icon notifIcon" data-icon="${type}" content></span>
@@ -34,16 +35,18 @@
 			
 			<!-- Noticias de RSS -->
 			<div class="row compact card" await foreach="news">
-				<div class="column notifItem ta-left">
-					<div class="row ta-left bold">
-						<span class="icon notifIcon" data-icon="${icon}" content></span>
-						<span class="notifTitle" content="${title}"></span>
+				<a href="${link}" class="row">
+					<div class="column notifItem ta-left">
+						<div class="row ta-left bold">
+							<span class="icon notifIcon" data-icon="${icon}" content></span>
+							<span class="notifTitle" content="${title}"></span>
+						</div>
+						<div class="column ta-left">
+							<div class="row ta-left metaText" content="${meta}"></div>
+							<div class="row ta-left newsContent" content="${description}"></div>
+						</div>
 					</div>
-					<div class="column ta-left">
-						<div class="row ta-left metaText" content="${meta}"></div>
-						<div class="row ta-left newsContent" content="${description}"></div>
-					</div>
-				</div>
+				</a>
 			</div>
 			
 		</div>

@@ -4,13 +4,32 @@ let messages = [];
 let lastTimestamp = 0;
 let refreshInterval = 0;
 
+const chatMenu={
+	"Eliminar Conversación":confirmDeleteChat
+}
+
+function confirmDeleteChat(){
+	showConfirmModal(
+		"¿Eliminar Conversción?",
+		"Se eliminará para ambas personas y no podrán volver a ponerse en contacto hasta que se haga un nuevo reporte",
+		deleteChat
+	)
+}
+
+function deleteChat(){
+	request(SERVER_URL+"deleteChat.php",{pairCode:URLparams["id"]});
+	goBack();
+}
+
 async function beforeLoad(){
-	getNewerMessages();
+	let startingMessages = await getNewerMessages();
 	refreshInterval = setInterval(getNewerMessages,15000);
+	document.querySelector("#contactName").textContent=startingMessages.pairName;
+	document.querySelector(".profileImageDisplay").style.filter="hue-rotate("+(-10*(parseInt(hash(startingMessages.pairName),36)%12))+"deg)";
 }
 
 async function getNewerMessages(){
-	let account_id = userData.account_id;		//TODO: Debe ser la id del usuario logeado.
+	let account_id = userData.account_id;
 	let messagesContainer = document.querySelector("#messagesArea");
 	let newMessages = await request(SERVER_URL+`getChat.php`,{account_id:account_id, pair_code:getUrlParams()["id"], timestamp:lastTimestamp})
 	if(newMessages.status=="GOOD"){
@@ -21,6 +40,7 @@ async function getNewerMessages(){
 		}
 		lastTimestamp = messages[messages.length-1].timestamp;
 	}
+	return newMessages;
 }
 
 function newMessageElement(data){

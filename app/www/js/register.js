@@ -46,20 +46,26 @@ document.addEventListener('DOMContentLoaded', function() {
 			showConfirmModal(
 				'Confirmar Registro',
 				'¿Estás seguro de que quieres registrar esta mascota con la información proporcionada?',
-				async ()=>{
+				()=>{
 					reqBody = {account_id:userData.account_id}
 					new FormData(form).entries().forEach(e=>{
 						reqBody[e[0]]=e[1]
 					})
 					console.log(reqBody);
-					let register = await request(SERVER_URL+"registerPet.php",reqBody)
-					if(register.status=="GOOD"){
-						loadModal('templates/petAddedModal.html',()=>{
-							window.location=document.referrer
-						});
-					} else {
-						console.log("Couldn't register pet:",register)
-					}
+					showAwaitModal("Registrando Mascota","",
+						async ()=>{ return await request(SERVER_URL+"registerPet.php",reqBody) },
+						(req)=>{
+							if(req.status=="GOOD"){
+								showAlertModal(
+									"¡Tu mascota se añadió con éxito!",
+									"Ahora aparece en tu lista de mascotas",
+									goBack);
+							} else {
+								showAlertModal(
+									"Hubo un error",
+									"No se pudo registrar tu mascota");
+							}
+						})
 				}
 			);
 		} else {

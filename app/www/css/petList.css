@@ -22,3 +22,10 @@
 	width:2rem;height:2rem;border:solid 0.1rem var(--color-primary);border-radius:50%;
 }
 .breedIndicator{white-space:break-spaces}
+
+/* Mascotas "En Casa" */
+.pet_home{}
+/* Mascotas "Perdidas" */
+.pet_lost{background-color:var(--color-secondary) !important}
+/* Mascotas "Fuera de zona segura", con GPS */
+.pet_away{}

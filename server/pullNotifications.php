@@ -33,6 +33,7 @@
         $noteIndex=0;
 		while($row = $res->fetch_array()){
 			//$row["notification_id"] is the ID of the notification. Use it to delete it from the table after pulling
+			$response[$noteIndex]["id"]=$row["notification_id"];
 			$response[$noteIndex]["title"]=$row["title"];
 			$response[$noteIndex]["description"]=$row["description"];
 			$response[$noteIndex]["type"]=$row["type"];

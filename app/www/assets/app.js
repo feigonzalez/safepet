@@ -125,7 +125,7 @@ async function processContents(self){
 	
 	// Maneja elementos que no son <img> pero que muestran imágenes
 	for(let pseudoImg of frame.querySelectorAll("[data-imgsrc]")){
-		pseudoImg.style.backgroundImage="url("+pseudoImg.dataset.imgsrc+")";
+		if(pseudoImg.dataset.imgsrc.trim() != "" )pseudoImg.style.backgroundImage="url("+pseudoImg.dataset.imgsrc+")";
 	}
 	
 	// Fija la imagen de fondo para los elementos con [data-icon]

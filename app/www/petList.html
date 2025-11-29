@@ -23,7 +23,7 @@
 	<div class="row">
 		<div class="column list" id="petList"> <!-- Lista de mascotas -->
 	
-			<div class="card row compact" await foreach="pets">
+			<div class="card row compact pet_${data.status.toLowerCase()}" await foreach="pets">
 				<a href="petDetail.html?id=${pet_id}" class="row">
 					<div class="column compact">
 						<div class="petImageDisplay ${getAnimalClass('${species}')}" data-petName="${name}"></div>

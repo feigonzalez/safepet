@@ -20,9 +20,13 @@ async function beforeLoad(){
 					default:
 						break;
 				}
+				m.partnerImg="";
 			}
 			fillIterable(document.querySelector("[foreach=messages]"),messages)
 			
+			for(let header of document.querySelectorAll(".chatHeader")){
+				header.querySelector(".msgAvatar").style.filter="hue-rotate("+(-10*(parseInt(hash(header.textContent),36)%12))+"deg)";
+			}
 			//Actualiza la recencia (qué tan reciente es) de los mensajes de la lista
 			setInterval(()=>{
 				for(let timestamp of document.querySelectorAll(".timestamp")){

@@ -39,7 +39,7 @@ function handleQR(qrContent, html5QrCode) {
 	frame.classList.add("detected")
 	
 	let qrParams = qrContent.match(/^registerowner{account_id:(\d+);pet_id:(\d+)}$/);
-	if(qrParams.length == 3){
+	if(qrParams && qrParams.length == 3){
 		console.log(`Register user [${qrParams[1]}] as owner of pet [${qrParams[2]}]`)
 		showAwaitModal("Añadiendo dueño","",
 			async()=>{

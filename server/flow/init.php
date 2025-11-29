@@ -15,7 +15,7 @@
 	$confirmationUrl  = "http://dintdt.c1.biz/safepet/flow/confirm.php";
 
 	// Orden única
-	$commerceOrder = "SP-" . $userId . "-" . strtoupper($plan) . "-" . time();
+	$commerceOrder = "SP-" . $userId . "-" . strtoupper($plan);
 
 	$data = array(
 		"apiKey"          => $apiKey,
@@ -38,7 +38,7 @@
 	$data["s"] = $signature;
 
 	// Enviar a Flow
-	$curl = curl_init("http://sandbox.flow.cl:443/api/payment/create");
+	$curl = curl_init("https://sandbox.flow.cl/api/payment/create");
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($curl, CURLOPT_POST, true);
@@ -52,4 +52,6 @@
 	}
 	else echo $response;
 	curl_close($curl);
+	echo "\n".$stringToSign."\n";
+	var_dump($data);
 ?>

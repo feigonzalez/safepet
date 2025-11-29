@@ -33,13 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
 				"petBreed": document.getElementById("petBreed").value,
 				"petColor": document.getElementById("petColor").value
 			}
-
-			const payload = await request(SERVER_URL + "updatePet.php", {account_id:userData.account_id, ...formData});
-			if (payload.status === "GOOD") {
-				showAlertModal("Éxito", "Mascota actualizada.",()=>{goBack()});
-			} else {
-				showAlertModal("Error", "No se pudo actualizar la mascota.");
-			}
+			showAwaitModal("Actualizando Datos","",
+				async ()=>{ return request(SERVER_URL + "updatePet.php", {account_id:userData.account_id, ...formData});},
+				(payload)=>{
+					if (payload.status === "GOOD") {
+						showAlertModal("Mascota actualizada.","",goBack);
+					} else {
+						showAlertModal("Hubo un error", "No se pudo actualizar la mascota.");
+					}
+				})
 		} else {
 			ValidationUtils.showErrorMessage('Por favor, corrige los errores en el formulario');
 		}

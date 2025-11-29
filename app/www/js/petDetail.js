@@ -147,7 +147,7 @@ async function deletePet(){
 function updateStatus(){
 	switch(petData.petStatus){
 		case "HOME": confirmAlert(); break;
-		case "LOST": alert("Se debe registrar que la mascota fue hallada"); break;
+		case "LOST": confirmFound(); break;
 		default: alert("Estado de mascota no especificado."); break;
 	}
 }
@@ -163,6 +163,14 @@ function confirmAlert() {
 		'Alertar Pérdida',
 		'¿Estás seguro de que quieres generar una alerta por la pérdida de esta mascota? Se notificará a la comunidad.',
 		alertMissingPet
+	)
+}
+
+function confirmFound(){
+	showConfirmModal(
+		'¿Encontraste a tu mascota?',
+		'Se quitará la alerta que hiciste previamente',
+		alertFoundPet
 	)
 }
 
@@ -194,4 +202,32 @@ async function alertMissingPet(){
 			
 		}
 	)
+}
+
+async function alertFoundPet(){
+	showAwaitModal(
+		"Quitando Alerta", "",
+		async ()=>{
+			return request(SERVER_URL+"deleteAlert.php",{
+				account_id:userData.account_id,
+				pet_id:petData.pet_id,
+			})
+		},
+		(req)=>{
+			if(req.status=="GOOD")
+				showAlertModal(
+					"Se ha eliminado la alerta",
+					`¡Esperamos que ${petData.name} no se pierda otra vez!`,
+					goBack
+				)
+			else{
+				showAlertModal(
+					"Hubo un problema",
+					"No se pudo eliminar la alerta. Inténtalo más tarde"
+				)
+			}
+			
+		}
+	)
+	
 }
