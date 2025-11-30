@@ -6,24 +6,26 @@
 	header('Access-Control-Allow-Origin: *');
 	//var_dump($_POST);
 	$response=array();
-    if(!isset($_POST["account_id"])){
-        $response["status"]="FAIL";
-        $response["message"]="There was no account_id to make report as.";
-        echo json_encode($response);
-        return;
-    }
     if(!isset($_POST["pet_id"])){
         $response["status"]="FAIL";
         $response["message"]="There was no pet_id to make report for.";
         echo json_encode($response);
         return;
     }
-    if(!isset($_POST["latitude"]) || !isset($_POST["longitude"])){
-        $response["status"]="FAIL";
-        $response["message"]="There was missing location data (latitude and/or longitude) to make report from.";
-        echo json_encode($response);
-        return;
-    }
+	if(!isset($_POST["phone"])){
+	}
+	if(!isset($_POST["account_id"])){
+		$response["status"]="FAIL";
+		$response["message"]="There was no account_id to make report as.";
+		echo json_encode($response);
+		return;
+	}
+	if(!isset($_POST["latitude"]) || !isset($_POST["longitude"])){
+		$response["status"]="FAIL";
+		$response["message"]="There was missing location data (latitude and/or longitude) to make report from.";
+		echo json_encode($response);
+		return;
+	}
 
 	$ins = $sqlConn->prepare("INSERT INTO `spet_reports` (`emitter_id`, `pet_id`, `timestamp`, `latitude`, `longitude`) values (?, ?, ?, ?, ?)");
 	$ins->bind_param("iiidd",$_POST["account_id"],$_POST["pet_id"],$_POST["timestamp"],$_POST["latitude"],$_POST["longitude"]);
