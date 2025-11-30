@@ -17,8 +17,14 @@ function confirmDeleteChat(){
 }
 
 function deleteChat(){
-	request(SERVER_URL+"deleteChat.php",{pairCode:URLparams["id"]});
-	goBack();
+	showAwaitModal("Eliminando conversación","",
+	async ()=>{ return request(SERVER_URL+"deleteChat.php",{pair_code:URLparams["id"],account_id:userData.account_id});},
+	(req)=>{
+		if(req.status=="GOOD")
+			showAlertModal("Conversación Eliminada","Volverás a la lista de conversaciones",goBack);
+		else
+			showAlertModal("Hubo un error","La conversación no pudo ser eliminada");
+	})
 }
 
 async function beforeLoad(){

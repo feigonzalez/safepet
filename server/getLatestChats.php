@@ -35,10 +35,10 @@ SELECT m.*, (m.sender_id + m.receiver_id) AS pair_code
         	WHERE `sender_id` = ? OR `receiver_id` = ?
         	GROUP BY pair_code
     	) d
-        ON pair_code = d.pair_code AND m.timestamp = d.latest
+        ON (m.sender_id + m.receiver_id) = d.pair_code AND m.timestamp = d.latest
 	INNER JOIN `spet_users` p
 		ON p.user_id = (m.sender_id + m.receiver_id - ?)
-    WHERE sender_id = ? OR receiver_id = ?;");
+    WHERE sender_id = ? OR receiver_id = ? GROUP BY `pair_code`;");
 
 	$stmt->bind_param("iiiii",$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"]);
 	$stmt->execute();

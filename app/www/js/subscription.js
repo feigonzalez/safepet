@@ -37,7 +37,7 @@ async function processPayment() {
 	let monto = 3000;
 	let plan="basico"
 	
-	navigateTo(SERVER_URL+`flow/init.php?idUsuario=${userData.account_id}&plan=${plan}&monto=${monto}&nombrePlan=${nombrePlan}`);
+	navigateTo(FLOWSERVER_URL+`flow/init.php?idUsuario=${userData.account_id}&plan=${plan}&monto=${monto}&nombrePlan=${nombrePlan}`);
 	
 	/*
 	// Orden única

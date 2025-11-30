@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						account_id:register.account_id,
 						name:register.name,
 						phone:register.phone,
+						plan:register.plan,
 						email:register.username}));
 					window.location.replace('petList.html');
 				} else if(register.status=="MISS"){

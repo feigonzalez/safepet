@@ -33,9 +33,7 @@ async function confirmDelete(){
 		`<div><p>• Se borrarán todos tus datos</p>
 		<p>• Se borrarán los datos de tus mascotas, a menos que tengan otro dueño registrado.</p>
 		<p>• Perderás todos los beneficios de tu suscripción</p></div>`,
-		()=>{	// On confirm
-			deleteAccount
-		}
+		deleteAccount	// On confirm
 	)
 }
 
@@ -44,7 +42,7 @@ function logout() {
 	NavigationUtils.restart();
 }
 
-async function deleteAcount(){
+function deleteAccount(){
 	showAwaitModal(
 		"Eliminando Cuenta",
 		"",
@@ -52,10 +50,11 @@ async function deleteAcount(){
 			return request(SERVER_URL+"deleteAccount.php",{account_id:userData.account_id})
 		},
 		(req)=>{
+			localStorage.removeItem("userData");
 			showAlertModal(
 				"Cuenta Eliminada",
 				"Esperamos que te vaya bien ",
-				NavigationUtils.restart
+				restart
 			)
 		}
 	)

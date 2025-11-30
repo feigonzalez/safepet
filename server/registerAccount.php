@@ -39,6 +39,7 @@
 			$response["account_id"]=$insID;
 			$response["username"]=$_POST["username"];
 			$response["name"]=$_POST["name"];
+			$response["plan"]='free';
 			echo json_encode($response);
 		} else {
 			$response["status"]="FAIL";

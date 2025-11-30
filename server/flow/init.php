@@ -5,10 +5,10 @@
 	$apiKey    = "5745DF16-A963-447A-99EB-6D6AADL5E636";
 	$secretKey = "abf248d2e87af3a68542899406c4f39007e10914";
 
-	$userId     = $_POST["idUsuario"];
-	$plan       = $_POST["plan"];
-	$monto      = $_POST["monto"];
-	$nombrePlan = $_POST["nombrePlan"];
+	$userId     = $_GET["idUsuario"];
+	$plan       = $_GET["plan"];
+	$monto      = $_GET["monto"];
+	$nombrePlan = $_GET["nombrePlan"];
 
 	// URLS DEL SERVIDOR
 	$returnUrl        = "http://dintdt.c1.biz/safepet/flow/return.php";

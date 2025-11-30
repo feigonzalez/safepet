@@ -47,7 +47,7 @@ function handleQR(qrContent, html5QrCode) {
 		showAwaitModal("Mascota encontrada","Se está avisando al dueño",
 			async ()=>{
 				return await request(SERVER_URL+"postReport.php",{
-					command:"POST REPORT",
+					command:"POST REPORT",	// No se que hace esto. postReport.php ni siquiera lo usa
 					account_id:userData.account_id,
 					pet_id:qrparams[1],
 					timestamp: Math.floor(new Date().getTime()/1000),

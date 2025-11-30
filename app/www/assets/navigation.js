@@ -118,12 +118,3 @@ window.NavigationUtils = {
 window.goBack = goBack;
 window.navigateTo = navigateTo;
 window.getUrlParams = getUrlParams;
-
-window.addEventListener("load",()=>{
-	let navAction = localStorage.getItem("navigationAction");
-	localStorage.removeItem("navigationAction");
-	switch(navAction){
-		case "reload": reloadPage(); break;
-		default: break;
-	}
-})

@@ -30,11 +30,11 @@
 	}
 	
 	$stmt = $sqlConn->prepare("SELECT m.*, u.name FROM `spet_messages` m
-		JOIN `spet_users` u ON `user_id` = (? - ?) WHERE `sender_id` + `receiver_id`= ? AND `timestamp` > ?;");
+		JOIN `spet_users` u ON `user_id` = (? - ?) WHERE `sender_id` + `receiver_id`= ? AND (`sender_id` = ? OR `receiver_id` = ?)AND `timestamp` > ?;");
 
 	$pairCode = intval($_POST["pair_code"]);
 
-	$stmt->bind_param("iiii",$pairCode,$_POST["account_id"],$pairCode,$timestamp);
+	$stmt->bind_param("iiiiii",$pairCode,$_POST["account_id"],$pairCode,$_POST["account_id"],$_POST["account_id"],$timestamp);
 	$stmt->execute();
 	
 	$res=$stmt->get_result();

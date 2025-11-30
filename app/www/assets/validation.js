@@ -202,6 +202,7 @@ const SafePetValidations = {
     petReportForm: {
         petSpecies: ValidationConfig.petSpecies,
         petColor: ValidationConfig.petColor,
+        petBreed: ValidationConfig.petBreed,
         petSex: { required: true, message: 'Selecciona el sexo de la mascota' }
     },
 

@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				"¿Deseas actualizar tus datos?",
 				()=>{
 					showAwaitModal("Actualizando Datos","",
-					async ()=>{ return request(SERVER_URL+"updateAccount.php",{account_id:userData.account_id,...formData})}
+					async ()=>{ return request(SERVER_URL+"updateAccount.php",{account_id:userData.account_id,...formData})},
 					(update)=>{
 						if(update.status == "GOOD"){
 							userData.name = update.fullName;

@@ -5,5 +5,10 @@
 	"bundledWebRuntime": false,
 	"android": {
 		"allowMixedContent": true 
+	},
+	"server": {
+		"allowNavigation": [
+			"*"
+		]
 	}
 }
