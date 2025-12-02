@@ -28,8 +28,15 @@ async function downloadQR(){
 }
 
 async function beforeLoad(){
-	petData = await request(SERVER_URL+"getPet.php",{account_id:userData.account_id,pet_id:URLparams.id})
-	trackerData = await request(SERVER_URL+"getTrackerInfo.php",{pet_id:URLparams.id})
+    petData = await request(SERVER_URL+"getPet.php",{account_id:userData.account_id,pet_id:URLparams.id})
+    if(!petData || petData.status !== "GOOD"){
+        showAlertModal("No se pudo cargar la mascota","Intenta nuevamente o verifica tu conexión")
+        return;
+    }
+    trackerData = await request(SERVER_URL+"getTrackerInfo.php",{pet_id:URLparams.id})
+    if(userData.plan === "free"){
+        petDetailMenu["Añadir Dueño"] = null;
+    }
 	if(userData.plan == "premium"){
 		document.querySelector("#trackerInfo").classList.remove("hidden");
 		switch(trackerData.status){

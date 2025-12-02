@@ -30,8 +30,11 @@
 			$response["name"]=$row["name"];
 			if (isset($row["phone"]) && $row["phone"] !== '') { $response["phone"]=$row["phone"]; }
 			$response["email"]=$row["username"];
-			$response["plan"]=$row["plan"];
-			echo json_encode($response);
+            $p = strtolower(trim($row["plan"]));
+            if($p === 'gratis') $p = 'free';
+            if($p === 'basico') $p = 'basic';
+            $response["plan"]=$p;
+            echo json_encode($response);
 		} else {
 			$response["status"]="MISS";
 			$response["message"]="Incorrect password";

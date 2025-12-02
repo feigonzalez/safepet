@@ -489,10 +489,10 @@ const hash = function(str, seed = 0) {
 	return (4294967296 * (2097151 & h2) + (h1>>>0)).toString(36);
 };
 
-function locate(callbackSuccess, callbackError){
+function locate(callbackSuccess, callbackError = ()=>{}){
 	if(!navigator.geolocation){
 		console.warn("Este navegador no permite geolocalización")
-		callbackError();
+		try{ if(typeof callbackError === 'function') callbackError(); }catch(_){}
 	}
 	navigator.geolocation.getCurrentPosition(
 		(pos)=>{	//On Success
@@ -502,7 +502,7 @@ function locate(callbackSuccess, callbackError){
 		},
 		(e)=>{	//On Error
 			console.warn("No se pudo obtener geolocalización")
-			callbackError(e);
+			try{ if(typeof callbackError === 'function') callbackError(e); }catch(_){}
 		}
 	)
 }

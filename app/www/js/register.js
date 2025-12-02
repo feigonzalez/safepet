@@ -14,7 +14,15 @@ function showUploadedImage(input, imgId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	const form = document.querySelector('form');
+    try {
+        const u = (typeof userData !== 'undefined' && userData.plan) ? userData : JSON.parse(localStorage.getItem('userData')||'{}');
+        const plan = (u && u.plan) ? u.plan : 'free';
+        if(plan === 'free'){
+            const qrBtn = document.querySelector('.header .column.compact a[href="addPetQR.html"]');
+            if(qrBtn) qrBtn.remove();
+        }
+    } catch(e) {}
+    const form = document.querySelector('form');
 	const validationRules = ValidationUtils.SafePetValidations.petReportForm;
 	
 	// Configurar validación en tiempo real
