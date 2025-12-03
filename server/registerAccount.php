@@ -28,8 +28,15 @@
 		echo json_encode($response);
 	} else {
 		$passHash = password_hash($_POST["password"],PASSWORD_BCRYPT);
-		$ins = $sqlConn->prepare("INSERT INTO `spet_users` (`username`,`password`, `name`, `plan`) VALUES (?, ?, ?, 'free')");
-		$ins->bind_param("sss",$_POST["username"],$passHash,$_POST["name"]);
+		$plan = 'free';
+		if(isset($_POST["plan"])){
+			$p = strtolower(trim($_POST["plan"]));
+			if($p === 'gratis') $p = 'free';
+			if($p === 'basico') $p = 'basic';
+			if(in_array($p, ['free','basic','premium'])) $plan = $p;
+		}
+		$ins = $sqlConn->prepare("INSERT INTO `spet_users` (`username`,`password`, `name`, `plan`) VALUES (?, ?, ?, ?)");
+		$ins->bind_param("ssss",$_POST["username"],$passHash,$_POST["name"],$plan);
 		$ins->execute();
 		$insID=$sqlConn->insert_id;
 
@@ -39,7 +46,7 @@
 			$response["account_id"]=$insID;
 			$response["username"]=$_POST["username"];
 			$response["name"]=$_POST["name"];
-			$response["plan"]='free';
+			$response["plan"]=$plan;
 			echo json_encode($response);
 		} else {
 			$response["status"]="FAIL";

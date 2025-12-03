@@ -15,9 +15,27 @@
         echo json_encode($response);
         return;
     }
-	
-	// Check if the tracker is already in use. If it is, it can't be registered.
-	$sel = $sqlConn->prepare("SELECT * FROM `spet_trackers` WHERE `tracker_id` = ?");
+    
+    $planSel = $sqlConn->prepare("SELECT u.`plan` FROM `spet_ownership` o JOIN `spet_users` u ON o.`user_id` = u.`user_id` WHERE o.`pet_id` = ? LIMIT 1");
+    $planSel->bind_param("i", $_POST["pet_id"]);
+    $planSel->execute();
+    $planRes = $planSel->get_result();
+    $petPlan = 'free';
+    if($planRes && $rowPlan = $planRes->fetch_array()){
+        $p = strtolower(trim($rowPlan["plan"]));
+        if($p === 'gratis') $p = 'free';
+        if($p === 'basico') $p = 'basic';
+        $petPlan = $p;
+    }
+    if($petPlan !== 'premium'){
+        $response["status"] = "MISS";
+        $response["message"] = "Tracker requires premium plan";
+        echo json_encode($response);
+        return;
+    }
+
+    // Check if the tracker is already in use. If it is, it can't be registered.
+    $sel = $sqlConn->prepare("SELECT * FROM `spet_trackers` WHERE `tracker_id` = ?");
 	$sel->bind_param("i",$_POST["tracker_id"]);
 	$sel->execute();
 	$res=$sel->get_result();

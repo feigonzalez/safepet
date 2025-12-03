@@ -29,15 +29,13 @@ function closeSubscriptionModal() {
 
 // INICIA EL PROCESO DE FLOW
 async function processPayment() {
-    // Redirige al backend
-	// URLS DEL SERVIDOR
-	let returnUrl        = "http://dintdt.c1.biz/safepet/flow/return.php";
-	let confirmationUrl  = "http://dintdt.c1.biz/safepet/flow/confirm.php";
-	let nombrePlan = "NOMBRE LPAN";
-	let monto = 3000;
-	let plan="basico"
-	
-	navigateTo(FLOWSERVER_URL+`flow/init.php?idUsuario=${userData.account_id}&plan=${plan}&monto=${monto}&nombrePlan=${nombrePlan}`);
+    let returnUrl        = "http://dintdt.c1.biz/safepet/flow/return.php";
+    let confirmationUrl  = "http://dintdt.c1.biz/safepet/flow/confirm.php";
+    let nombrePlan = selectedPlan === 'premium' ? 'Plan Premium' : 'Plan Básico';
+    let monto = selectedPlan === 'premium' ? 9990 : 5990;
+    let plan = selectedPlan || 'basico';
+
+    navigateTo(FLOWSERVER_URL+`flow/init.php?idUsuario=${userData.account_id}&plan=${plan}&monto=${monto}&nombrePlan=${nombrePlan}`);
 	
 	/*
 	// Orden única
@@ -79,4 +77,19 @@ async function makeFlowRequest(url,data){
 		console.log("couldn't get hash from server");
 	}
 	*/
+}
+function beforeLoad(){
+    try{
+        const u = JSON.parse(localStorage.getItem('userData')||'{}');
+        const p = (u && u.plan) ? u.plan : 'free';
+        const pEs = p==='premium'?'premium':(p==='basic'?'basico':'gratis');
+        if(pEs==='basico'){
+            const b = document.getElementById('subscribeBasicBtn');
+            if(b){ b.textContent='Plan actual'; b.classList.remove('bg-primary'); b.classList.add('disabled'); b.style.opacity='0.6'; b.setAttribute('onclick','return false;'); }
+        }
+        if(pEs==='premium'){
+            const b = document.getElementById('subscribePremiumBtn');
+            if(b){ b.textContent='Plan actual'; b.classList.remove('bg-primary'); b.classList.add('disabled'); b.style.opacity='0.6'; b.setAttribute('onclick','return false;'); }
+        }
+    }catch(e){}
 }

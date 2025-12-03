@@ -267,7 +267,7 @@ function addRealSheltersAndServices() {
 			shelterMarkers.push(marker);
     });
 
-    console.log(`ï¿?Refugios y servicios cargados: ${places.length}`);
+    console.log(`ï¿½?Refugios y servicios cargados: ${places.length}`);
 }
 // FUNCIONES DE INTERFAZ
 
@@ -311,14 +311,15 @@ window.addEventListener('load', async () => {
 	let dID = await window.getDeviceId();
 	localStorage.setItem("deviceID",dID.identifier)
 	
-	request(SERVER_URL+"getAlerts.php",{latitude:localStorage.latitude, longitude:localStorage.longitude}).then(r=>{
-		r.forEach(item => {
-		const icon = L.divIcon({
-			className: 'custom-div-icon alert-marker',
-			html: '<div class="marker-content"><span class="icon" data-icon="warning"></span></div>',
-			iconSize: [34, 34],
-			iconAnchor: [17, 17]
-		});
+    request(SERVER_URL+"getAlerts.php",{latitude:localStorage.latitude, longitude:localStorage.longitude}).then(r=>{
+        if(!Array.isArray(r)) return;
+        r.forEach(item => {
+            const icon = L.divIcon({
+                className: 'custom-div-icon alert-marker',
+                html: '<div class="marker-content"><span class="icon" data-icon="warning"></span></div>',
+                iconSize: [34, 34],
+                iconAnchor: [17, 17]
+            });
 		const marker = L.marker([item.latitude, item.longitude], {icon })
 			.addTo(map)
 			.bindPopup(`
