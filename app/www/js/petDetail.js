@@ -8,7 +8,7 @@ var petDetailMenu = {
 	"Ver Código QR":showPetQR,
 	"Añadir Dueño":addOwner,
 	"Añadir Rastreador":null,
-	"Quitar Rastreador":null,
+	"Gestionar Rastreador":null,
 	"Eliminar Mascota":confirmDeletePet
 }
 
@@ -39,8 +39,8 @@ async function beforeLoad(){
 				}
 				break;
 			case "GOOD":	// Pet has a tracker. Allow user to remove it
-				petDetailMenu["Quitar Rastreador"]=()=>{
-					showAlertModal("Función no implementada","En progreso")	//TODO
+				petDetailMenu["Gestionar Rastreador"]=()=>{
+					navigateTo("manageTracker.html?pet_id="+URLparams.id);
 				};
 				let unit = "m";
 				let distance = Math.round(distanceGeo(

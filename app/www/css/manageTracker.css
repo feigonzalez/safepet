@@ -1,0 +1,4 @@
+.formGroup{display:flex;width:100%;flex-direction:column}
+.formGroup>*{width:100%;padding:0.25rem}
+.formGroup label{font-weight:bold}
+.formGroup input{border-radius:1em;font-size:1em;text-align:center;border:solid 1px #ccc}

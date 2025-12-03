@@ -1,5 +1,6 @@
 <head>
 	<meta charset="utf-8">
+	<script src="mobile.js"></script>
 </head>
 <script defer>
 	var watchID;
@@ -16,8 +17,11 @@
 			(position)=>{	//On Success
 				addNotice({status:"WAIT",
 					message:"Publicando ubicación..."})
-				postLocation({"lat":position.coords.latitude,
-					"long":position.coords.longitude})
+				postLocation({
+					"lat":position.coords.latitude,
+					"long":position.coords.longitude,
+					"accuracy":position.coords.accuracy
+				})
 			},
 			()=>{	//On Error
 				addNotice({status:"FAIL",
@@ -38,8 +42,11 @@
 			(position)=>{	//On Success
 				addNotice({status:"WAIT",
 					message:"Publicando ubicación..."})
-				postLocation({"lat":position.coords.latitude,
-					"long":position.coords.longitude})
+				postLocation({
+					"lat":position.coords.latitude,
+					"long":position.coords.longitude,
+					"accuracy":position.coords.accuracy
+					})
 			},
 			()=>{	//On Error
 				addNotice({status:"FAIL",
@@ -59,17 +66,22 @@
 			"<div class='notice'><span class='noticeBadge "+update.status+"'>"+update.status+"</span><span class='noticeContent'>"+update.message+"</span></div>"+document.querySelector("#noticeList").innerHTML
 	}
 	
-	function postLocation(loc){
+	async function postLocation(loc){
 		console.log("Post location ["+loc.lat+"; "+loc.long+"]")
 		fetch("http://dintdt.c1.biz/safepet/updateTrackerInfo.php",{
 			method:"POST",
 			body:new URLSearchParams({
-				tracker_id:0,
+				tracker_id:document.querySelector("#trackerID").value,
 				latitude:loc.lat,
-				longitude:loc.long})
+				longitude:loc.long,
+				accuracy:loc.accuracy,
+				battery:(await getBatteryInfo()).batteryLevel*100
+				})
 			})
-			.then(r=>r.ok?r.json():{"status":"NONE"})
+			.then(r=>r.ok?r.text():'{"status":"NONE"}')
 			.then(j=>{
+				console.log(j);
+				j = JSON.parse(j);
 				if(j.status=="GOOD"){
 					j.message=`[${j.latitude};${j.longitude}]`;
 				}
@@ -81,9 +93,17 @@
 		document.querySelector("#button_locate").addEventListener("click",()=>{locate();})
 		document.querySelector("#button_track").addEventListener("click",()=>{beginTracking();})
 		document.querySelector("#button_clear").addEventListener("click",()=>{clearTracking();})
+		document.querySelector("#qrCode").setAttribute("src","https://api.qrserver.com/v1/create-qr-code/?data=safepet:gpstrackerid=0")
+		document.querySelector("#trackerID").addEventListener("change",(ev)=>{
+			document.querySelector("#qrCode").setAttribute("src","https://api.qrserver.com/v1/create-qr-code/?data=safepet:gpstrackerid="+ev.target.value)
+		})
 	})
 </script>
 <body>
+	<div id="qrContainer">
+		<img id="qrCode">
+		<input id="trackerID" value=0>
+	</div>
 	<div id="buttons">
 		<button id="button_locate">Publicar ubicación</button>
 		<button id="button_track">Comenzar seguimiento</button>
@@ -94,8 +114,8 @@
 <style>
 	*{font-size:5vw}
 	body{margin:0;display:flex;flex-direction:column}
-	button{display:block;width:80vw;text-align:center;padding:0.5em;margin:0.5em auto}
-	#buttons, #noticeList{height:50vh;}
+	button{display:block;width:80vw;text-align:center;padding:0.5em;margin:0.5em auto;border-radius:2em;border:none;background-color:#f44;color:#fff}
+	#buttons, #noticeList{margin:0.5em}
 	#noticeList{overflow-y:scroll}
 	
 	.notice{margin:0.1rem;font-family:monospace;}
@@ -104,4 +124,8 @@
 	.noticeBadge.FAIL{background-color:#a44}
 	.noticeBadge.WAIT{background-color:#888}
 	.noticeBadge.DONE{background-color:#44a}
+	
+	#qrContainer{width:100%;display:flex;flex-direction:column;align-items:center}
+	#qrCode{padding:2em;border:solid 1px #ccc;border-radius:1em;width:50vw;height:50vw;;margin:1em}
+	#trackerID{padding:1em;border-radius:2em;border:solid 1px #ccc;text-align:center}
 </style>
