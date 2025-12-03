@@ -16,6 +16,8 @@
         return;
     }
     
+	// 1. Verificar que el dueño de la mascota tenga el plan necesario (premium) para asignar un rastreador
+	
     $planSel = $sqlConn->prepare("SELECT u.`plan` FROM `spet_ownership` o JOIN `spet_users` u ON o.`user_id` = u.`user_id` WHERE o.`pet_id` = ? LIMIT 1");
     $planSel->bind_param("i", $_POST["pet_id"]);
     $planSel->execute();
@@ -34,7 +36,8 @@
         return;
     }
 
-    // Check if the tracker is already in use. If it is, it can't be registered.
+    // 2. Verificar que el rastreador no está ya siendo usado por otra mascota
+	
     $sel = $sqlConn->prepare("SELECT * FROM `spet_trackers` WHERE `tracker_id` = ?");
 	$sel->bind_param("i",$_POST["tracker_id"]);
 	$sel->execute();
@@ -46,7 +49,8 @@
 		exit();
 	}
 	
-	// Tracker was not in use. Assign to indicated pet
+	// 3. Asignar rastreador a mascota
+	
 	$ins = $sqlConn->prepare("INSERT INTO `spet_trackers` (`tracker_id`, `pet_id`) VALUES (?, ?)");
 	$ins->bind_param("ii",$_POST["tracker_id"],$_POST["pet_id"]);
 	$ins->execute();

@@ -30,6 +30,8 @@
 			$response["latitude"]=$row["latitude"];
 			$response["longitude"]=$row["longitude"];
 			$response["last_reading"]=$row["last_reading"];
+			$response["battery"]=$row["battery"];
+			$response["accuracy"]=$row["accuracy"];
 		}
 		echo json_encode($response);
 	} else {

@@ -1,3 +1,11 @@
+function viewSafeZone(){
+	// TODO
+	showAlertModal(
+		"Función no Implementada",
+		"Esta función redirigirá al mapa y mostrará un círculo transparente azul, correspondiente a la zona segura."
+	)
+}
+
 function confirmSafeZone(){
 	let szRadius = document.querySelector("#safezone_radius").value
 	let errMsg = "";
@@ -13,9 +21,18 @@ function confirmSafeZone(){
 
 function postSafeZone(szRadius){
 	showAwaitModal("Añadiendo Zona Segura","",
-		async()=>{request(SERVER_URL+"postSafeZone.php",{account_id:userData.account_id,pet_id:URLparams["pet_id"],latitude:localStorage.latitude,longitude:localStorage.longitude,radius:szRadius})},
+		async()=>{ return request(SERVER_URL+"postSafeZone.php",{
+			account_id:userData.account_id,
+			pet_id:URLparams["pet_id"],
+			latitude:localStorage.latitude,
+			longitude:localStorage.longitude,
+			radius:szRadius})},
 		(req)=>{
-			console.log(req)
+			if(req.status=="GOOD"){
+				showAlertModal("Zona Segura Añadida","Ahora se te avisará cuando tu mascota salga de esta area",goBack)
+			} else {
+				showAlertModal("Hubo un error","No se pudo definir la zona segura")
+			}
 		}
 	)
 }
@@ -26,9 +43,13 @@ function confirmRemoveTracker(){
 
 function removeTracker(){
 	showAwaitModal("Quitando Rastreador","",
-		async ()=>{ request(SERVER_URL+"removeTracker.php",{account_id:userData.account_id,pet_id:URLparams["pet_id"]})},
+		async ()=>{ return request(SERVER_URL+"removeTracker.php",{account_id:userData.account_id,pet_id:URLparams["pet_id"]})},
 		(req)=>{
-			console.log(req)
+			if(req.status=="GOOD"){
+				showAlertModal("Rastreador Quitado","",goBack)
+			} else {
+				showAlertModal("Hubo un error","No se pudo quitar el rastreador")
+			}
 		}
 	)
 }

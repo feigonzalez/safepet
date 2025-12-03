@@ -11,6 +11,8 @@ var petDetailMenu = {
 	"Gestionar Rastreador":null,
 	"Eliminar Mascota":confirmDeletePet
 }
+var hasTracker = false;
+var statusButtonFunction = ()=>{};
 
 async function downloadQR(){
 	let dataBlob = await fetch(getQR(SERVER_URL+"?petID="+URLparams["id"]))
@@ -49,13 +51,14 @@ async function beforeLoad(){
 				petDetailMenu["Gestionar Rastreador"]=()=>{
 					navigateTo("manageTracker.html?pet_id="+URLparams.id);
 				};
+				hasTracker=true;
 				let unit = "m";
 				let distance = Math.round(distanceGeo(
 					parseFloat(localStorage.latitude), parseFloat(localStorage.longitude),
 					parseFloat(trackerData.latitude), parseFloat(trackerData.longitude)));
 				if(distance > 1000){ distance = Math.round(distance/100)/10; unit="Km";}
 				document.querySelector('#trackerDistance').textContent = distance + unit;
-				document.querySelector('#trackerBattery').textContent = trackerData.battery;
+				document.querySelector('#trackerBattery').textContent = trackerData.battery+"%";
 				break;
 		}
 	}
@@ -81,10 +84,22 @@ async function beforeLoad(){
 	
 	
 	let statusButtonText="";
-	switch(petData.petStatus){
-		case "HOME": statusButtonText="Mi mascota se perdió"; break;
-		case "LOST": statusButtonText="Encontré mi mascota"; break;
-		default: break;
+	if(hasTracker){
+		statusButtonText="Ubicar mascota en el mapa";
+		statusButtonFunction = locatePet;
+	} else {
+		switch(petData.petStatus){
+			case "HOME":
+				statusButtonText="Mi mascota se perdió";
+				statusButtonFunction = confirmAlert;
+				break;
+			case "LOST":
+				statusButtonText="Encontré mi mascota";
+				statusButtonFunction = confirmFound;
+				break;
+			default:
+				break;
+		}
 	}
 	
 	document.querySelector("#changeStatusBtn").textContent=statusButtonText;
@@ -152,11 +167,11 @@ async function deletePet(){
 }
 
 function updateStatus(){
-	switch(petData.petStatus){
-		case "HOME": confirmAlert(); break;
-		case "LOST": confirmFound(); break;
-		default: alert("Estado de mascota no especificado."); break;
-	}
+	statusButtonFunction();
+}
+
+function locatePet(){
+	console.log("redirect to index with marker where pet is right now");
 }
 
 function confirmAlert() {
