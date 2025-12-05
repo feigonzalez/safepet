@@ -171,7 +171,10 @@ function updateStatus(){
 }
 
 function locatePet(){
-	console.log("redirect to index with marker where pet is right now");
+	locationData={"tracker":trackerData.tracker_id+";"+trackerData.latitude+";"+trackerData.longitude}
+	if(trackerData["safezone_latitude"] && trackerData["safezone_longitude"] && trackerData["safezone_radius"])
+		locationData["area"]=trackerData["safezone_latitude"]+";"+trackerData["safezone_longitude"]+";"+trackerData["safezone_radius"]
+	navigateWithParams("index.html",locationData)
 }
 
 function confirmAlert() {

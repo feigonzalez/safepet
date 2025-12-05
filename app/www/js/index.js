@@ -9,6 +9,10 @@ let mapInitialized = false;
 let shelterMarkers = [];	let showShelters = true;
 let alertMarkers = [];		let showAlerts = true;
 let userLocation = null;
+let updatingPosition=false;
+
+// marcador móvil si se debe mostrar un rastreador
+var tracker=null;
 
 // ======================
 // INICIALIZAR MAPA
@@ -77,8 +81,8 @@ function initMap() {
                 userLocation = { lat: userLat, lng: userLng };
 				localStorage.setItem("latitude",userLat)
 				localStorage.setItem("longitude",userLng)
-				// Si se abri�� index con un parametro URL "marker", se centra en el marker en vez del usuario
-                if(!("marker" in URLparams))
+				// Si se pasó algún parámetro, no se centra en el usuario.
+                if(Object.keys(URLparams).length == 0)
 					map.setView([userLat, userLng], 15);
 
                 // Añadir marcador del usuario
@@ -103,6 +107,20 @@ function initMap() {
 					.bindPopup(popup)
 					.on("click",()=>{map.setView([userLat, userLng])})
 				processContents(userMarker._icon)
+				// se actualiza la posición del usuario cada diez segundos
+				setInterval(()=>{
+					if(!updatingPosition){
+					console.log("updating user location");
+						updatingPosition=true;
+						locate(pos=>{
+							updatingPosition=false;
+							console.log("updated");
+							userMarker.setLatLng([pos.coords.latitude,pos.coords.longitude])
+						})
+					} else {
+						console.log("still updating")
+					}
+					},20000)
 /*
                 getAddressFromCoordinates(userLat, userLng, address => {
                     userMarker.bindPopup(`
@@ -121,8 +139,9 @@ function initMap() {
     }
 	
 	if("marker" in URLparams){
+		// "marker" tiene el formato CLASE;LATITUDE;LONGITUD, donde CLASE es una clase .css que se aplica al marcador
 		let markData = URLparams["marker"].split(";")
-		console.log(markData)
+		console.log("markData: ",markData)
 		let marker = L.marker([parseFloat(markData[1]),parseFloat(markData[2])], {
 			icon: L.divIcon({
 				className: 'marker-'+markData[0],
@@ -132,6 +151,44 @@ function initMap() {
 			})
 		}).addTo(map);
 		map.setView([parseFloat(markData[1]), parseFloat(markData[2])], 15);
+	}
+	
+	if("area" in URLparams){
+		// "area" tiene el formato LATITUDE;LONGITUDE;RADIUS
+		let areaData = URLparams["area"].split(";")
+		console.log("areaData: ",areaData)
+		let circle = L.circle([parseFloat(areaData[0]),parseFloat(areaData[1])], {
+			radius: parseFloat(areaData[2])
+		}).addTo(map);
+		map.setView([parseFloat(areaData[0]), parseFloat(areaData[1])], 19);
+	}
+	
+	if("tracker" in URLparams){
+		// "area" tiene el formato ID;LATITUDE;LONGITUDE
+		let trackerData = URLparams["tracker"].split(";")
+		console.log("trackerData:",trackerData);
+		tracker = L.marker([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
+			icon: L.divIcon({
+				className: 'marker-tracker',
+				html: '<div class="marker-content"><span class="icon" data-icon="pets"></span></div>',
+				iconSize: [26, 26],
+				iconAnchor: [13, 13]
+			}),
+			zIndexOffset:200
+		}).addTo(map);
+		map.setView([parseFloat(trackerData[1]), parseFloat(trackerData[2])], 19);
+		processContents(tracker._icon)
+		// se actualiza la posición del rastreador cada 10 segundos
+		setInterval(()=>{locateTracker(trackerData)},10000)
+	}
+}
+
+async function locateTracker(trackerData){
+	req = await request(SERVER_URL+"getTrackerInfo.php",{tracker_id:trackerData[0]})
+	if(req.status=="GOOD"){
+		tracker.setLatLng([parseFloat(req.latitude),parseFloat(req.longitude)])
+	} else {
+		console.log("couldn't update tracker position");
 	}
 }
 
@@ -307,6 +364,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 window.addEventListener('load', async () => {
+	
+	
+	// Si se pasó algún parámetro, se quitan los botones a otras paginas para evitar que pueda formar una historia de navegacion infinita
+	if(Object.keys(URLparams).length > 0){
+		document.querySelector(".footer").remove();
+		document.querySelector("#notificationsBtnHolder").remove();
+	}
+	
     if (!mapInitialized) setTimeout(() => initMap(), 200);
 	let dID = await window.getDeviceId();
 	localStorage.setItem("deviceID",dID.identifier)

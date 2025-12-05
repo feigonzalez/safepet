@@ -27,14 +27,9 @@
 			$response["status"]="GOOD";
 			$response["tracker_id"]=$row["tracker_id"];
 			$response["pet_id"]=$row["pet_id"];
-			$response["latitude"]=$row["latitude"];
-			$response["longitude"]=$row["longitude"];
-			$response["last_reading"]=$row["last_reading"];
-			$response["battery"]=$row["battery"];
-			$response["accuracy"]=$row["accuracy"];
-			$response["safezone_latitude"]=$row["safezone_latitude"];
-			$response["safezone_longitude"]=$row["safezone_longitude"];
-			$response["safezone_radius"]=$row["safezone_radius"];
+			$response["latitude"]=$row["safezone_latitude"];
+			$response["longitude"]=$row["safezone_longitude"];
+			$response["radius"]=$row["safezone_radius"];
 		}
 		echo json_encode($response);
 	} else {
