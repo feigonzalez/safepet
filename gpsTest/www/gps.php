@@ -1,12 +1,55 @@
+<?php
+	header('Access-Control-Allow-Origin: *');
+	
+	if(isset($_GET["id"])){
+		$tid = $_GET["id"];
+		$lat = $_GET["lat"];
+		$lng = $_GET["lng"];
+		$acc = $_GET["acc"];
+		$prd = $_GET["period"];
+		
+		$data=[
+			"tracker_id" => $tid,
+			"latitude" => $lat,
+			"longitude" => $lng,
+			"accuracy" => $acc
+		];
+		$curl = curl_init("http://dintdt.c1.biz/safepet/updateTrackerInfo.php");
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($curl);
+		if($response === false){
+			$error = curl_error($curl);
+			throw new Exception($error, 1);
+		}
+		
+		if(isset($_GET["period"])){
+			echo "<script class='php_generated'>const timer = ".$_GET["period"]."</script>";
+		}
+	}
+?>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 	<!--script src="mobile.js"></script-->
 </head>
 <script defer>
-	var watchID;
 	
-	function locate(){
+	function clearTracking(){
+		clearInterval(trackInterval);
+		addNotice({status:"DONE",
+			message:"Seguimiento terminado"})
+	}
+	
+	function addNotice(update){
+		document.querySelector("#noticeList").innerHTML=
+			"<div class='notice'><span class='noticeBadge "+update.status+"'>"+update.status+"</span><span class='noticeContent'>"+update.message+"</span></div>"+document.querySelector("#noticeList").innerHTML
+	}
+	
+	async function postLocation(period){
 		addNotice({status:"WAIT",
 			message:"Obteniendo ubicación..."})
 		if(!navigator.geolocation){
@@ -18,82 +61,31 @@
 			(position)=>{	//On Success
 				addNotice({status:"WAIT",
 					message:"Publicando ubicación..."})
-				postLocation({
+				loc= {
+					"id":document.querySelector("#trackerID").value,
 					"lat":position.coords.latitude,
 					"long":position.coords.longitude,
-					"accuracy":position.coords.accuracy
-				})
+					"acc":position.coords.accuracy,
+					"period":period	// segundos a esperar antes de publicar la ubicacion otra vez. "0" lo hace una sola vez
+				}
+				console.log("Post location ["+loc.lat+"; "+loc.long+"]")
+				window.location.href=`gps.php?id=${loc.id}&lat=${loc.lat}&lng=${loc.long}&acc=${loc.acc}`+(period>0?`&period=${period}`:"");
 			},
 			()=>{	//On Error
 				addNotice({status:"FAIL",
 					message:"No se pudo obtener ubicación"})
 			}
 		)
-	}
-	
-	function beginTracking(){
-		addNotice({status:"WAIT",
-			message:"Comenzando seguimiento..."})
-		if(!navigator.geolocation){
-			addNotice({status:"FAIL",
-				message:"Este navegador no permite geolocalización."});
-			return;
-		}
-		watchID = navigator.geolocation.watchPosition(
-			(position)=>{	//On Success
-				addNotice({status:"WAIT",
-					message:"Publicando ubicación..."})
-				postLocation({
-					"lat":position.coords.latitude,
-					"long":position.coords.longitude,
-					"accuracy":position.coords.accuracy
-					})
-			},
-			()=>{	//On Error
-				addNotice({status:"FAIL",
-					message:"No se pudo obtener ubicación"})
-			}
-		)
-	}
-	
-	function clearTracking(){
-		navigator.geolocation.clearWatch(watchID)
-		addNotice({status:"DONE",
-			message:"Seguimiento terminado"})
-	}
-	
-	function addNotice(update){
-		document.querySelector("#noticeList").innerHTML=
-			"<div class='notice'><span class='noticeBadge "+update.status+"'>"+update.status+"</span><span class='noticeContent'>"+update.message+"</span></div>"+document.querySelector("#noticeList").innerHTML
-	}
-	
-	async function postLocation(loc){
-		console.log("Post location ["+loc.lat+"; "+loc.long+"]")
-		fetch("http://dintdt.c1.biz/safepet/updateTrackerInfo.php",{
-			method:"POST",
-			mode:"no-cors",
-			body:new URLSearchParams({
-				tracker_id:document.querySelector("#trackerID").value,
-				latitude:loc.lat,
-				longitude:loc.long,
-				accuracy:loc.accuracy,
-				//battery:(await getBatteryInfo()).batteryLevel*100
-				})
-			})
-			.then(r=>r.ok?r.text():'{"status":"NONE"}')
-			.then(j=>{
-				console.log(j);
-				j = JSON.parse(j);
-				//if(j.status=="GOOD"){
-					j.message=`[${loc.lat};${loc.lat}]`;
-				//}
-				addNotice(j)
-			}) 
 	}
 	
 	window.addEventListener("load",()=>{
-		document.querySelector("#button_locate").addEventListener("click",()=>{locate();})
-		document.querySelector("#button_track").addEventListener("click",()=>{beginTracking();})
+		
+		if(typeof(timer)!=="undefined"){
+			trackInterval = setInterval(()=>{postLocation(timer)},timer*1000);
+		}
+		
+		document.querySelector("#button_locate").addEventListener("click",()=>{postLocation(0);})
+		document.querySelector("#button_track").addEventListener("click",()=>{postLocation(15);})
 		document.querySelector("#button_clear").addEventListener("click",()=>{clearTracking();})
 		document.querySelector("#qrCode").setAttribute("src","https://api.qrserver.com/v1/create-qr-code/?data=safepet:gpstrackerid=0")
 		document.querySelector("#trackerID").addEventListener("change",(ev)=>{

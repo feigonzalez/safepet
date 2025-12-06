@@ -33,7 +33,8 @@ window.addEventListener("load",(ev)=>{
 				body: body,
 				id: Math.ceil(Math.random() * 100), // any random int
 				schedule: { at: date },
-				sound: null
+				sound: null,
+				smallIcon: "notification_icon"
 			}]
 		});
 	}
