@@ -1,39 +1,5 @@
 
-        .modalOverlay {
-            position: fixed;
-            top: 0; 
-            left: 0;
-            width: 100%; 
-            height: 100%;
-            background: rgba(0,0,0,0.45);
-            display: none;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 9999;
-        }
-
-        .modalSheet {
-            background: #fff;
-            width: 100%;
-            max-width: 500px;
-            border-radius: 22px 22px 0 0;
-            padding: 1.8rem;
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
-            animation: slideUp .3s ease forwards;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to   { transform: translateY(0); }
-        }
-
-        .handle {
-            width: 50px;
-            height: 6px;
-            background: #ccc;
-            border-radius: 10px;
-            margin: 0 auto 1rem auto;
-        }
+/* modal unificado usa estilos globales en assets/style.css (.modalBackdrop, .modalBody, .modalContent) */
 
         .chip {
             background: #f4f4f4;
@@ -43,23 +9,12 @@
 		
 		/* Mantener el header estándar del proyecto, sin overrides aquí. */
 
-.content {
-    padding: 16px;
-}
+.content { padding: 16px; }
 
-.planCard {
-    background: white;
-    border-radius: var(--radius-lg);
-    padding: 14px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-1);
-}
+.planCard { background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1rem; margin:0.75rem 0; box-shadow:var(--shadow-1); }
+.planCard:hover { box-shadow:var(--shadow-2); }
 
-.planTitle {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
+.planTitle { font-size:1.2rem; font-weight:600; margin-bottom:0.25rem; }
 
 .planIcon {
     font-size: 28px;
@@ -67,23 +22,10 @@
     margin-bottom: 8px;
 }
 
-.price {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #444;
-    margin-bottom: 10px;
-    text-align: left;
-}
+.price { display:inline-block; background:var(--color-primary-soft); padding:0.35rem 0.75rem; border-radius:1rem; font-size:0.95rem; font-weight:600; color:#333; margin:0.25rem 0 0.5rem; }
 
-.features li {
-    margin: 4px 0;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
+.features li { margin:0.25rem 0; font-size:0.95rem; line-height:1.4; }
 
-.planCard .button {
-    width: auto;
-    min-width: 10rem;
-    max-width: 16rem;
-    margin: 0.5rem auto 0;
-}
+.planCard .button { width:auto; min-width:10rem; max-width:16rem; margin:0.75rem auto 0; }
+.currentPlanChip { display:inline-flex; align-items:center; gap:0.35rem; padding:0.25rem 0.5rem; border:1px solid var(--color-border); border-radius:1rem; background:#fff; font-size:0.85rem; color:#555; }
+.sectionHeader { margin:0.5rem 0 1rem; }
