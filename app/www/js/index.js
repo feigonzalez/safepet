@@ -13,6 +13,8 @@ let updatingPosition=false;
 
 // marcador móvil si se debe mostrar un rastreador
 var tracker=null;
+// circulo que muestra la precision del rastreado
+var trackerAccuracy=null;
 
 // ======================
 // INICIALIZAR MAPA
@@ -167,6 +169,12 @@ function initMap() {
 		// "area" tiene el formato ID;LATITUDE;LONGITUDE
 		let trackerData = URLparams["tracker"].split(";")
 		console.log("trackerData:",trackerData);
+		trackerAccuracy = L.circle([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
+			radius: parseFloat(trackerData[3]),
+			zIndexOffset:199
+		}).addTo(map);
+		trackerAccuracy._path.setAttribute("stroke","#a3c");
+		trackerAccuracy._path.setAttribute("fill","#a3c");
 		tracker = L.marker([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
 			icon: L.divIcon({
 				className: 'marker-tracker',
@@ -186,6 +194,7 @@ function initMap() {
 async function locateTracker(trackerData){
 	req = await request(SERVER_URL+"getTrackerInfo.php",{tracker_id:trackerData[0]})
 	if(req.status=="GOOD"){
+		trackerAccuracy.setLatLng([parseFloat(req.latitude),parseFloat(req.longitude)])
 		tracker.setLatLng([parseFloat(req.latitude),parseFloat(req.longitude)])
 	} else {
 		console.log("couldn't update tracker position");

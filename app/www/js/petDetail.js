@@ -171,7 +171,7 @@ function updateStatus(){
 }
 
 function locatePet(){
-	locationData={"tracker":trackerData.tracker_id+";"+trackerData.latitude+";"+trackerData.longitude}
+	locationData={"tracker":trackerData.tracker_id+";"+trackerData.latitude+";"+trackerData.longitude+";"+trackerData.accuracy}
 	if(trackerData["safezone_latitude"] && trackerData["safezone_longitude"] && trackerData["safezone_radius"])
 		locationData["area"]=trackerData["safezone_latitude"]+";"+trackerData["safezone_longitude"]+";"+trackerData["safezone_radius"]
 	navigateWithParams("index.html",locationData)

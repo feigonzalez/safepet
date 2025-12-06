@@ -1,6 +1,6 @@
 <?php
-	include "sql.php";
-	include "crypto.php";
+	require_once "sql.php";
+	require_once "crypto.php";
 	header('Content-type: application/json');
 	header('Access-Control-Allow-Origin: *');
 	$response=array();

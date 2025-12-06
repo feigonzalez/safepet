@@ -1,6 +1,6 @@
 const FLOWSERVER_URL="https://safepet.rf.gd/SafePet/server/";
 const SERVER_URL="http://dintdt.c1.biz/safepet/"
-// const SERVER_URL="http://localhost:8080/safepet/github/server/";
+// const SERVER_URL="http://localhost/safepet/github/server/";
 // const SERVER_URL="https://safepet.rf.gd/SafePet/server/";
 
 // La llave pública del servidor web donde están los endpoints de la API
