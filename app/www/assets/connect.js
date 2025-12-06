@@ -106,27 +106,31 @@ async function request(url,body){
 }
 
 async function formRequest(url, data){
-	/*let iframe = document.createElement("iframe");
-		iframe.id="formRequest_target";
-		iframe.setAttribute("name","formRequest_target");*/
-	let form = document.createElement("form");
-		form.id="formRequest_form";
-		/*form.setAttribute("target","formRequest_target");*/
-		form.setAttribute("action",url);
-		form.setAttribute("method","post");
+    let iframe = document.getElementById("formRequest_target");
+    if(!iframe){
+        iframe = document.createElement("iframe");
+        iframe.id = "formRequest_target";
+        iframe.setAttribute("name","formRequest_target");
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+    }
+    let form = document.createElement("form");
+        form.id="formRequest_form";
+        form.setAttribute("target","formRequest_target");
+        form.setAttribute("action",url);
+        form.setAttribute("method","post");
 	for(let dp in data){
 		let input = document.createElement("input");
 		input.setAttribute("name",dp);
 		input.setAttribute("value",data[dp]);
 		form.appendChild(input);
 	}
-	document.body.appendChild(form);/*
-	document.body.appendChild(iframe);
-	iframe.addEventListener("load",(ev)=>{
-		console.log("loaded: >this >iframe >ev");
-		console.log(iframe);
-	})*/
-	form.submit();
+    document.body.appendChild(form);
+    // Nota: no podemos leer contenido por CORS, pero el load indica envío realizado
+    iframe.addEventListener("load",()=>{
+        console.log("formRequest: carga completada en iframe");
+    });
+    form.submit();
 }
 
 async function unsafeRequest(url,body){

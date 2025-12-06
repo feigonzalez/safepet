@@ -1,5 +1,6 @@
-var selectedPlan
+var selectedPlan;
 
+// Botón de seleccionar plan
 function selectPlan(plan) {
     selectedPlan = plan;
 
@@ -19,7 +20,7 @@ function selectPlan(plan) {
         planPrice.textContent = "$9.990 / mes";
     }
 
-    // Mostrar modal elegante tipo SafePet
+    // Mostrar modal
     document.getElementById("subscriptionModal").style.display = "flex";
 }
 
@@ -27,69 +28,127 @@ function closeSubscriptionModal() {
     document.getElementById("subscriptionModal").style.display = "none";
 }
 
+/* ==================== FLUJO FLOW ==================== */
+
+// URL base hacia init.php en InfinityFree
+// Si tienes definida FLOWSERVER_URL, la usamos; si no, usamos la URL fija.
+// FORZAMOS la URL correcta del init.php en InfinityFree
+const FLOW_INIT_URL = FLOWSERVER_URL + "flow/init.php";
+
+
 // INICIA EL PROCESO DE FLOW
 async function processPayment() {
-    let returnUrl        = "http://dintdt.c1.biz/safepet/flow/return.php";
-    let confirmationUrl  = "http://dintdt.c1.biz/safepet/flow/confirm.php";
-    let nombrePlan = selectedPlan === 'premium' ? 'Plan Premium' : 'Plan Básico';
-    let monto = selectedPlan === 'premium' ? 9990 : 5990;
-    let plan = selectedPlan || 'basico';
+    if (!selectedPlan) {
+        alert("Primero selecciona un plan");
+        return;
+    }
 
-    navigateTo(FLOWSERVER_URL+`flow/init.php?idUsuario=${userData.account_id}&plan=${plan}&monto=${monto}&nombrePlan=${nombrePlan}`);
-	
-	/*
-	// Orden única
-	let commerceOrder = "SP-"+userData.account_id+"-"+selectedPlan.toUpperCase()//+"-"+Date.now();
-	
-    await makeFlowRequest("payment/create",{
-		"commerceOrder"   : commerceOrder,
-		"subject"         : "Suscripción "+nombrePlan,
-		"amount"          : parseInt(monto),
-		"email"           : "cliente@example.com",
-		"urlConfirmation" : confirmationUrl,
-		"urlReturn"       : returnUrl,
-	});
-	*/
+    if (!userData || !userData.account_id) {
+        alert("No se encontró el usuario en sesión");
+        return;
+    }
+
+    // Montos y nombres según plan
+    let nombrePlan = selectedPlan === "premium" ? "Plan Premium" : "Plan Básico";
+    let monto      = selectedPlan === "premium" ? 9990 : 5990;
+    let plan       = selectedPlan === "premium" ? "premium" : "basico";
+
+    // URL de retorno absoluta, robusta para cualquier base (localhost:5500, 5501, deploy)
+    const appReturn = new URL('account.html', window.location.href).toString();
+
+    const params = new URLSearchParams({
+        idUsuario:   userData.account_id,
+        plan:        plan,
+        monto:       monto,
+        nombrePlan:  nombrePlan,
+        appReturn:   appReturn,
+        email:       (userData.email || userData.mail || ("safe.pet+"+userData.account_id+"@gmail.com"))
+    });
+
+    const urlInit = FLOW_INIT_URL + "?" + params.toString();
+    window.location.href = urlInit;
 }
 
-async function makeFlowRequest(url,data){
-	/*
-	//https://sandbox.flow.cl/api/payment/create
-	let apiKey    = "5745DF16-A963-447A-99EB-6D6AADL5E636";
-	let secretKey = "abf248d2e87af3a68542899406c4f39007e10914";
-	
-	let params={ "apiKey": apiKey }
-	params = {...params, ...data};
-	
-	let sortedKeys = Object.keys(params).sort();
-	let toSign = "";
-	for(let key of sortedKeys){
-		toSign+=key.toString()+params[key].toString();
-	}
-	
-	console.log(`hashing [${toSign}]`)
-	let hash = await request(SERVER_URL+"functions/hmac.php",{key:secretKey,message:toSign});
-	if(hash.status=="GOOD"){
-		params["s"]=hash.hash;
-		console.log(params);
-		await formRequest("https://sandbox.flow.cl/api/"+url,params)
-	} else {
-		console.log("couldn't get hash from server");
-	}
-	*/
-}
+/* ==================== DESHABILITAR BOTONES SEGÚN PLAN ==================== */
+
 function beforeLoad(){
     try{
-        const u = JSON.parse(localStorage.getItem('userData')||'{}');
+        const u = JSON.parse(localStorage.getItem('userData') || '{}');
         const p = (u && u.plan) ? u.plan : 'free';
-        const pEs = p==='premium'?'premium':(p==='basic'?'basico':'gratis');
-        if(pEs==='basico'){
+        const pEs = p === 'premium' ? 'premium' : (p === 'basic' ? 'basico' : 'gratis');
+
+        // Botón del plan Gratis: blanco y visible solo si el plan actual es gratis
+        const freeBtn = document.getElementById('subscribeFreeBtn');
+        if (freeBtn){
+            if (pEs === 'gratis'){
+                freeBtn.textContent = 'Plan actual';
+                freeBtn.classList.remove('bg-primary');
+                freeBtn.classList.remove('disabled');
+                freeBtn.style.opacity = '1';
+                freeBtn.onclick = function(){ return false; };
+                freeBtn.classList.remove('hidden');
+            } else {
+                freeBtn.textContent = 'Suscribirse';
+                freeBtn.classList.add('bg-primary');
+                freeBtn.classList.remove('disabled');
+                freeBtn.style.opacity = '1';
+                freeBtn.onclick = function(){ switchToFree(); return false; };
+                freeBtn.classList.remove('hidden');
+            }
+        }
+
+        if (pEs === 'basico') {
             const b = document.getElementById('subscribeBasicBtn');
-            if(b){ b.textContent='Plan actual'; b.classList.remove('bg-primary'); b.classList.add('disabled'); b.style.opacity='0.6'; b.setAttribute('onclick','return false;'); }
+            if (b) {
+                b.textContent = 'Plan actual';
+                b.classList.remove('bg-primary');
+                b.classList.add('disabled');
+                b.style.opacity = '0.6';
+                b.setAttribute('onclick','return false;');
+            }
         }
-        if(pEs==='premium'){
+        if (pEs === 'premium') {
             const b = document.getElementById('subscribePremiumBtn');
-            if(b){ b.textContent='Plan actual'; b.classList.remove('bg-primary'); b.classList.add('disabled'); b.style.opacity='0.6'; b.setAttribute('onclick','return false;'); }
+            if (b) {
+                b.textContent = 'Plan actual';
+                b.classList.remove('bg-primary');
+                b.classList.add('disabled');
+                b.style.opacity = '0.6';
+                b.setAttribute('onclick','return false;');
+            }
         }
-    }catch(e){}
+    } catch(e){
+        console.warn("Error en beforeLoad subscription:", e);
+    }
+}
+
+// Cambiar a plan Gratis sin Flow
+async function switchToFree(){
+    try{
+        if (!userData || !userData.account_id){
+            showAlertModal('Sesión requerida','Inicia sesión para cambiar tu plan');
+            return;
+        }
+        showConfirmModal('Cambiar a Plan Gratis','¿Confirmas cambiar tu suscripción al Plan Gratis?', ()=>{
+            showAwaitModal('Actualizando suscripción','',
+                async ()=>{
+                    const payload = { idUsuario: userData.account_id, plan: 'gratis' };
+                    return await request(SERVER_URL + 'updatePlan.php', payload);
+                },
+                (upd)=>{
+                    if (upd && (upd.success || upd.status === 'GOOD')){
+                        const u = JSON.parse(localStorage.getItem('userData')||'{}');
+                        u.plan = 'free';
+                        localStorage.setItem('userData', JSON.stringify(u));
+                        showAlertModal('Suscripción actualizada','Tu plan fue cambiado a Gratis', ()=>{ window.location.replace('account.html'); });
+                    } else {
+                        showAlertModal('No se pudo cambiar','Intenta nuevamente más tarde');
+                    }
+                }
+            );
+        });
+    } catch(e){
+        console.error('switchToFree error', e);
+        showAlertModal('Error','Ocurrió un problema al cambiar de plan');
+    }
 }

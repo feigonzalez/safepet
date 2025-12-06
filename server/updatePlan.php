@@ -2,11 +2,14 @@
 //opcional: si se desea actualizar el plan de un usuario
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
 require_once "sql.php"; // conexión mysqli en $sqlConn
 
 // Validar parámetros
-if (!isset($_POST["idUsuario"]) || !isset($_POST["plan"])) {
+$src = $_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST;
+if (!isset($src["idUsuario"]) && !isset($src["user_id"]) || !isset($src["plan"])) {
     echo json_encode([
         "success" => false,
         "error"   => "Faltan parámetros: idUsuario o plan"
@@ -14,8 +17,12 @@ if (!isset($_POST["idUsuario"]) || !isset($_POST["plan"])) {
     exit();
 }
 
-$userId = intval($_POST["idUsuario"]);
-$plan   = strtolower(trim($_POST["plan"])); // gratis | basico | premium
+$userId = isset($src["idUsuario"]) ? intval($src["idUsuario"]) : intval($src["user_id"]);
+$planIn = strtolower(trim($src["plan"]));
+if ($planIn === "free") $planIn = "gratis";
+if ($planIn === "basic") $planIn = "basico";
+if ($planIn === "premiun") $planIn = "premium";
+$plan = $planIn; // gratis | basico | premium
 
 // Validar plan permitido
 $planesValidos = ["gratis", "basico", "premium"];

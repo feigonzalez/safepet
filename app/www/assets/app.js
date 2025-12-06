@@ -2,13 +2,16 @@ const LOCALE = "cl-ES";		//Chile - Español
 const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
 	// "es" es para "español" TODO: Si se quisiera i18nalizar habria que cambiarlo
 var userData={};
+
 window.addEventListener("load",()=>{
 	locate((pos)=>{
 		localStorage.setItem("latitude",pos.coords.latitude)
 		localStorage.setItem("longitude",pos.coords.longitude)
 	})
-	try{ userData = JSON.parse(localStorage.getItem("userData")) 
-		userData.firstName = userData.name.split(" ")[0]}
+	try{ 
+		userData = JSON.parse(localStorage.getItem("userData")) 
+		userData.firstName = userData.name.split(" ")[0]
+	}
 	catch(e) {userData = {}}
 	if(typeof beforeLoad === "function")
 		beforeLoad();
@@ -19,6 +22,9 @@ window.addEventListener("load",()=>{
 		fillIterable(iterable,data)
 	}
 	processContents();
+
+	// 👇 NUEVO: si venimos desde Flow, procesa el resultado del pago
+	procesarFlow();
 })
 
 function replaceContents(self,data){
@@ -146,18 +152,27 @@ async function processContents(self){
 	}
 	
 	// Hace que el botón #backButton redirija a la página previa
-	let backButton = frame.querySelector("#backButton")
-	if(backButton){
-		backButton.addEventListener("click",()=>{
-			// Si hay historial previo, retrocede
-			if(window.history.length > 1){
-				history.back();
-			} else {
-				// Si no hay historial, va a la página principal
-				window.location.href = 'index.html';
-			}
-		})
-	}
+    let backButton = frame.querySelector("#backButton")
+    if(backButton){
+        backButton.addEventListener("click",()=>{
+            try{
+                const path = window.location.pathname;
+                if (path.endsWith('/petList.html')){
+                    window.location.href = 'index.html';
+                    return;
+                }
+                const sameOriginRef = document.referrer && new URL(document.referrer).origin === window.location.origin;
+                if (sameOriginRef && window.history.length > 1) {
+                    history.back();
+                } else {
+                    const fallback = (path.endsWith('/account.html') || path.endsWith('/subscription.html')) ? 'petList.html' : 'index.html';
+                    window.location.href = fallback;
+                }
+            } catch(_) {
+                window.location.href = 'index.html';
+            }
+        })
+    }
 	
 	// Something about handling file uploads ??
 	for(let controller of frame.querySelectorAll(".fileUploadControl")){
@@ -540,3 +555,154 @@ function getAnimalClass(s){
 		default: return "pet";
 	}
 }
+
+// ==== INICIO BLOQUE FLOW ====
+
+const FLOW_PROXY = typeof FLOWSERVER_URL !== "undefined"
+    ? FLOWSERVER_URL + "flow/"
+    : "https://safepet.rf.gd/SafePet/server/flow/";
+
+function getApiServer(){
+    if (typeof SERVER_URL !== "undefined" && SERVER_URL) return SERVER_URL;
+    return "http://dintdt.c1.biz/safepet/";
+}
+
+function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+}
+
+// Esta función se ejecuta cuando volvemos de Flow con ?flowReturn=1&token=...
+async function procesarFlow() {
+    const flowReturn = getParam("flowReturn");
+    const token      = getParam("token");
+    const order      = getParam("order");
+    const status     = getParam("status");
+
+    if (flowReturn !== "1" || (!token && !order)) return; // no viene de Flow
+
+    try {
+        // 1) Pedir estado del pago al servidor que habla con Flow (InfinityFree)
+        let flowStatus;
+        let commerceOrd = order;
+        if (status) {
+            flowStatus = (status === "paid") ? 2 : 1;
+        } else {
+            let statusUrl = FLOW_PROXY + "status.php?token=" + encodeURIComponent(token);
+            if(!token && order){
+                statusUrl = FLOW_PROXY + "status.php?order=" + encodeURIComponent(order);
+            }
+            const resStatus = await fetch(statusUrl);
+            const statusData = await resStatus.json();
+            console.log("statusData:", statusData);
+            if (!statusData || typeof statusData.status === "undefined") {
+                alert("No se pudo obtener el estado del pago");
+                return;
+            }
+            flowStatus  = parseInt(statusData.status);
+            commerceOrd = statusData.commerceOrder;
+        }
+
+        // 2) Avisar a tu servidor con BD para que actualice el plan
+        const body = new URLSearchParams();
+        body.append("status", flowStatus);
+        body.append("commerceOrder", commerceOrd);
+        body.append("token", token);
+
+        // Derivar plan en español para updatePlan.php
+        let planSp = "free";
+        if (commerceOrd && typeof commerceOrd === "string"){
+            const parts = commerceOrd.split("-");
+            const p = (parts[2]||"").toLowerCase();
+            planSp = (p === "premium" || p === "premiun") ? "premium" : (p === "basic" || p === "basico") ? "basico" : "gratis";
+        }
+
+        async function callUpdateOnce(endpoint){
+            try{
+                const res = await fetch(getApiServer() + endpoint, {
+                    method: "POST",
+                    headers: { "Accept": "application/json" },
+                    body: new URLSearchParams({ idUsuario: (commerceOrd||"").split("-")[1] || "", plan: planSp })
+                });
+                const txt = await res.text();
+                try { return JSON.parse(txt); }
+                catch(_){ return { success:false, status:"TEXT", message: txt.slice(0,200) }; }
+            } catch(err){
+                return { success:false, error:"fetch_failed" };
+            }
+        }
+        const endpoints = [
+            "updateplan",
+            "updatePlan.php",
+            "updateplan.php"
+        ];
+        let upd = null;
+        for (let i=0;i<endpoints.length;i++){
+            upd = await callUpdateOnce(endpoints[i]);
+            if (upd && (upd.success || upd.status === "OK")) break;
+        }
+        console.log("updatePlan:", upd);
+
+        if ((upd && upd.success) || upd.status === "OK") {
+            try{
+                const u = JSON.parse(localStorage.getItem('userData')||'{}');
+                const newPlanSp = (upd && typeof upd.updated_plan === 'string') ? upd.updated_plan.toLowerCase() : planSp;
+                const newPlanApp = newPlanSp === 'basico' ? 'basic' : (newPlanSp === 'premium' ? 'premium' : 'free');
+                u.plan = newPlanApp;
+                localStorage.setItem('userData', JSON.stringify(u));
+                userData = u;
+                const label = newPlanSp === 'basico' ? 'Básico' : (newPlanSp === 'premium' ? 'Premium' : 'Gratuito');
+                const sub = document.getElementById('profileSubStatus');
+                if (sub) sub.textContent = label;
+                const cancelRow = document.getElementById('cancelSubRow');
+                if (cancelRow) cancelRow.style.display = (u.plan === 'free') ? 'none' : '';
+                if (typeof beforeLoad === 'function') { try{ beforeLoad(); }catch(_){} }
+            }catch(_){ }
+            if (typeof showAlertModal === 'function') {
+                showAlertModal('Pago exitoso','Tu suscripción fue actualizada.');
+            } else {
+                alert('Pago exitoso. Tu suscripción fue actualizada.');
+            }
+            try{
+                const base = window.location.origin + '/account.html';
+                history.replaceState(null,'', base);
+            }catch(_){/* noop */}
+        } else {
+            try{
+                const payload = { idUsuario: (commerceOrd||"").split("-")[1] || "", plan: planSp };
+                if (typeof formRequest === "function") {
+                    formRequest(getApiServer() + "updateplan.php", payload);
+                } else {
+                    const f = document.createElement("form");
+                    f.method = "post"; f.action = getApiServer() + "updateplan.php";
+                    for (const k in payload){ const input = document.createElement("input"); input.name=k; input.value=payload[k]; f.appendChild(input); }
+                    document.body.appendChild(f); f.submit();
+                }
+                const u = JSON.parse(localStorage.getItem('userData')||'{}');
+                const newPlanSp = (upd && typeof upd.updated_plan === 'string') ? upd.updated_plan.toLowerCase() : planSp;
+                const newPlanApp = newPlanSp === 'basico' ? 'basic' : (newPlanSp === 'premium' ? 'premium' : 'free');
+                u.plan = newPlanApp;
+                localStorage.setItem('userData', JSON.stringify(u));
+                userData = u;
+                const label = newPlanSp === 'basico' ? 'Básico' : (newPlanSp === 'premium' ? 'Premium' : 'Gratuito');
+                const sub = document.getElementById('profileSubStatus');
+                if (sub) sub.textContent = label;
+                const cancelRow = document.getElementById('cancelSubRow');
+                if (cancelRow) cancelRow.style.display = (u.plan === 'free') ? 'none' : '';
+                if (typeof beforeLoad === 'function') { try{ beforeLoad(); }catch(_){} }
+                if (typeof showAlertModal === 'function') {
+                    showAlertModal('Pago exitoso','Tu suscripción fue actualizada.');
+                } else {
+                    alert('Pago exitoso. Tu suscripción fue actualizada.');
+                }
+            } catch(_){
+                alert("No se pudo actualizar el plan: " + (upd && (upd.message||upd.error) || "Error"));
+            }
+        }
+
+    } catch (e) {
+        console.error(e);
+        alert("Error al procesar el resultado del pago");
+    }
+}
+
+// ==== FIN BLOQUE FLOW ====

@@ -27,7 +27,8 @@
 
 		<div class="content">
 
-            <!-- PLAN GRATIS (SOLO INFORMATIVO) -->
+
+            <!-- PLAN GRATIS -->
             <div class="planCard" data-plan="gratis">
                 <div class="planTitle">Plan Gratis 🐾</div>
                 <div class="price">$0 / mes</div>
@@ -39,25 +40,26 @@
                     <li>✖ Geolocalización 24/7</li>
                 </ul>
 
-				<div class="row ta-center">
-					<span class="button disabled" style="opacity:0.6; cursor:default;">Plan por defecto</span>
-				</div>
-			</div>
+                <div class="row ta-center">
+                    <a id="subscribeFreeBtn" href="#" class="button" onclick="switchToFree(); return false;">Plan por defecto</a>
+                </div>
+            </div>
 
             <!-- PLAN BASICO -->
             <div class="planCard" data-plan="basico">
                 <div class="planTitle">Plan Básico ⭐</div>
                 <div class="price">$5.990 / mes</div>
-
                 <ul class="features">
                     <li>✔ Mascotas ilimitadas</li>
                     <li>✔ Código QR</li>
                     <li>✔ Múltiples Dueños</li>
                     <li>✖ Geolocalización 24/7</li>
                 </ul>
-
                 <div class="row ta-center">
                     <a id="subscribeBasicBtn" href="#" class="button bg-primary" onclick="selectPlan('basico'); return false;">Suscribirse</a>
+                </div>
+                <div class="row ta-center" if="userData.plan=='basic'">
+                    <a href="#" class="chip" onclick="switchToFree(); return false;">Cancelar suscripción</a>
                 </div>
             </div>
 
@@ -65,45 +67,42 @@
             <div class="planCard" data-plan="premium">
                 <div class="planTitle">Plan Premium 💎</div>
                 <div class="price">$9.990 / mes</div>
-
                 <ul class="features">
                     <li>✔ Mascotas ilimitadas</li>
                     <li>✔ Código QR</li>
                     <li>✔ Múltiples Dueños</li>
                     <li>✔ Geolocalización 24/7</li>
                 </ul>
-
                 <div class="row ta-center">
                     <a id="subscribePremiumBtn" href="#" class="button bg-primary" onclick="selectPlan('premium'); return false;">Suscribirse</a>
+                </div>
+                <div class="row ta-center" if="userData.plan=='premium'">
+                    <a href="#" class="chip" onclick="switchToFree(); return false;">Cancelar suscripción</a>
                 </div>
             </div>
 
 		</div>
 
-		<!-- MODAL SOLO PARA PLANES DE PAGO -->
-		<div id="subscriptionModal" class="modalOverlay" onclick="closeSubscriptionModal()">
-			<div class="modalSheet" onclick="event.stopPropagation()">
-
-				<div class="handle"></div>
-
-				<h2 id="modalPlanName" class="bold ta-center"></h2>
-
-				<div class="row middle ta-center mb-1" style="justify-content:center; margin-top:1rem;">
-					<span class="chip" id="modalPlanPrice"></span>
-					<span class="metaText">Suscripción mensual</span>
-				</div>
-
-				<p class="metaText ta-center mb-2" style="margin-top:1rem;">
-					Verifica el plan seleccionado y continúa con el pago.
-				</p>
-
-				<a href="#" class="button bg-primary"
-				   style="margin-top:1.5rem; width:100%;"
-				   onclick="processPayment(); return false;">
-					Pagar con Flow
-				</a>
-
-			</div>
-		</div>
+        <!-- MODAL DE SUSCRIPCIÓN (UNIFICADO CON ESTILO GLOBAL) -->
+        <div id="subscriptionModal" class="modalBackdrop" style="display:none" onclick="closeSubscriptionModal()">
+            <div class="modalBody" onclick="event.stopPropagation()">
+                <div class="modalCloseButton" onclick="closeSubscriptionModal()"></div>
+                <div class="modalContent">
+                    <div class="row compact"><h2 id="modalPlanName" class="bold ta-center"></h2></div>
+                    <div class="row middle ta-center mb-1" style="justify-content:center; margin-top:1rem;">
+                        <span class="chip" id="modalPlanPrice"></span>
+                        <span class="metaText">Suscripción mensual</span>
+                    </div>
+                    <p class="metaText ta-center mb-2" style="margin-top:1rem;">
+                        Verifica el plan seleccionado y continúa con el pago.
+                    </p>
+                    <a href="#" class="button bg-primary"
+                       style="margin-top:1.5rem; width:100%;"
+                       onclick="processPayment(); return false;">
+                        Pagar con Flow
+                    </a>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>
