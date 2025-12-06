@@ -15,10 +15,8 @@ async function beforeLoad(){
 	} else {
 		// Solicita las notificaciones a la API
 		request(SERVER_URL+"pullNotifications.php",{"account_id":userData.account_id}).then(n=>{
-		notifications = n;
-			if(notifications.status=="MISS"){
-				document.querySelector("[foreach=notifications]").innerHTML="No tienes notificaciones nuevas";
-			} else {
+			if(n.status=="GOOD"){
+				notifications = n.notifications;
 				// Fija el metaText de cada notificación a la timestamp de cuándo se generó la notificación.
 				for(let n of notifications){
 					try{n["metaText"]=getRecency(n.timestamp)}
@@ -31,6 +29,8 @@ async function beforeLoad(){
 						popUpMenu(notificationMenu);
 					})
 				}
+			} else {
+				document.querySelector("[foreach=notifications]").innerHTML="No tienes notificaciones nuevas";
 			}
 		})
 	}

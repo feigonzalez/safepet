@@ -1,7 +1,11 @@
-const LOCALE = "cl-ES";		//Chile - EspaÃ±ol
+//Chile - EspaÃ±ol
+const LOCALE = "cl-ES";
+// "es" es para "espa?ol" TODO: Si se quisiera i18nalizar habria que cambiarlo
 const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
-	// "es" es para "espaÃ±ol" TODO: Si se quisiera i18nalizar habria que cambiarlo
+// almacena la informaci¨®n del usuario. Se obtiene directamente desde localStorage
 var userData={};
+// es TRUE entre que se hace un request para obtener las notificaciones y que se recibe la respuesta
+var fetchingNotifications=false;
 
 window.addEventListener("load",()=>{
 	locate((pos)=>{
@@ -25,6 +29,35 @@ window.addEventListener("load",()=>{
 
 	// ðŸ‘‡ NUEVO: si venimos desde Flow, procesa el resultado del pago
 	procesarFlow();
+	
+	// si la sesi¨®n est¨¢ iniciada, se crea un intervalo para buscar notificaciones nuevas cada 15 segundos
+	if(userData.account_id){
+		notificationCheckInterval = setInterval(async ()=>{
+			if(fetchingNotifications){
+				console.log("still fetching notifications");
+				return;
+			} else {
+				let lastTimestamp = localStorage.lastNotificationTimestamp || 0;
+				console.log(`fetching notifications [time:${lastTimestamp}]`);
+				fetchingNotifications=true;
+				let req = await request(SERVER_URL+"pullNotifications.php",{account_id:userData.account_id,timestamp:lastTimestamp})
+				if(req.status!="MISS"){
+					notifications = req.notifications;
+					for(notification of notifications){
+						if(parseInt(notification.timestamp)>lastTimestamp){
+							lastTimestamp=parseInt(notification.timestamp);
+						}
+						showNotification(notification.title,notification.description,new Date(Date.now()+100));
+					}
+				}
+				localStorage.setItem("lastNotificationTimestamp",lastTimestamp);
+				fetchingNotifications=false;
+				console.log("done fetching notifications");
+			}
+		},
+		// 15000 milisegundos (15 segundos)
+		15000)
+	}
 })
 
 function replaceContents(self,data){

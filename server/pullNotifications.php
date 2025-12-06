@@ -22,22 +22,28 @@
         echo json_encode($response);
         return;
     }
+	$timestamp = 0;
+	if(isset($_POST["timestamp"]) && is_numeric($_POST["timestamp"]))
+		$timestamp = $_POST["timestamp"];
 
-	$stmt = $sqlConn->prepare("SELECT * FROM `spet_notifications` WHERE `account_id` = ? ORDER BY `timestamp` DESC");
+	$stmt = $sqlConn->prepare("SELECT * FROM `spet_notifications` WHERE `account_id` = ? AND `timestamp` > ? ORDER BY `timestamp` DESC");
 
-	$stmt->bind_param("i",$_POST["account_id"]);
+	$stmt->bind_param("ii",$_POST["account_id"],$timestamp);
 	$stmt->execute();
 	
 	$res=$stmt->get_result();
 	if($res->num_rows>0){
         $noteIndex=0;
+		$response["status"]="GOOD";
+		$response["notifications"]=array();
 		while($row = $res->fetch_array()){
+			$response["notifications"][$noteIndex]=array();
 			//$row["notification_id"] is the ID of the notification. Use it to delete it from the table after pulling
-			$response[$noteIndex]["id"]=$row["notification_id"];
-			$response[$noteIndex]["title"]=$row["title"];
-			$response[$noteIndex]["description"]=$row["description"];
-			$response[$noteIndex]["type"]=$row["type"];
-			$response[$noteIndex]["timestamp"]=$row["timestamp"];
+			$response["notifications"][$noteIndex]["id"]=$row["notification_id"];
+			$response["notifications"][$noteIndex]["title"]=$row["title"];
+			$response["notifications"][$noteIndex]["description"]=$row["description"];
+			$response["notifications"][$noteIndex]["type"]=$row["type"];
+			$response["notifications"][$noteIndex]["timestamp"]=$row["timestamp"];
             $noteIndex++;
 		}
 		echo json_encode($response);
