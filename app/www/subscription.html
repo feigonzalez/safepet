@@ -26,6 +26,7 @@
 		</div>
 
 		<div class="content">
+		
 
 
             <!-- PLAN GRATIS -->
@@ -94,15 +95,15 @@
                         <span class="metaText">Suscripción mensual</span>
                     </div>
                     <p class="metaText ta-center mb-2" style="margin-top:1rem;">
-                        Verifica el plan seleccionado y continúa con el pago.
+                        Verifica el precio y beneficios antes de confirmar.
                     </p>
-                    <a href="#" class="button bg-primary"
-                       style="margin-top:1.5rem; width:100%;"
-                       onclick="processPayment(); return false;">
-                        Pagar con Flow
-                    </a>
+                    <ul id="modalPlanBenefits" class="features" style="margin:0.5rem 0 1rem 0;"></ul>
+                    <div class="row compact" style="gap:0.5rem">
+                        <a href="#" id="modalCancelBtn" class="button" style="flex:1" onclick="closeSubscriptionModal(); return false;">Cancelar</a>
+                        <a href="#" id="modalConfirmBtn" class="button bg-primary" style="flex:1" onclick="processPayment(); return false;">Confirmar</a>
+                    </div>
                 </div>
             </div>
         </div>
-	</body>
+    </body>
 </html>

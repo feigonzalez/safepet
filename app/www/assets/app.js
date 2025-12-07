@@ -2,12 +2,24 @@
 const LOCALE = "cl-ES";
 // "es" es para "espa?ol" TODO: Si se quisiera i18nalizar habria que cambiarlo
 const timeFormat = new Intl.RelativeTimeFormat("es",{style:"short"})
-// almacena la informaci®Æn del usuario. Se obtiene directamente desde localStorage
+// almacena la informaciÔøΩÔøΩn del usuario. Se obtiene directamente desde localStorage
 var userData={};
 // es TRUE entre que se hace un request para obtener las notificaciones y que se recibe la respuesta
 var fetchingNotifications=false;
 
 window.addEventListener("load",()=>{
+    try{
+        const p = window.location.pathname;
+        const q = window.location.search || '';
+        if (p === '/account.html'){
+            window.location.replace('/app/www/account.html' + q);
+            return;
+        }
+        if (p === '/subscription.html'){
+            window.location.replace('/app/www/subscription.html' + q);
+            return;
+        }
+    }catch(_){}
 	locate((pos)=>{
 		localStorage.setItem("latitude",pos.coords.latitude)
 		localStorage.setItem("longitude",pos.coords.longitude)
@@ -27,10 +39,16 @@ window.addEventListener("load",()=>{
 	}
 	processContents();
 
-	// üëá NUEVO: si venimos desde Flow, procesa el resultado del pago
-	procesarFlow();
+    // Procesar Flow solo si hay par√°metros y en p√°ginas destino de la app (evitar verify/validate)
+    try{
+        const qp = new URLSearchParams(window.location.search);
+        const page = window.location.pathname.split('/').pop();
+        if ((qp.get('flowReturn') === '1' || qp.has('token') || qp.has('order')) && (page === 'account.html' || page === 'subscription.html')){
+            procesarFlow();
+        }
+    }catch(_){ }
 	
-	// si la sesi®Æn est®¢ iniciada, se crea un intervalo para buscar notificaciones nuevas cada 15 segundos
+	// si la sesiÔøΩÔøΩn estÔøΩÔøΩ iniciada, se crea un intervalo para buscar notificaciones nuevas cada 15 segundos
 	if(userData.account_id){
 		notificationCheckInterval = setInterval(async ()=>{
 			if(fetchingNotifications){
@@ -184,22 +202,15 @@ async function processContents(self){
 		span.style.gridColumn=span.getAttribute("colspan")+" span";
 	}
 	
-	// Hace que el bot√≥n #backButton redirija a la p√°gina previa
+    // Bot√≥n Volver unificado
     let backButton = frame.querySelector("#backButton")
     if(backButton){
         backButton.addEventListener("click",()=>{
             try{
-                const path = window.location.pathname;
-                if (path.endsWith('/petList.html')){
-                    window.location.href = 'index.html';
-                    return;
-                }
-                const sameOriginRef = document.referrer && new URL(document.referrer).origin === window.location.origin;
-                if (sameOriginRef && window.history.length > 1) {
-                    history.back();
+                if (window.NavigationUtils && typeof window.NavigationUtils.goBack === 'function'){
+                    window.NavigationUtils.goBack();
                 } else {
-                    const fallback = (path.endsWith('/account.html') || path.endsWith('/subscription.html')) ? 'petList.html' : 'index.html';
-                    window.location.href = fallback;
+                    window.location.href = 'index.html';
                 }
             } catch(_) {
                 window.location.href = 'index.html';
@@ -664,6 +675,7 @@ async function procesarFlow() {
             }
         }
         const endpoints = [
+            "update.php",
             "updateplan",
             "updatePlan.php",
             "updateplan.php"
@@ -696,17 +708,20 @@ async function procesarFlow() {
                 alert('Pago exitoso. Tu suscripci√≥n fue actualizada.');
             }
             try{
-                const base = window.location.origin + '/account.html';
-                history.replaceState(null,'', base);
+                const dir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+                const base = window.location.origin + dir + 'account.html';
+                if (window.location.pathname.endsWith('/account.html') === false){
+                    window.location.replace(base);
+                }
             }catch(_){/* noop */}
         } else {
             try{
                 const payload = { idUsuario: (commerceOrd||"").split("-")[1] || "", plan: planSp };
                 if (typeof formRequest === "function") {
-                    formRequest(getApiServer() + "updateplan.php", payload);
+                    formRequest(getApiServer() + "update.php", payload);
                 } else {
                     const f = document.createElement("form");
-                    f.method = "post"; f.action = getApiServer() + "updateplan.php";
+                    f.method = "post"; f.action = getApiServer() + "update.php";
                     for (const k in payload){ const input = document.createElement("input"); input.name=k; input.value=payload[k]; f.appendChild(input); }
                     document.body.appendChild(f); f.submit();
                 }
