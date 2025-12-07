@@ -5,27 +5,27 @@
 	$apiKey    = "5745DF16-A963-447A-99EB-6D6AADL5E636";
 	$secretKey = "abf248d2e87af3a68542899406c4f39007e10914";
 
-$userId     = $_GET["idUsuario"];
-$plan       = $_GET["plan"];
-$monto      = $_GET["monto"];
-$nombrePlan = $_GET["nombrePlan"];
-$userEmail  = isset($_GET["email"]) ? trim($_GET["email"]) : "";
-if(!$userEmail){ $userEmail = "safe.pet+".$userId."@gmail.com"; }
-if($nombrePlan){
-    $nombrePlan = strtr($nombrePlan, [
-        "á"=>"a","Á"=>"A","é"=>"e","É"=>"E","í"=>"i","Í"=>"I",
-        "ó"=>"o","Ó"=>"O","ú"=>"u","Ú"=>"U","ñ"=>"n","Ñ"=>"N"
-    ]);
-}
+	$userId     = $_GET["idUsuario"];
+	$plan       = $_GET["plan"];
+	$monto      = $_GET["monto"];
+	$nombrePlan = $_GET["nombrePlan"];
+	$userEmail  = isset($_GET["email"]) ? trim($_GET["email"]) : "";
+	if(!$userEmail){ $userEmail = "safe.pet+".$userId."@gmail.com"; }
+	if($nombrePlan){
+		$nombrePlan = strtr($nombrePlan, [
+			"á"=>"a","Á"=>"A","é"=>"e","É"=>"E","í"=>"i","Í"=>"I",
+			"ó"=>"o","Ó"=>"O","ú"=>"u","Ú"=>"U","ñ"=>"n","Ñ"=>"N"
+		]);
+	}
 
 	// Construir la orden UNA VEZ y reutilizarla en todas partes
 	$commerceOrder = "SP-" . $userId . "-" . strtoupper($plan) . "-" . time();
 
 	// URLS DEL SERVIDOR (HTTPS requeridas por Flow)
-	$appReturn = isset($_GET['appReturn']) ? $_GET['appReturn'] : null;
+	$returnBaseURL = isset($_GET['returnBaseURL']) ? $_GET['returnBaseURL'] : null;
 	// Persistir en cookie para fallback en return.php
-	if($appReturn){
-		@setcookie('spet_appReturn', $appReturn, time()+3600, '/');
+	if($returnBaseURL){
+		@setcookie('spet_appReturn', $returnBaseURL, time()+3600, '/');
 	}
 	// Flow sandbox puede fallar si urlReturn tiene query params; usar URL limpia
 	$returnUrl        = "https://safepet.rf.gd/SafePet/server/flow/return.php";
@@ -75,7 +75,7 @@ if($nombrePlan){
     if(!is_dir($logDir)) @mkdir($logDir,0777,true);
 	@file_put_contents($logDir."/last_create.json", json_encode([
 		"request"=>$data,
-		"appReturn"=>$appReturn,
+		"appReturn"=>$returnBaseUrl+"verifySub.html",
 		"response_raw"=>$response,
 		"response_json"=>$json
 	], JSON_PRETTY_PRINT));

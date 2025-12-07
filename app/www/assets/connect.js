@@ -1,5 +1,6 @@
 const FLOWSERVER_URL="https://safepet.rf.gd/SafePet/server/";
 const SERVER_URL="http://dintdt.c1.biz/safepet/"
+const THIS_URL ="http://localhost/safepet/github/app/www/"
 // const SERVER_URL="http://localhost/safepet/github/server/";
 // const SERVER_URL="https://safepet.rf.gd/SafePet/server/";
 

@@ -70,12 +70,8 @@ if(isset($appReturn) && $appReturn){
     if($order){ $qs .= '&order='.urlencode($order); }
     $qs .= '&status='.urlencode($status);
     $redir = $appReturn.$sep.$qs;
-    header('Location: '.$redir);
+    header('Location: google.com');//.$redir);
     echo "<a href='".$redir."'>Volver a la aplicación</a>";
     exit();
-}
-
-echo "<h3>Retorno de pago</h3>";
-if($token){ echo "Token: ".htmlspecialchars($token); }
-if($order){ echo "<br>Orden: ".htmlspecialchars($order); }
+}+
 ?>

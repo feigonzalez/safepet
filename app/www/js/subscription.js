@@ -41,11 +41,6 @@ function closeSubscriptionModal() {
 
 /* ==================== FLUJO FLOW ==================== */
 
-// URL base hacia init.php en InfinityFree
-
-const FLOW_INIT_URL = FLOWSERVER_URL + "flow/init.php";
-
-
 // INICIA EL PROCESO DE FLOW
 async function processPayment() {
     if (!selectedPlan) {
@@ -64,18 +59,18 @@ async function processPayment() {
     let plan       = selectedPlan === "premium" ? "premium" : "basico";
 
     // URL de retorno absoluta, respetando el directorio actual (p.ej. /app/www/)
-    const appReturn = window.location.origin + '/app/www/account.html';
+    const returnBaseURL = THIS_URL;
 
     const params = new URLSearchParams({
-        idUsuario:   userData.account_id,
-        plan:        plan,
-        monto:       monto,
-        nombrePlan:  nombrePlan,
-        appReturn:   appReturn,
-        email:       (userData.email || userData.mail || ("safe.pet+"+userData.account_id+"@gmail.com"))
+        idUsuario:  userData.account_id,
+        plan:       plan,
+        monto:      monto,
+        nombrePlan: nombrePlan,
+        appReturn:  returnBaseURL+"verifySub.html",
+        email:      (userData.email || userData.mail || ("safe.pet+"+userData.account_id+"@gmail.com"))
     });
 
-    const urlInit = FLOW_INIT_URL + "?" + params.toString();
+    const urlInit = FLOWSERVER_URL+"flow/startPayment.php?" + params.toString();
     window.location.href = urlInit;
 }
 
