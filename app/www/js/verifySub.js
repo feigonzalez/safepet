@@ -1,4 +1,6 @@
 async function beforeLoad(){
+	// numero de veces que se intentará obtener el token
+	let attempts = 3;
 	showAwaitModal("Validando pago","");
 	// Guarda el token de la transacción
 	let flowToken = null;
@@ -15,7 +17,19 @@ async function beforeLoad(){
 			// solicita al servidor que borre el token, para evitar que se vuelva a usar
 			request(SERVER_URL+"deleteToken.php",{account_id:userData.account_id});
 			// navegar a la siguiente pagina
-			navigateWithParams(FLOWSERVER_URL+"flow/verifyPayment.php",{returnURL:THIS_URL+"validateSub.html",token:flowToken.token});
+			navigateWithParams(FLOWSERVER_URL+"flow/verifyPayment.php",{returnURL:THIS_URL+"validateSub.html",token:flowToken.token,plan:URLparams["plan"]});
+		}
+		// reducir la cantidad de intentos disponibles
+		attempts-=1;
+		// si se usaron todos los intentos, no se pudo verificar. quizá el pago fue cancelado
+		if(attempts == 0){
+			showAlertModal("No se pudo verificar el pago","",()=>{
+				history.back(); // a flow.cl/.../result
+				history.back(); // a flow.cl/.../sendMedio.php
+				history.back(); // a flow.cl/.../pay.php?token=...
+				history.back(); // a subscription.html
+				history.back(); // a account.html
+			})
 		}
 		// indicar que se respondió la solicitud
 		busy=false;

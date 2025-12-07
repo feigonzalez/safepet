@@ -56,7 +56,7 @@ async function processPayment() {
     // Montos y nombres según plan
     let nombrePlan = selectedPlan === "premium" ? "Plan Premium" : "Plan Básico";
     let monto      = selectedPlan === "premium" ? 9990 : 5990;
-    let plan       = selectedPlan === "premium" ? "premium" : "basico";
+    let plan       = selectedPlan === "premium" ? "premium" : "basic";
 
     // URL de retorno absoluta, respetando el directorio actual (p.ej. /app/www/)
     const returnBaseURL = THIS_URL;
@@ -66,7 +66,7 @@ async function processPayment() {
         plan:       plan,
         monto:      monto,
         nombrePlan: nombrePlan,
-        appReturn:  returnBaseURL+"verifySub.html",
+        appReturn:  returnBaseURL+"verifySub.html?plan="+plan,
         email:      (userData.email || userData.mail || ("safe.pet+"+userData.account_id+"@gmail.com"))
     });
 
@@ -144,7 +144,7 @@ async function switchToFree(){
         showConfirmModal('Cambiar a Plan Gratis','¿Confirmas cambiar tu suscripción al Plan Gratis?', ()=>{
             showAwaitModal('Actualizando suscripción','',
                 async ()=>{
-                    const payload = { idUsuario: userData.account_id, plan: 'gratis' };
+                    const payload = { account_id: userData.account_id, plan: 'free' };
                     return await request(SERVER_URL + 'updatePlan.php', payload);
                 },
                 (upd)=>{

@@ -37,7 +37,7 @@
 	}
 	
 	// Redirecciona a la ubicacion asignada por Flow.cl
-	header('Location: '.$_GET["returnURL"]."?apidata=".json_encode($data)."&response=".$req);
+	header('Location: '.$_GET["returnURL"]."?plan=".$_GET["plan"]."&apidata=".json_encode($data)."&response=".$req);
 	
 	function curlGetRequest($url){
 		$curl = curl_init($url);

@@ -1,50 +1,34 @@
 <?php
-//opcional: si se desea actualizar el plan de un usuario
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-
-require_once "sql.php"; // conexión mysqli en $sqlConn
-
-// Validar parámetros
-$src = $_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST;
-if (!isset($src["idUsuario"]) && !isset($src["user_id"]) || !isset($src["plan"])) {
-    echo json_encode([
-        "success" => false,
-        "error"   => "Faltan parámetros: idUsuario o plan"
-    ]);
-    exit();
-}
-
-$userId = isset($src["idUsuario"]) ? intval($src["idUsuario"]) : intval($src["user_id"]);
-$planIn = strtolower(trim($src["plan"]));
-if ($planIn === "free") $planIn = "gratis";
-if ($planIn === "basic") $planIn = "basico";
-if ($planIn === "premiun") $planIn = "premium";
-$plan = $planIn; // gratis | basico | premium
-
-// Validar plan permitido
-$planesValidos = ["gratis", "basico", "premium"];
-
-if (!in_array($plan, $planesValidos)) {
-    echo json_encode([
-        "success" => false,
-        "error"   => "Plan no válido"
-    ]);
-    exit();
-}
-
-// Actualizar BD
-$stmt = $sqlConn->prepare("UPDATE `spet_users` 
-                           SET `plan` = ? 
-                           WHERE `user_id` = ?");
-$stmt->bind_param("si", $plan, $userId);
-$ok = $stmt->execute();
-
-echo json_encode([
-    "success" => $ok,
-    "updated_plan" => $plan,
-    "user_id" => $userId
-]);
+	require_once "sql.php";
+	header('Content-type: application/json');
+	header('Access-Control-Allow-Origin: *');
+	$response=array();
+	if(!isset($_POST["account_id"])){
+		$response["status"]="FAIL";
+		$response["message"]="There was no account_id to update plan for.";
+		echo json_encode($response);
+		return;
+	}
+	if(!isset($_POST["plan"])){
+		$response["status"]="FAIL";
+		$response["message"]="There was no plan to update to.";
+		echo json_encode($response);
+		return;
+	}
+	
+	$stmt = $sqlConn->prepare("UPDATE `spet_users` SET `plan` = ? WHERE `user_id` = ?");
+	$stmt->bind_param("si",$_POST["plan"],$_POST["account_id"]);
+	$stmt->execute();
+	
+	$res=$stmt->get_result();
+	if(mysqli_affected_rows($sqlConn)>0 || !$res){
+		$response["status"]="GOOD";
+		$response["account_id"]=$_POST["account_id"];
+		$response["plan"]=$_POST["plan"];
+		echo json_encode($response);
+	} else {
+		$response["status"]="FAIL";
+		$response["message"]="Plan could not be updated";
+		echo json_encode($response);
+	}
 ?>

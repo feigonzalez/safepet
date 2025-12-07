@@ -2,35 +2,14 @@
 // Este archivo proporciona funciones para manejar la navegación entre páginas
 
 var URLparams;
-const NAV_STACK_KEY = 'navStack';
-
-function getNavStack(){
-    try{ return JSON.parse(sessionStorage.getItem(NAV_STACK_KEY) || '[]'); }
-    catch(_){ return []; }
-}
-function setNavStack(stack){
-    sessionStorage.setItem(NAV_STACK_KEY, JSON.stringify(stack));
-}
-function pushCurrent(){
-    const url = window.location.pathname.split('/').pop() + window.location.search;
-    const stack = getNavStack();
-    if (stack.length === 0 || stack[stack.length-1] !== url){
-        stack.push(url);
-        setNavStack(stack);
-    }
-}
 
 // Función para navegar hacia atrás
 function goBack() {
-    const stack = getNavStack();
-    if (stack.length > 1){
-        stack.pop();
-        const prev = stack[stack.length-1];
-        setNavStack(stack);
-        window.location.href = prev;
-        return;
+	 if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = 'index.html';
     }
-    window.location.href = 'index.html';
 }
 
 // Función para navegar a una página específica
@@ -116,7 +95,6 @@ function restart(){
 // Configurar navegación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     URLparams=getUrlParams();
-    pushCurrent();
     setupNavigationButtons();
 });
 
@@ -130,8 +108,7 @@ window.NavigationUtils = {
     reloadPage,
     isCurrentPage,
     setupNavigationButtons,
-    restart,
-    pushCurrent
+    restart
 };
 
 // También exportar funciones individuales para compatibilidad
