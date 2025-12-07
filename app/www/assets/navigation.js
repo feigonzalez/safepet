@@ -30,12 +30,7 @@ function goBack() {
         window.location.href = prev;
         return;
     }
-    if (window.history.length > 1) {
-        localStorage.setItem("navigationAction","reload");
-        window.history.back();
-    } else {
-        window.location.href = 'index.html';
-    }
+    window.location.href = 'index.html';
 }
 
 // Función para navegar a una página específica

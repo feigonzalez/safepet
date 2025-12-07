@@ -6,6 +6,13 @@ function selectPlan(plan) {
 
     const planName = document.getElementById("modalPlanName");
     const planPrice = document.getElementById("modalPlanPrice");
+    const planBenefits = document.getElementById("modalPlanBenefits");
+
+    const BENEFITS = {
+        gratis: ["✔ 1 Mascota", "✔ Código QR", "✖ Múltiples Dueños", "✖ Geolocalización 24/7"],
+        basico: ["✔ Mascotas ilimitadas", "✔ Código QR", "✔ Múltiples Dueños", "✖ Geolocalización 24/7"],
+        premium:["✔ Mascotas ilimitadas", "✔ Código QR", "✔ Múltiples Dueños", "✔ Geolocalización 24/7"],
+    };
 
     if (plan === "gratis") {
         planName.textContent = "Plan Gratis";
@@ -20,6 +27,10 @@ function selectPlan(plan) {
         planPrice.textContent = "$9.990 / mes";
     }
 
+    if (planBenefits){
+        planBenefits.innerHTML = (BENEFITS[plan] || []).map(b=>`<li>${b}</li>`).join("");
+    }
+
     // Mostrar modal
     document.getElementById("subscriptionModal").style.display = "flex";
 }
@@ -31,8 +42,7 @@ function closeSubscriptionModal() {
 /* ==================== FLUJO FLOW ==================== */
 
 // URL base hacia init.php en InfinityFree
-// Si tienes definida FLOWSERVER_URL, la usamos; si no, usamos la URL fija.
-// FORZAMOS la URL correcta del init.php en InfinityFree
+
 const FLOW_INIT_URL = FLOWSERVER_URL + "flow/init.php";
 
 
@@ -53,8 +63,8 @@ async function processPayment() {
     let monto      = selectedPlan === "premium" ? 9990 : 5990;
     let plan       = selectedPlan === "premium" ? "premium" : "basico";
 
-    // URL de retorno absoluta, robusta para cualquier base (localhost:5500, 5501, deploy)
-    const appReturn = new URL('account.html', window.location.href).toString();
+    // URL de retorno absoluta, respetando el directorio actual (p.ej. /app/www/)
+    const appReturn = window.location.origin + '/app/www/account.html';
 
     const params = new URLSearchParams({
         idUsuario:   userData.account_id,
@@ -77,7 +87,6 @@ function beforeLoad(){
         const p = (u && u.plan) ? u.plan : 'free';
         const pEs = p === 'premium' ? 'premium' : (p === 'basic' ? 'basico' : 'gratis');
 
-        // Botón del plan Gratis: blanco y visible solo si el plan actual es gratis
         const freeBtn = document.getElementById('subscribeFreeBtn');
         if (freeBtn){
             if (pEs === 'gratis'){
@@ -88,11 +97,11 @@ function beforeLoad(){
                 freeBtn.onclick = function(){ return false; };
                 freeBtn.classList.remove('hidden');
             } else {
-                freeBtn.textContent = 'Suscribirse';
-                freeBtn.classList.add('bg-primary');
-                freeBtn.classList.remove('disabled');
-                freeBtn.style.opacity = '1';
-                freeBtn.onclick = function(){ switchToFree(); return false; };
+                freeBtn.textContent = 'Ya tienes un plan mejor';
+                freeBtn.classList.remove('bg-primary');
+                freeBtn.classList.add('disabled');
+                freeBtn.style.opacity = '0.6';
+                freeBtn.onclick = function(){ return false; };
                 freeBtn.classList.remove('hidden');
             }
         }
@@ -115,6 +124,14 @@ function beforeLoad(){
                 b.classList.add('disabled');
                 b.style.opacity = '0.6';
                 b.setAttribute('onclick','return false;');
+            }
+            const bb = document.getElementById('subscribeBasicBtn');
+            if (bb){
+                bb.textContent = 'Ya tienes un plan mejor';
+                bb.classList.remove('bg-primary');
+                bb.classList.add('disabled');
+                bb.style.opacity = '0.6';
+                bb.setAttribute('onclick','return false;');
             }
         }
     } catch(e){
