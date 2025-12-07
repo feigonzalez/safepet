@@ -1,6 +1,6 @@
 <?php
-	include "sql.php";
-	include "functions/postChat.php";
+	require_once "sql.php";
+	require_once "functions/postChat.php";
 	
 	header('Content-type: application/json');
 	header('Access-Control-Allow-Origin: *');

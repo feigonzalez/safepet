@@ -1,6 +1,6 @@
 <?php
-	include "sql.php";
-	include "functions/pushNotification.php";	//pushNotification($uID, $title, $description, $type)
+	require_once "sql.php";
+	require_once "functions/pushNotification.php";	//pushNotification($uID, $title, $description, $type)
 	include "functions/postChat.php";	//postChat($pairCode, $accountId, $type, $content, $timestamp)
 	header('Content-type: application/json');
 	header('Access-Control-Allow-Origin: *');
