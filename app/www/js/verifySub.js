@@ -1,4 +1,5 @@
 async function beforeLoad(){
+	showAwaitModal("Validando pago","");
 	// Guarda el token de la transacción
 	let flowToken = null;
 	// Evita hacer requests cuando ya hay una pendiente
