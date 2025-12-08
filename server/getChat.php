@@ -35,7 +35,8 @@
 			ON `user_id` = (? - ?)
 		WHERE `sender_id` + `receiver_id`= ?
 			AND (`sender_id` = ? OR `receiver_id` = ?)
-			AND `timestamp` > ?;");
+			AND `timestamp` > ?
+		ORDER BY `timestamp` ASC;");
 
 	$pairCode = intval($_POST["pair_code"]);
 
