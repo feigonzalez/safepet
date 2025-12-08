@@ -51,9 +51,9 @@
             if($p === 'basico') $p = 'basic';
             $petPlan = $p;
         }
-        if($petPlan === 'free'){
+        if($petPlan !== 'premium'){
             $response["status"] = "MISS";
-            $response["message"] = "Multiple owners not allowed for free plan";
+            $response["message"] = "Multiple owners require premium plan";
             echo json_encode($response);
             exit();
         }

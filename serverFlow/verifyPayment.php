@@ -7,8 +7,8 @@
 		exit;
 	}
 	
-	echo "<h2>token</h2>";
-	var_dump($_GET["token"]);
+	// echo "<h2>token</h2>";
+	// var_dump($_GET["token"]);
 
 	$apiKey    = "5745DF16-A963-447A-99EB-6D6AADL5E636";
 	$secretKey = "abf248d2e87af3a68542899406c4f39007e10914";
@@ -21,14 +21,14 @@
 	$toSign = ""; foreach($data as $k=>$v){ $toSign .= $k.$v; }
 	$data["s"] = hash_hmac("sha256", $toSign, $secretKey);
 	
-	echo "<h2>data</h2>";
-	var_dump($data);
+	// echo "<h2>data</h2>";
+	// var_dump($data);
 	
 	$url = "https://sandbox.flow.cl/api/payment/getStatus?" . http_build_query($data);
 	$req = curlGetRequest($url);
 	
-	echo "<h2>req</h2>";
-	var_dump($req);
+	// echo "<h2>req</h2>";
+	// var_dump($req);
 	
 	if($req === false){
 		echo "<h1>Hubo un error</h1>";
@@ -37,7 +37,7 @@
 	}
 	
 	// Redirecciona a la ubicacion asignada por Flow.cl
-	header('Location: '.$_GET["returnURL"]."?plan=".$_GET["plan"]."&apidata=".json_encode($data)."&response=".$req);
+	header('Location: '.$_GET["returnURL"]."?uid=".$_GET["uid"]."&plan=".$_GET["plan"]);//."&apidata=".json_encode($data)."&response=".$req);
 	
 	function curlGetRequest($url){
 		$curl = curl_init($url);

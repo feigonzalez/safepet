@@ -8,7 +8,7 @@
 	// Prevents warnings from being printed into the response.
 	// Added specifically because of the warnings that rise when
 	// mysqli's bind_param is used with call_user_func_array, since
-	// bind_param expects parameters passed by reference but call_user_func_array
+	// bind_param expects parameters passed by reference but call_user...
 	// doesn't do that >:c
 	error_reporting(E_ERROR | E_PARSE);
 

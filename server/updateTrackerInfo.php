@@ -5,8 +5,6 @@
 	header('Access-Control-Allow-Origin: *');
 	$response=array();
 	
-	//$_POST = $_GET;
-	
     if(!isset($_POST["tracker_id"])){
         $response["status"]="FAIL";
         $response["message"]="There was no tracker_id to update info of.";
@@ -17,7 +15,7 @@
 	//echo "[!] tracker_id : [".$_POST["tracker_id"]."]\n";
 
 	$timestamp = strtotime(date("Y-m-d H:i:s"));
-	
+
 	// obtener los datos actuales del tracker
 	$trackerData = selectSingle("spet_trackers","tracker_id",$_POST["tracker_id"]);
 	

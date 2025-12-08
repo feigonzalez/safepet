@@ -24,7 +24,7 @@
 		while($row = $res->fetch_array()){
 			//$row["tracker_id"] is the ID of the tracker.
             //A single tracker is expected to be found: Response properties are overwritten
-			$response["status"]="GOOD";
+            $response["status"]="GOOD";
 			$response["tracker_id"]=$row["tracker_id"];
 			$response["pet_id"]=$row["pet_id"];
 			$response["latitude"]=$row["latitude"];
