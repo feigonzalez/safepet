@@ -1,6 +1,8 @@
-var geo;
+
+let account_id = deviceIDToUID();
+
 document.addEventListener("DOMContentLoaded", async function() {
-	locate((l)=>geo = l)
+	if(userData.account_id) account_id=userData.account_id;
 	const reader = document.getElementById("reader");
 	const statusText = document.getElementById("statusText");
 
@@ -36,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async function() {
 });
 
 function handleQR(qrContent, html5QrCode) {
-	if(!geo) return
 	const frame = document.querySelector(".scan-frame");
 	if(frame.classList.contains("detected")) return;
 	frame.classList.add("detected")
@@ -47,12 +48,11 @@ function handleQR(qrContent, html5QrCode) {
 		showAwaitModal("Mascota encontrada","Se está avisando al dueño",
 			async ()=>{
 				return await request(SERVER_URL+"postReport.php",{
-					command:"POST REPORT",	// No se que hace esto. postReport.php ni siquiera lo usa
-					account_id:userData.account_id,
+					account_id:account_id,
 					pet_id:qrparams[1],
 					timestamp: Math.floor(new Date().getTime()/1000),
-					latitude: geo.coords.latitude,
-					longitude: geo.coords.longitude});
+					latitude: localStorage.latitude,
+					longitude: localStorage.longitude});
 			},
 			(req)=>{
 				console.log(req)

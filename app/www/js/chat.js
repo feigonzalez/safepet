@@ -4,6 +4,8 @@ let messages = [];
 let lastTimestamp = 0;
 let refreshInterval = 0;
 
+let account_id = deviceIDToUID();
+
 const chatMenu={
 	"Eliminar Conversación":confirmDeleteChat
 }
@@ -18,7 +20,7 @@ function confirmDeleteChat(){
 
 function deleteChat(){
 	showAwaitModal("Eliminando conversación","",
-	async ()=>{ return request(SERVER_URL+"deleteChat.php",{pair_code:URLparams["id"],account_id:userData.account_id});},
+	async ()=>{ return request(SERVER_URL+"deleteChat.php",{pair_code:URLparams["id"],account_id:account_id});},
 	(req)=>{
 		if(req.status=="GOOD")
 			showAlertModal("Conversación Eliminada","Volverás a la lista de conversaciones",goBack);
@@ -28,14 +30,16 @@ function deleteChat(){
 }
 
 async function beforeLoad(){
+	if(userData.account_id) account_id=userData.account_id;
 	let startingMessages = await getNewerMessages();
 	refreshInterval = setInterval(getNewerMessages,15000);
+	if(startingMessages.pairName==null)
+		startingMessages.pairName="Usuario sin cuenta";
 	document.querySelector("#contactName").textContent=startingMessages.pairName;
 	document.querySelector(".profileImageDisplay").style.filter="hue-rotate("+(-10*(parseInt(hash(startingMessages.pairName),36)%12))+"deg)";
 }
 
 async function getNewerMessages(){
-	let account_id = userData.account_id;
 	let messagesContainer = document.querySelector("#messagesArea");
 	let newMessages = await request(SERVER_URL+`getChat.php`,{account_id:account_id, pair_code:getUrlParams()["id"], timestamp:lastTimestamp})
 	if(newMessages.status=="GOOD"){
@@ -103,7 +107,7 @@ async function sendMessage() {
 		input.value = '';
 		updateSendButton();
 		sendRequest = await request(SERVER_URL+`postChat.php`,
-			{account_id:userData.account_id,pair_code:getUrlParams()["id"],...newMessage})
+			{account_id:account_id,pair_code:getUrlParams()["id"],...newMessage})
 		// Solicita los mensajes nuevos. Si el mensaje se envió correctamente, se debería mostrar como el último de la conversación
 		getNewerMessages();
 	}

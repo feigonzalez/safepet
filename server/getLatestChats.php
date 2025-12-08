@@ -27,7 +27,8 @@ SELECT m.*, (m.sender_id + m.receiver_id) AS pair_code
         return;
     }
 
-	$stmt = $sqlConn->prepare("SELECT m.*, (m.sender_id + m.receiver_id) AS pair_code, p.name as partner
+	// Get all conversations, even with users that are not registered
+	$stmt = $sqlConn->prepare("SELECT m.*, (m.sender_id + m.receiver_id) AS pair_code, (m.sender_id + m.receiver_id - ?) AS partner_code, p.name AS partner_name
 	FROM `spet_messages` m
     INNER JOIN ( 
         	SELECT MAX(`timestamp`) AS latest, (`sender_id` + `receiver_id`) AS pair_code
@@ -35,12 +36,14 @@ SELECT m.*, (m.sender_id + m.receiver_id) AS pair_code
         	WHERE `sender_id` = ? OR `receiver_id` = ?
         	GROUP BY pair_code
     	) d
-        ON (m.sender_id + m.receiver_id) = d.pair_code AND m.timestamp = d.latest
-	INNER JOIN `spet_users` p
-		ON p.user_id = (m.sender_id + m.receiver_id - ?)
-    WHERE sender_id = ? OR receiver_id = ? GROUP BY `pair_code`;");
+        ON pair_code = d.pair_code AND m.timestamp = d.latest
+    LEFT JOIN `spet_users` p
+    	ON p.user_id = (m.sender_id + m.receiver_id - ?)
+    WHERE sender_id = ? OR receiver_id = ?
+	GROUP BY partner_code
+	ORDER BY d.latest DESC;");
 
-	$stmt->bind_param("iiiii",$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"]);
+	$stmt->bind_param("iiiiii",$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"],$_POST["account_id"]);
 	$stmt->execute();
 	
 	$res=$stmt->get_result();
@@ -54,7 +57,7 @@ SELECT m.*, (m.sender_id + m.receiver_id) AS pair_code
 			$response["messages"][$index]["timestamp"]=$row["timestamp"];
 			$response["messages"][$index]["inbound"]=($_POST["account_id"]==$row["receiver_id"]);
             $response["messages"][$index]["paircode"]=$row["pair_code"];
-            $response["messages"][$index]["partner"]=$row["partner"];
+            $response["messages"][$index]["partner"]=$row["partner_name"];
             $index++;
 		}
 		$jsonResponse = json_encode($response , JSON_INVALID_UTF8_SUBSTITUTE);

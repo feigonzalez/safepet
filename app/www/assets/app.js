@@ -536,7 +536,7 @@ const hash = function(str, seed = 0) {
 	return (4294967296 * (2097151 & h2) + (h1>>>0)).toString(36);
 };
 
-function locate(callbackSuccess, callbackError = ()=>{}){
+async function locate(callbackSuccess, callbackError = ()=>{}){
 	if(!navigator.geolocation){
 		console.warn("Este navegador no permite geolocalización")
 		try{ if(typeof callbackError === 'function') callbackError(); }catch(_){}
@@ -586,4 +586,11 @@ function getAnimalClass(s){
 		case "cuervo": return "bird";
 		default: return "pet";
 	}
+}
+
+// Retorna un número "único" para el dispositivo.
+// Se usa como ID de usuario para manejar mensajería con usuarios no registrados
+function deviceIDToUID(){
+	let id = localStorage.deviceID.replaceAll("-","")
+	return Math.floor(parseInt(id.substring(id.length-8),16)*-0.5)
 }

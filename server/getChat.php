@@ -29,8 +29,13 @@
 		$timestamp = intval($_POST["timestamp"]);
 	}
 	
-	$stmt = $sqlConn->prepare("SELECT m.*, u.name FROM `spet_messages` m
-		JOIN `spet_users` u ON `user_id` = (? - ?) WHERE `sender_id` + `receiver_id`= ? AND (`sender_id` = ? OR `receiver_id` = ?)AND `timestamp` > ?;");
+	$stmt = $sqlConn->prepare("SELECT m.*, u.name
+		FROM `spet_messages` m
+		LEFT JOIN `spet_users` u
+			ON `user_id` = (? - ?)
+		WHERE `sender_id` + `receiver_id`= ?
+			AND (`sender_id` = ? OR `receiver_id` = ?)
+			AND `timestamp` > ?;");
 
 	$pairCode = intval($_POST["pair_code"]);
 

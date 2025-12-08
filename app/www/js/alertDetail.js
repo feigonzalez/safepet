@@ -1,12 +1,16 @@
+let account_id = deviceIDToUID();
+
 const statusDict={
 	"HOME": "En casa",
-	"LOST": "Extraviada"
+	"LOST": "Extraviada",
+	"AWAY": "Fuera de la zona segura"
 }
 
 var currentLocation;
 
 async function beforeLoad(){
-	petData = await request(SERVER_URL+"getPet.php",{account_id:userData.account_id,pet_id:URLparams.id})
+	if(userData.account_id) account_id=userData.account_id;
+	petData = await request(SERVER_URL+"getPet.php",{account_id:account_id,pet_id:URLparams.id})
 	
 	/*
 	// Actualizar imagen
@@ -45,7 +49,7 @@ function reportFinding(){
 			async ()=>{
 				return await request(SERVER_URL+"postReport.php",{
 					command:"POST REPORT",
-					account_id:userData.account_id,
+					account_id:account_id,
 					pet_id:petData.pet_id,
 					timestamp: Math.floor(new Date().getTime()/1000),
 					latitude: localStorage.latitude,
