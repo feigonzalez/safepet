@@ -94,7 +94,6 @@ function initMap() {
 					.setContent(`<div class="popup-content">
 									<div class="popup-title">Tu ubicación</div>
 								</div>`)
-					.on("click",()=>{console.log("clicked")})	// No funciona :c
 
                 userMarker = L.marker([userLat, userLng], {
 						icon: L.divIcon({
@@ -107,7 +106,10 @@ function initMap() {
 					})
 					.addTo(map)
 					.bindPopup(popup)
-					.on("click",()=>{map.setView([userLat, userLng])})
+					.on("click",()=>{
+						map.setView([userLat, userLng])
+						userMarker._popup._container._leaflet_disable_click=false;
+					})
 				processContents(userMarker._icon)
 				// se actualiza la posición del usuario cada diez segundos
 				setInterval(()=>{
@@ -319,16 +321,21 @@ function addRealSheltersAndServices() {
 
     places.forEach(item => {
         const webLink = item.web ? `<div><a href="${item.web}" target="_blank">🌐 Sitio web</a></div>` : "";
-        const marker = L.marker([item.lat, item.lon], { icon })
-            .addTo(map)
-            .bindPopup(`
+		let popup = L.popup({interactive: true, bubblingMouseEvents: true})
+			.setContent(`
                 <div class="popup-content shelter-popup">
                     <div class="popup-title">${item.nombre}</div>
                     <div><strong>Dirección:</strong> ${item.direccion}</div>
                     ${webLink}
                 </div>
             `)
-			.on("click",()=>{map.setView([item.lat, item.lon])});
+        const marker = L.marker([item.lat, item.lon], { icon })
+            .addTo(map)
+            .bindPopup(popup)
+			.on("click",()=>{
+				map.setView([item.lat, item.lon])
+				marker._popup._container._leaflet_disable_click=false;
+			});
 			processContents(marker._icon);
 			shelterMarkers.push(marker);
     });
@@ -394,17 +401,22 @@ window.addEventListener('load', async () => {
                 iconSize: [34, 34],
                 iconAnchor: [17, 17]
             });
-		const marker = L.marker([item.latitude, item.longitude], {icon })
-			.addTo(map)
-			.bindPopup(`
+		let popup = L.popup({interactive: true, bubblingMouseEvents: true})
+			.setContent(`
 				<div class="popup-content alert-popup">
 					<div class="popup-title">${item.petName}</div>
 					<div>${getRecency(item.timestamp)}</div>
 				</div>
 			`)
-			.on("click",()=>{map.setView([item.latitude, item.longitude])});
+		const marker = L.marker([item.latitude, item.longitude], {icon })
+			.addTo(map)
+			.bindPopup(popup)
+			.on("click",()=>{
+				map.setView([item.latitude, item.longitude])
+				marker._popup._container._leaflet_disable_click=false;
+			});
 			processContents(marker._icon);
-		alertMarkers.push(marker);
+			alertMarkers.push(marker);
 		});
 	})
 });
