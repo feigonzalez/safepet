@@ -42,7 +42,7 @@ function handleQR(qrContent, html5QrCode) {
 	if(frame.classList.contains("detected")) return;
 	frame.classList.add("detected")
 
-	let qrparams = qrContent.match(/.*\/safepet\/report.php\?petID=(\d+)/);
+	let qrparams = qrContent.match(/.*\/safepet.*\/report.php\?petID=(\d+)/);
 	if(qrparams && qrparams.length == 2){
 		console.log(`Report pet [${qrparams[1]}] as found`)
 		showAwaitModal("Mascota encontrada","Se está avisando al dueño",

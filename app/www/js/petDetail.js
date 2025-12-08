@@ -15,17 +15,22 @@ var hasTracker = false;
 var statusButtonFunction = ()=>{};
 
 async function downloadQR(){
-	let dataBlob = await fetch(getQR(SERVER_URL+"?petID="+URLparams["id"]))
+	let dataBlob = await fetch(getQR(REPORT_URL+"?petID="+URLparams["id"]))
 		.then(r=>r.ok?r.blob():null);
 	let qrFile = new FileReader();
-		qrFile.readAsDataURL(dataBlob);
+	qrFile.readAsDataURL(dataBlob);
 	qrFile.addEventListener("loadend",()=>{
 		let petQRURL = qrFile.result;
-		downloadFile(petData.name+"_QR.png", petQRURL.substring(petQRURL.indexOf(",")+1))
-		/*dLink = document.querySelector("#qrDownload");
-		dLink.setAttribute("href",petQRURL);
-		dLink.setAttribute("download",petData.name+"_QR.png")
-		dLink.click();*/
+		showAwaitModal("Descargando Código QR","",
+			async()=>{return downloadFile(petData.name+"_QR.png", petQRURL.substring(petQRURL.indexOf(",")+1))},
+			(req)=>{
+				if(req.uri){
+					showAlertModal("Código descargado","Busca el archivo en tu carpeta de Documentos")
+				} else {
+					showAlertModal("Hubo un problema","No se pudo descargar la imagen del código QR")
+				}
+			}
+		)
 	})
 }
 
@@ -51,14 +56,18 @@ async function beforeLoad(){
 				petDetailMenu["Gestionar Rastreador"]=()=>{
 					navigateTo("manageTracker.html?pet_id="+URLparams.id);
 				};
-				hasTracker=true;
-				let unit = "m";
-				let distance = Math.round(distanceGeo(
-					parseFloat(localStorage.latitude), parseFloat(localStorage.longitude),
-					parseFloat(trackerData.latitude), parseFloat(trackerData.longitude)));
-				if(distance > 1000){ distance = Math.round(distance/100)/10; unit="Km";}
-				document.querySelector('#trackerDistance').textContent = distance + unit;
-				document.querySelector('#trackerBattery').textContent = trackerData.battery+"%";
+				if(trackerData.accuracy){
+					hasTracker=true;
+					let unit = "m";
+					let distance = Math.round(distanceGeo(
+						parseFloat(localStorage.latitude), parseFloat(localStorage.longitude),
+						parseFloat(trackerData.latitude), parseFloat(trackerData.longitude)));
+					if(distance > 1000){ distance = Math.round(distance/100)/10; unit="Km";}
+					document.querySelector('#trackerDistance').textContent = distance + unit;
+				}
+				if(trackerData.battery){
+					document.querySelector('#trackerBattery').textContent = trackerData.battery+"%";
+				}
 				break;
 		}
 	}
@@ -89,6 +98,7 @@ async function beforeLoad(){
 		statusButtonFunction = locatePet;
 	} else {
 		switch(petData.petStatus){
+			case "AWAY":
 			case "HOME":
 				statusButtonText="Mi mascota se perdió";
 				statusButtonFunction = confirmAlert;
@@ -131,7 +141,7 @@ function showPetQR(){
 		`<div class="column">
 			<div class="row">
 				<a id="qrDownload" download>
-					<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(SERVER_URL+"report.php?petID="+URLparams["id"])}">
+					<img id="qrCode" class="loading" onclick="downloadQR()" src="${getQR(REPORT_URL+"?petID="+URLparams["id"])}">
 				</a>
 			</div>
 			<div class="row"><p>Cuando alguien escanee este código, se te alertará dónde ocurrió.</p></div>

@@ -38,12 +38,18 @@ window.addEventListener("load",(ev)=>{
 			}]
 		});
 	}
-	
 	// Permite descargar un archivo. Usado para descargar el codigo QR de una mascota
 	window.downloadFile = async (filename, data)=>{
-		await Filesystem.writeFile({
-			path: "downloads/"+filename,
+			// First get the full file path using Filesystem
+		const fileInfo = await Filesystem.getUri({
+		  directory: Directory.Documents,
+		  path: filename
+		});
+		
+		return await Filesystem.writeFile({
+			path: fileInfo.uri,
 			data: data,
+			recursive:true
 			//directory: Directory.Documents,
 			//encoding: Encoding.UTF8,
 		});

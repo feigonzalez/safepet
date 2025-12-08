@@ -26,15 +26,6 @@ window.addEventListener("load",()=>{
 		fillIterable(iterable,data)
 	}
 	processContents();
-
-    // Procesar Flow solo si hay parámetros y en páginas destino de la app (evitar verify/validate)
-    try{
-        const qp = new URLSearchParams(window.location.search);
-        const page = window.location.pathname.split('/').pop();
-        if ((qp.get('flowReturn') === '1' || qp.has('token') || qp.has('order')) && (page === 'account.html' || page === 'subscription.html')){
-            procesarFlow();
-        }
-    }catch(_){ }
 	
 	// si la sesi��n est�� iniciada, se crea un intervalo para buscar notificaciones nuevas cada 15 segundos
 	if(userData.account_id){

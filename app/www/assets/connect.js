@@ -1,4 +1,5 @@
 const FLOWSERVER_URL="https://safepet.rf.gd/SafePet/server/";    // URL del server que maneja las conexiones con Flow.cl
+const REPORT_URL="https://safepet.rf.gd/report.php";             // URL a la que redirigen los QR de las mascotas
 const SERVER_URL="http://dintdt.c1.biz/safepet/"                 // URL del server de producción
 // const THIS_URL ="http://localhost/safepet/github/app/www/"    // URL base de desarrollo. Usar en el PC
 const THIS_URL ="https://localhost/"                              // URL base de producción. Usar en la app móvil

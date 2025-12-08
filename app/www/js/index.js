@@ -142,6 +142,43 @@ function initMap() {
         );
     }
 	
+	if("area" in URLparams){
+		// "area" tiene el formato LATITUDE;LONGITUDE;RADIUS
+		let areaData = URLparams["area"].split(";")
+		console.log("areaData: ",areaData)
+		let circle = L.circle([parseFloat(areaData[0]),parseFloat(areaData[1])], {
+			radius: parseFloat(areaData[2])
+		}).addTo(map);
+		map.setView([parseFloat(areaData[0]), parseFloat(areaData[1])], 19);
+	}
+	
+	if("tracker" in URLparams){
+		// "tracker" tiene el formato ID;LATITUDE;LONGITUDE
+		let trackerData = URLparams["tracker"].split(";")
+		console.log("trackerData:",trackerData);
+		// se dibuja un circulo alrededor del tracker para indicar la precisión de la lectura
+		trackerAccuracy = L.circle([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
+			radius: parseFloat(trackerData[3]),
+			zIndexOffset:199
+		}).addTo(map);
+		trackerAccuracy._path.setAttribute("stroke","#a3c");
+		trackerAccuracy._path.setAttribute("fill","#a3c");
+		// el rastreador
+		tracker = L.marker([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
+			icon: L.divIcon({
+				className: 'marker-tracker',
+				html: '<div class="marker-content"><span class="icon" data-icon="pets"></span></div>',
+				iconSize: [26, 26],
+				iconAnchor: [13, 13]
+			}),
+			zIndexOffset:200
+		}).addTo(map);
+		map.setView([parseFloat(trackerData[1]), parseFloat(trackerData[2])], 19);
+		processContents(tracker._icon)
+		// se actualiza la posición del rastreador cada 10 segundos
+		setInterval(()=>{locateTracker(trackerData)},10000)
+	}
+	
 	if("marker" in URLparams){
 		// "marker" tiene el formato CLASE;LATITUDE;LONGITUD, donde CLASE es una clase .css que se aplica al marcador
 		let markData = URLparams["marker"].split(";")
@@ -158,47 +195,13 @@ function initMap() {
 		processContents(marker._icon)
 		map.setView([parseFloat(markData[1]), parseFloat(markData[2])], 15);
 	}
-	
-	if("area" in URLparams){
-		// "area" tiene el formato LATITUDE;LONGITUDE;RADIUS
-		let areaData = URLparams["area"].split(";")
-		console.log("areaData: ",areaData)
-		let circle = L.circle([parseFloat(areaData[0]),parseFloat(areaData[1])], {
-			radius: parseFloat(areaData[2])
-		}).addTo(map);
-		map.setView([parseFloat(areaData[0]), parseFloat(areaData[1])], 19);
-	}
-	
-	if("tracker" in URLparams){
-		// "area" tiene el formato ID;LATITUDE;LONGITUDE
-		let trackerData = URLparams["tracker"].split(";")
-		console.log("trackerData:",trackerData);
-		trackerAccuracy = L.circle([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
-			radius: parseFloat(trackerData[3]),
-			zIndexOffset:199
-		}).addTo(map);
-		trackerAccuracy._path.setAttribute("stroke","#a3c");
-		trackerAccuracy._path.setAttribute("fill","#a3c");
-		tracker = L.marker([parseFloat(trackerData[1]),parseFloat(trackerData[2])], {
-			icon: L.divIcon({
-				className: 'marker-tracker',
-				html: '<div class="marker-content"><span class="icon" data-icon="pets"></span></div>',
-				iconSize: [26, 26],
-				iconAnchor: [13, 13]
-			}),
-			zIndexOffset:200
-		}).addTo(map);
-		map.setView([parseFloat(trackerData[1]), parseFloat(trackerData[2])], 19);
-		processContents(tracker._icon)
-		// se actualiza la posición del rastreador cada 10 segundos
-		setInterval(()=>{locateTracker(trackerData)},10000)
-	}
 }
 
 async function locateTracker(trackerData){
 	req = await request(SERVER_URL+"getTrackerInfo.php",{tracker_id:trackerData[0]})
 	if(req.status=="GOOD"){
 		trackerAccuracy.setLatLng([parseFloat(req.latitude),parseFloat(req.longitude)])
+		trackerAccuracy.setRadius(parseFloat(req.accuracy))
 		tracker.setLatLng([parseFloat(req.latitude),parseFloat(req.longitude)])
 	} else {
 		console.log("couldn't update tracker position");
