@@ -17,12 +17,6 @@ function beforeLoad(){
     document.querySelector("#profilePhone").textContent=userData.phone
     document.querySelector("#profileSubStatus").textContent=planDict[userData.plan]
     document.querySelector(".profileImageDisplay").style.filter="hue-rotate("+(-10*(parseInt(hash(userData.name),36)%12))+"deg)";
-    try{
-        const row = document.getElementById('cancelSubRow');
-        if (row){
-            row.style.display = (userData.plan === 'free') ? 'none' : '';
-        }
-    } catch(_){ }
 }
 
 async function confirmLogout() {

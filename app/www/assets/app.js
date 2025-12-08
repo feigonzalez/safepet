@@ -8,18 +8,6 @@ var userData={};
 var fetchingNotifications=false;
 
 window.addEventListener("load",()=>{
-    try{
-        const p = window.location.pathname;
-        const q = window.location.search || '';
-        if (p === '/account.html'){
-            window.location.replace('/app/www/account.html' + q);
-            return;
-        }
-        if (p === '/subscription.html'){
-            window.location.replace('/app/www/subscription.html' + q);
-            return;
-        }
-    }catch(_){}
 	locate((pos)=>{
 		localStorage.setItem("latitude",pos.coords.latitude)
 		localStorage.setItem("longitude",pos.coords.longitude)
