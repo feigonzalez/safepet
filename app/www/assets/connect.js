@@ -1,8 +1,9 @@
-const FLOWSERVER_URL="https://safepet.rf.gd/SafePet/server/";
-const SERVER_URL="http://dintdt.c1.biz/safepet/"
-const THIS_URL ="http://localhost/safepet/github/app/www/"
-// const SERVER_URL="http://localhost/safepet/github/server/";
-// const SERVER_URL="https://safepet.rf.gd/SafePet/server/";
+const FLOWSERVER_URL="https://safepet.rf.gd/SafePet/server/";    // URL del server que maneja las conexiones con Flow.cl
+const SERVER_URL="http://dintdt.c1.biz/safepet/"                 // URL del server de producción
+// const THIS_URL ="http://localhost/safepet/github/app/www/"    // URL base de desarrollo. Usar en el PC
+const THIS_URL ="https://localhost/"                              // URL base de producción. Usar en la app móvil
+// const SERVER_URL="http://localhost/safepet/github/server/";   // URL del server de desarollo. Es en el PC
+// const SERVER_URL="https://safepet.rf.gd/SafePet/server/";     // URL del server de producción que no se usó.
 
 // La llave pública del servidor web donde están los endpoints de la API
 const serverPublicJWK = {"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":"xwCjMDAPoO3wAqh982Fqklx0XC_yw8cpwAihn28KUEMma5GgZZ0duNZ8yu-NwgfYHS3y8i4kuIcEfbZbooawbWqhOWJFDxrsCWfKfGSFlO98dL0ondxkeD6q-xF8S5-o6b6pgX5RM9d2_a1YML_qS9kEm39hMa3rSIFY0GMrSWpG-Ox3653jvomn8Vt8oSQIT4Mf3R-tke-7Kw1U5plTcqKHb15FZ1SACw2G8ZDBc_uukWIp2oAeykLrej9DgGk6f87-fj2GPNkmADeCT6q0tLxHWdM_qh20fRbPWdpfcHnZ2ctYDWzgZPzNHJ2j4bhbytwXakT2BtepCDxMf2EDQQ"}

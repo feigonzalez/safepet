@@ -66,7 +66,7 @@ async function processPayment() {
         plan:       plan,
         monto:      monto,
         nombrePlan: nombrePlan,
-        appReturn:  returnBaseURL+"verifySub.html?plan="+plan,
+        appReturn:  returnBaseURL+"verifySub.html?plan="+plan+"&uid="+userData.account_id,
         email:      (userData.email || userData.mail || ("safe.pet+"+userData.account_id+"@gmail.com"))
     });
 

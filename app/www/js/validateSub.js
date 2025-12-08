@@ -1,11 +1,11 @@
 window.addEventListener("load",()=>{
 	
 	// actualizar datos
-	console.log(`UPDATE account_id[${userData.account_id}] to plan[${URLparams["plan"]}]`);
+	console.log(`UPDATE account_id[${URLparams["uid"]}] to plan[${URLparams["plan"]}]`);
 	planI18N = URLparams["plan"]=="premium"?"Premium":"Básico";
 	
 	showAwaitModal("Actualizando Plan","",
-		async ()=>{ return request(SERVER_URL+"updatePlan.php",{account_id:userData.account_id, plan:URLparams["plan"]})},
+		async ()=>{ return request(SERVER_URL+"updatePlan.php",{account_id:URLparams["uid"], plan:URLparams["plan"]})},
 		(req)=>{
 			if(req.status=="GOOD"){
 				userData.plan=URLparams["plan"];
