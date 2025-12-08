@@ -64,6 +64,7 @@
 				"Han hallado a tu mascota, ".$row["name"],
 				"Un usuario encontró a ".$row["name"].". Mira tus mensajes para ver dónde está.",
 				"warning");
+			postChat(intval($row["user_id"]) + intval($_POST["account_id"]), $_POST["account_id"], "init", "Se hizo un reporte de hallazgo para ".$row["name"], intval($_POST["timestamp"])-1);
 			postChat(intval($row["user_id"]) + intval($_POST["account_id"]), $_POST["account_id"], "geo", $_POST["latitude"].";".$_POST["longitude"], $_POST["timestamp"]);
 		}
 	} else {

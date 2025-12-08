@@ -29,5 +29,5 @@
 .alert-marker .marker-content{background-color:var(--color-primary)}
 .user-location-marker .marker-content{background-color:#007bff;}
 .shelter-marker .marker-content{background-color:var(--color-success)}
-.marker-report .marker-content{background-color:var(--color-primary)}
+.marker-report .marker-content{background-color:#eb2}
 .marker-tracker .marker-content{background-color:#a3c}

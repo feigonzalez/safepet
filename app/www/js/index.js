@@ -149,11 +149,13 @@ function initMap() {
 		let marker = L.marker([parseFloat(markData[1]),parseFloat(markData[2])], {
 			icon: L.divIcon({
 				className: 'marker-'+markData[0],
-				html: '<div class="marker-content"></div>',
+				html: '<div class="marker-content"><span class="icon" data-icon="warning"></span></div>',
 				iconSize: [26, 26],
 				iconAnchor: [13, 13]
-			})
+			}),
+			zIndexOffset:300
 		}).addTo(map);
+		processContents(marker._icon)
 		map.setView([parseFloat(markData[1]), parseFloat(markData[2])], 15);
 	}
 	

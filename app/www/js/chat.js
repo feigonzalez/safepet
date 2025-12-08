@@ -62,8 +62,6 @@ function newMessageElement(data){
 	let content = document.createElement("div")
 		msg.appendChild(content)
 	switch(data.type){
-		case "init":
-			break;
 		case "geo":
 			content.innerHTML=`<span class="icon" data-icon="location"></span> <small>Toca para ver en el mapa</small>`
 			content.addEventListener("click",()=>{
@@ -72,6 +70,7 @@ function newMessageElement(data){
 				navigateTo(`index.html?marker=report;${loc[0]};${loc[1]}`);
 			})
 			break;
+		case "init":
 		case "text":
 			content.textContent=data.content
 			break;
