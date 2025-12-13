@@ -1,0 +1,19 @@
+{
+    "request": {
+        "amount": 5990,
+        "apiKey": "5745DF16-A963-447A-99EB-6D6AADL5E636",
+        "commerceOrder": "SP-40-BASICO-1765126900",
+        "email": "t0712a@gmail.com",
+        "subject": "Suscripcion Plan Basico",
+        "urlConfirmation": "https:\/\/safepet.rf.gd\/SafePet\/server\/flow\/confirm.php",
+        "urlReturn": "https:\/\/safepet.rf.gd\/SafePet\/server\/flow\/status.php",
+        "s": "2dd85a4065f6ad87b1f223eb0aaf9b558b7cfc614fc1d035414dad85e1135b90"
+    },
+    "appReturn": "http:\/\/localhost\/safepet\/github\/app\/www\/verifySub.html",
+    "response_raw": "{\"token\":\"FE4CAFF3C626508DAF57A5F776F381C271BD310Q\",\"url\":\"https:\\\/\\\/sandbox.flow.cl\\\/app\\\/web\\\/pay.php\",\"flowOrder\":4808139}",
+    "response_json": {
+        "token": "FE4CAFF3C626508DAF57A5F776F381C271BD310Q",
+        "url": "https:\/\/sandbox.flow.cl\/app\/web\/pay.php",
+        "flowOrder": 4808139
+    }
+}
